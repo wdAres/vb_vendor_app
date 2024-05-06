@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { getErrorMessage } from "../../utils/getErrorMessage";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
 
 
@@ -24,10 +25,10 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "column",
-    gap: 5,
+    gap: responsiveHeight(1.86),
   },
   label: {
-    fontSize: 14,
+    fontSize: responsiveHeight(1.86),
     color: "black",
     fontWeight: "400",
   },
@@ -35,5 +36,6 @@ const styles = StyleSheet.create({
     color: "red",
     fontWeight: "400",
     textAlign: "right",
+    fontSize:responsiveHeight(1.24)
   },
 });

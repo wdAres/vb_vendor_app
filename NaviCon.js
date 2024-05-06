@@ -50,7 +50,7 @@ import AddProduct1 from "./screens/AddProduct1";
 import Coupons from "./screens/Coupons";
 import BulkUpload from "./screens/BulkUpload";
 import ShopSetting1 from "./screens/ShopSetting1";
-import Coupons1 from "./screens/Coupons1";
+import Coupons1 from "./screens/Coupon/Coupons1";
 import Support from "./screens/Support";
 import TicketDetails from "./screens/TicketDetails";
 import Frame5 from "./components/Frame5";

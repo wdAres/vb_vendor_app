@@ -1,70 +1,81 @@
-import React from "react";
+import React, { memo, useState } from "react";
 import { Controller } from "react-hook-form";
 import { StyleSheet } from "react-native";
-import { TextInput } from "react-native";
-import { getErrorMessage } from "../../../utils/getErrorMessage";
 import DropDownPicker from "react-native-dropdown-picker";
+import { getErrorMessage } from "../../../utils/getErrorMessage";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
-const ControlledSelect = ({
-  control,
-  name,
-  forInput = {},
-  errors,
-  rules = {},
-  items,
-  setItems,
-  open,
-  setOpen,
-}) => {
-  const basic = {
-    autoComplete: "off",
-    autoCapitalize: "none",
-  };
+const ControlledSelect = memo(
+  ({
+    control,
+    name,
+    forInput = {},
+    errors,
+    rules = {},
+    items,
+    setItems,
+    mode,
+    multiple,
+    max,
+  }) => {
+    const [open, setOpen] = useState(false);
 
-  const { exists: errorExist } = getErrorMessage(errors, name);
+    const basic = {
+      autoComplete: "off",
+      autoCapitalize: "none",
+    };
 
-  const handleValue = (func,value) => {
-    let res = func(value)
-    console.log(res)
-    return res
+    const { exists: errorExist } = getErrorMessage(errors, name);
+
+    const handleValue = (func, value) => {
+      let res = func(value);
+      console.log(res);
+      return res;
+    };
+
+    return (
+      <Controller
+        name={name}
+        rules={rules}
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <>
+            <DropDownPicker
+              mode={mode}
+              max={max}
+              multiple={multiple}
+              open={open}
+              value={value}
+              onChangeValue={onChange}
+              setValue={onChange}
+              items={items}
+              setOpen={setOpen}
+              setItems={setItems}
+              zIndex={3000}
+              zIndexInverse={1000}
+              searchable
+              listMode="MODAL"
+              style={[classes.input, errorExist && classes.errorInput]}
+            />
+          </>
+        )}
+      />
+    );
   }
-
-  return (
-    <Controller
-      name={name}
-      rules={rules}
-      control={control}
-      render={({ field: { value, onChange } }) => (
-        <>
-        {/* {console.log(onChange)} */}
-        <DropDownPicker
-          open={open}
-          value={value}
-          onChangeValue={onChange}
-          setValue={onChange}
-          items={items}
-          setOpen={setOpen}
-          setItems={setItems}
-          zIndex={3000}
-          zIndexInverse={1000}
-          searchable
-          listMode="MODAL"
-        />
-        </>
-      )}
-    />
-  );
-};
+);
 
 export default ControlledSelect;
 
 const classes = StyleSheet.create({
   input: {
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "#D9D9D9",
     borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    padding:10,
+    fontFamily: "Inter-Medium",
+    color: "#8f9095",
+    fontSize:responsiveHeight(1.49),
+    fontWeight: "500",
   },
   errorInput: {
     borderColor: "red",

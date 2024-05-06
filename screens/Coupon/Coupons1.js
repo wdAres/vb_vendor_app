@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -11,22 +11,66 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import { Datepicker as RNKDatepicker } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
-import { Color, FontFamily, Padding, Border, FontSize } from "../GlobalStyles";
+import {
+  Color,
+  FontFamily,
+  Padding,
+  Border,
+  FontSize,
+} from "../../GlobalStyles";
 import {
   responsiveHeight,
   responsiveWidth,
 } from "react-native-responsive-dimensions";
+import useHttp2 from "../../hooks/useHttp2";
+import { useForm } from "react-hook-form";
+import Coupon_Info from "./components/Coupon_Info";
+import PrimaryBtn from "../../components/Buttons/PrimaryBtn";
 
 const Coupons1 = () => {
-  const [frameDropdownOpen, setFrameDropdownOpen] = useState(false);
-  const [frameDropdownValue, setFrameDropdownValue] = useState();
-  const [frameDropdownItems, setFrameDropdownItems] = useState([
-    { value: "1", label: "1" },
-    { value: "2", label: "2" },
-    { value: "3", label: "3" },
-  ]);
-  const [frameDatePicker, setFrameDatePicker] = useState(undefined);
+  const { sendRequest, isLoading } = useHttp2();
   const navigation = useNavigation();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, defaultValues },
+  } = useForm();
+
+  const handleForm = (data) => {
+    console.log(data);
+    sendRequest({
+      url: `coupon`,
+      method: 'POST',
+      body: data
+    }, result => {
+
+    }, true)
+  };
+
+//   const [products, setProducts] = useState([]);
+// const { sendRequest: productDataFunc, isLoading: productDataLoading } =
+//   useHttp2();
+
+//   const handleSearchProducts = (key) => {
+//     productDataFunc(
+//       {
+//         url: `product?limit=10&page=1&search=${key ? key : ""}`,
+//       },
+//       (result) => {
+//         let arr = result.data.docs.map((element) => ({
+//           label: element.name,
+//           value: element._id,
+//         }));
+//         setProducts(arr);
+//       }
+//     );
+//   };
+
+//   useEffect(() => {
+//     handleSearchProducts();
+//   }, []);
+
 
   return (
     <ScrollView
@@ -47,7 +91,7 @@ const Coupons1 = () => {
                 <Image
                   style={styles.icon}
                   resizeMode="cover"
-                  source={require("../assets/arrowleftsm.png")}
+                  source={require("../../assets/arrowleftsm.png")}
                 />
               </Pressable>
               <Text style={[styles.addCoupon, styles.couponClr]}>
@@ -56,7 +100,7 @@ const Coupons1 = () => {
             </View>
           </View>
           <View style={styles.frameContainer}>
-            <View style={styles.frameGroup}>
+            {/* <View style={styles.frameGroup}>
               <Text style={[styles.couponType, styles.couponTypeTypo]}>
                 Coupon Type
               </Text>
@@ -125,12 +169,14 @@ const Coupons1 = () => {
                 onSelect={setFrameDatePicker}
                 controlStyle={styles.frameDatePickerValue}
               />
-            </View>
+            </View> */}
+            <Coupon_Info control={control} errors={errors}  />
           </View>
         </View>
-        <Pressable style={styles.createWrapper}>
+        <PrimaryBtn style={styles.createWrapper} title={"Add Coupon"} onPress={handleSubmit(handleForm)} />
+        {/* <Pressable style={styles.createWrapper}>
           <Text style={[styles.create, styles.createTypo]}>Create</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
     </ScrollView>
   );
@@ -246,6 +292,7 @@ const styles = StyleSheet.create({
   frameContainer: {
     marginTop: responsiveHeight(3.6),
     alignSelf: "stretch",
+    rowGap:responsiveHeight(5.34)
   },
   create: {
     fontSize: FontSize.size_sm,
@@ -253,30 +300,23 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   createWrapper: {
-    backgroundColor: Color.colorFirebrick_200,
-    justifyContent: "center",
-    paddingHorizontal: responsiveWidth(38.46),
-    paddingVertical: responsiveHeight(2.11),
     marginTop: responsiveHeight(29.85),
-    borderRadius: Border.br_8xs,
-    alignItems: "center",
-    alignSelf: "stretch",
-    flexDirection: "row",
-    overflow: "hidden",
   },
   frameParent: {
     flex: 1,
   },
   coupons: {
-    paddingHorizontal: responsiveWidth(5.12),
-    paddingVertical: responsiveHeight(2.36),
-    flexDirection: "row",
-    overflow: "hidden",
     backgroundColor: Color.colorWhite,
     width: responsiveWidth(100),
     flex: 1,
-    maxWidth: responsiveWidth(100),
-    width: "100%",
+    maxWidth: "100%",
+  },
+  shopSettingScrollViewContent: {
+    flexDirection: "row",
+    paddingHorizontal: responsiveWidth(5.12),
+    paddingVertical: responsiveHeight(2.36),
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
 });
 
