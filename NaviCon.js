@@ -33,8 +33,8 @@ import SellerDetails from "./screens/SellerDetails/SellerDetails";
 import RefundRequest1 from "./screens/RefundRequest1";
 import VendorProfile from "./screens/VendorProfile";
 import RefundRequest2 from "./components/RefundRequest2";
-import Payments from "./screens/Payments";
-import PaymentDetails from "./screens/PaymentDetails";
+import Payments from "./screens/Payment/Payments";
+import PaymentDetails from "./screens/Payment/PaymentDetails";
 import WithdrawMoney from "./screens/WithdrawMoney";
 // import Frame from "./components/Frame";
 // import Frame1 from "./components/Frame1";
@@ -47,7 +47,7 @@ import Orders from "./screens/Orders";
 import Frame8 from "./components/Frame8";
 import ShopSetting from "./screens/ShopSetting";
 import AddProduct1 from "./screens/AddProduct1";
-import Coupons from "./screens/Coupons";
+import Coupons from "./screens/Coupon/Coupons";
 import BulkUpload from "./screens/BulkUpload";
 import ShopSetting1 from "./screens/ShopSetting1";
 import Coupons1 from "./screens/Coupon/Coupons1";
@@ -85,6 +85,9 @@ import Signup from "./screens/Auth/Signup";
 import { AuthContext, AuthProvider, useAuth } from "./context/AuthContext";
 import Toast from "react-native-toast-message";
 import InputCheker from "./screens/InputCheker";
+import ViewCoupon from "./screens/Coupon/ViewCoupon";
+import EditCoupon from "./screens/Coupon/EditCoupon";
+import Withdraw from "./screens/Withdraw/Withdraw";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -324,6 +327,16 @@ const NaviCon = () => {
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen
+                  name="ViewCoupon"
+                  component={ViewCoupon}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditCoupon"
+                  component={EditCoupon}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
                   name="BulkUpload"
                   component={BulkUpload}
                   options={{ headerShown: false }}
@@ -356,6 +369,11 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="InputChecker"
                   component={InputCheker}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Withdraw"
+                  component={Withdraw}
                   options={{ headerShown: false }}
                 />
               </>

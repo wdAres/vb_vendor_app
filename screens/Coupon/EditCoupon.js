@@ -27,7 +27,7 @@ import { useForm } from "react-hook-form";
 import Coupon_Info from "./components/Coupon_Info";
 import PrimaryBtn from "../../components/Buttons/PrimaryBtn";
 
-const Coupons1 = () => {
+const EditCoupon = () => {
   const { sendRequest, isLoading } = useHttp2();
   const navigation = useNavigation();
   const {
@@ -46,7 +46,7 @@ const Coupons1 = () => {
         body: data,
       },
       (result) => {
-        navigation.replace("Coupons");
+        navigation.navigate("Coupons");
       },
       true
     );
@@ -80,6 +80,76 @@ const Coupons1 = () => {
             </View>
           </View>
           <View style={styles.frameContainer}>
+            {/* <View style={styles.frameGroup}>
+              <Text style={[styles.couponType, styles.couponTypeTypo]}>
+                Coupon Type
+              </Text>
+              <View style={styles.wrapper}>
+                <DropDownPicker
+                  style={styles.dropdownpicker}
+                  open={frameDropdownOpen}
+                  setOpen={setFrameDropdownOpen}
+                  value={frameDropdownValue}
+                  setValue={setFrameDropdownValue}
+                  placeholder="Select your type"
+                  items={frameDropdownItems}
+                  labelStyle={styles.frameDropdownValue}
+                  dropDownContainerStyle={styles.frameDropdowndropDownContainer}
+                />
+              </View>
+            </View>
+            <View style={styles.couponCodeParent}>
+              <Text style={[styles.couponType, styles.couponTypeTypo]}>
+                Coupon code
+              </Text>
+              <TextInput
+                style={[styles.frameChild, styles.frameBorder]}
+                placeholder="Select your type"
+                placeholderTextColor="#8f9095"
+              />
+            </View>
+            <View style={styles.couponCodeParent}>
+              <Text style={[styles.couponType, styles.couponTypeTypo]}>
+                Minimum Shopping
+              </Text>
+              <TextInput
+                style={[styles.frameChild, styles.frameBorder]}
+                placeholder="Select your type"
+                placeholderTextColor="#8f9095"
+              />
+            </View>
+            <View style={styles.couponCodeParent}>
+              <Text style={[styles.couponType, styles.couponTypeTypo]}>
+                Discount
+              </Text>
+              <View style={styles.frameBorder} placeholder="Select your type" />
+            </View>
+            <View style={styles.couponCodeParent}>
+              <Text style={[styles.couponType, styles.couponTypeTypo]}>
+                Maximum Discount Amount
+              </Text>
+              <TextInput
+                style={[styles.frameChild, styles.frameBorder]}
+                placeholder="Select your type"
+                placeholderTextColor="#8f9095"
+              />
+            </View>
+            <View style={styles.couponCodeParent}>
+              <Text style={[styles.couponType, styles.couponTypeTypo]}>
+                Till Date
+              </Text>
+              <RNKDatepicker
+                style={styles.frameRnkdatepicker}
+                placeholder={() => (
+                  <Text style={styles.frameDatePickerPlaceHolder}>
+                    Select your Date
+                  </Text>
+                )}
+                date={frameDatePicker}
+                onSelect={setFrameDatePicker}
+                controlStyle={styles.frameDatePickerValue}
+              />
+            </View> */}
             <Coupon_Info control={control} errors={errors} />
           </View>
         </View>
@@ -88,6 +158,9 @@ const Coupons1 = () => {
           title={"Add Coupon"}
           onPress={handleSubmit(handleForm)}
         />
+        {/* <Pressable style={styles.createWrapper}>
+          <Text style={[styles.create, styles.createTypo]}>Create</Text>
+        </Pressable> */}
       </View>
     </ScrollView>
   );
@@ -231,4 +304,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Coupons1;
+export default EditCoupon;

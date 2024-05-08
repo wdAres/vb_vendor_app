@@ -264,7 +264,7 @@ const VendorProfile = () => {
             </TouchableOpacity>
             <Pressable
               style={[styles.allProductsParent, styles.parentFlexBox]}
-              onPress={() => navigation.navigate("WithdrawMoney")}
+              onPress={() => navigation.navigate("Withdraw")}
             >
               <Text style={[styles.shopSettings, styles.companyTypo]}>
                 Withdraw

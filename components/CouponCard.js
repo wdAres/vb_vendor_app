@@ -5,99 +5,116 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
+import moment from "moment";
+import { useNavigation } from "@react-navigation/core";
 
-const CouponCard = ({ style }) => {
+const CouponCard = ({ style, data, isLoading }) => {
+  // Calculate days left until expiry date
+  const daysLeft = moment(data.expiryDate).fromNow(true);
+  const navigation = useNavigation();
+
+
+  const handlePress = () => {
+    navigation.navigate("ViewCoupon", { id: data._id });
+  };
+
+  // Truncate long label
+  const truncatedLabel =
+    data.couponLabel.length > 5
+      ? data.couponLabel.substring(0, 5) + "..."
+      : data.couponLabel;
+
+  if (isLoading) {
+    // Placeholder or Skeleton while loading
+    return (
+      <View style={[styles.container, style]}>
+        <View style={[styles.leftSection]}>
+          <View style={[styles.placeholderText, { width: "80%", marginBottom: responsiveHeight(0.5) }]} />
+          <View style={[styles.placeholderText, { width: "60%", marginBottom: responsiveHeight(0.5), marginTop: responsiveHeight(1.36) }]} />
+          <View style={[styles.placeholderText, { width: "40%", marginTop: responsiveHeight(1.36) }]} />
+        </View>
+        <View style={[styles.rightSection, styles.placeholderText]} />
+      </View>
+    );
+  }
+
   return (
-    <Pressable style={[style]}>
-      <View style={[styles.frameParent2, styles.frameParentBorder]}>
-        <View>
-          <Text style={[styles.vb30, styles.vb30Typo]}>{`V&B30`}</Text>
-          <Text style={[styles.dateTill2082023, styles.daysLeftTypo]}>
-            Date Till 20/8/2023
-          </Text>
-          <Text style={[styles.daysLeft, styles.daysLeftTypo]}>
-            60 Days Left
-          </Text>
-        </View>
-        <View style={styles.bathWareWrapper}>
-          <Text style={[styles.bathWare, styles.bathWareTypo]}>Bath ware</Text>
-        </View>
+    <Pressable style={[styles.container, style]} onPress={handlePress}>
+      <View style={[styles.leftSection]}>
+        <Text style={[styles.couponCode]}>{data.couponCode}</Text>
+        <Text style={[styles.expiryDate]}>
+          Expiry Date: {moment(data.expiryDate).format("MMM D, YYYY")}
+        </Text>
+        <Text style={[styles.daysLeft]}>{daysLeft} left</Text>
+      </View>
+      <View style={[styles.rightSection]}>
+        <Text style={[styles.label]}>{truncatedLabel}</Text>
       </View>
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  frameParent2: {
-    // marginTop: responsiveHeight(1.86),
-  },
-  frameParentBorder: {
+  container: {
+    flexDirection: "row",
     paddingVertical: responsiveHeight(1.36),
     paddingHorizontal: responsiveWidth(2.56),
-    justifyContent: "center",
-    width: responsiveWidth(89.74),
+    borderRadius: Border.br_8xs,
     borderWidth: 1,
     borderColor: Color.colorGainsboro_200,
-    borderStyle: "solid",
-    borderRadius: Border.br_8xs,
-    flexDirection: "row",
-    overflow: "hidden",
     backgroundColor: Color.colorWhite,
+    overflow: "hidden",
   },
-  vb30: {
+  leftSection: {
+    flex: 1,
+    paddingRight: responsiveWidth(2),
+  },
+  rightSection: {
+    minWidth: responsiveWidth(21.02),
+    height: responsiveHeight(3.1),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Color.colorWhitesmoke_300,
+    borderRadius: Border.br_8xs,
+    marginLeft: responsiveWidth(2),
+  },
+  couponCode: {
     fontSize: FontSize.size_mini,
     color: Color.colorFirebrick_200,
-    textAlign: "left",
-  },
-  vb30Typo: {
     fontFamily: FontFamily.interSemiBold,
     fontWeight: "600",
+    marginBottom: responsiveHeight(0.5),
+    paddingBottom: responsiveHeight(0.5),
   },
-  dateTill2082023: {
+  expiryDate: {
+    fontSize: FontSize.size_3xs,
+    color: Color.colorBlack,
     fontFamily: FontFamily.interMedium,
     fontWeight: "500",
-    color: Color.colorBlack,
-  },
-  daysLeftTypo: {
+    marginBottom: responsiveHeight(0.5),
     marginTop: responsiveHeight(1.36),
-    fontSize: FontSize.size_3xs,
-    textAlign: "left",
   },
   daysLeft: {
+    fontSize: FontSize.size_3xs,
     color: Color.colorGray_400,
     fontFamily: FontFamily.interSemiBold,
     fontWeight: "600",
-  },
-  daysLeftTypo: {
     marginTop: responsiveHeight(1.36),
+  },
+  label: {
     fontSize: FontSize.size_3xs,
-    textAlign: "left",
-  },
-  bathWareWrapper: {
-    backgroundColor: Color.colorWhitesmoke_300,
-    width: responsiveWidth(21.02),
-    height: responsiveHeight(3.1),
-    //
-    // paddingVertical: responsiveHeight(1.24),
-    // paddingHorizontal: responsiveWidth(2.56),
-
-    marginLeft: responsiveWidth(37.69),
-    justifyContent: "center",
-    borderRadius: Border.br_8xs,
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  bathWare: {
-    fontSize: FontSize.size_3xs,
-    textAlign: "left",
-  },
-  bathWareTypo: {
+    color: Color.colorBlack,
     fontFamily: FontFamily.interMedium,
     fontWeight: "500",
-    color: Color.colorBlack,
+    paddingHorizontal: responsiveWidth(1),
   },
-
- 
+  placeholderText: {
+    backgroundColor: Color.colorGainsboro_200,
+    borderRadius: Border.br_8xs,
+    marginBottom: responsiveHeight(0.5),
+    height:15,
+    marginTop: responsiveHeight(0.5),
+  },
 });
 
 export default CouponCard;

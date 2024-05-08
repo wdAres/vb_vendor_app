@@ -8,103 +8,94 @@ import {
   View,
   ImageBackground,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { FontFamily, FontSize, Padding, Color, Border } from "../GlobalStyles";
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  FontFamily,
+  FontSize,
+  Padding,
+  Color,
+  Border,
+} from "../../GlobalStyles";
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from "react-native-responsive-dimensions";
+import useHttp2 from "../../hooks/useHttp2";
+import moment from "moment";
+import Header from "../../components/Header";
 
 const PaymentDetails = () => {
   const navigation = useNavigation();
 
+  const [data, setData] = React.useState({});
+  const { sendRequest, isLoading } = useHttp2();
+  const route = useRoute();
+  const { id } = route.params;
+
+  React.useEffect(() => {
+    sendRequest(
+      {
+        url: `wallet/${id}/show`,
+      },
+      (result) => {
+        setData(result.data);
+      }
+    );
+
+    return () => {
+      setData({});
+    };
+  }, [id]);
+
+  const myData1 = [
+    { title: "Transaction ID", value: data?._id ?? "--" },
+    { title: "Payment Ref ID", value: data?.paymentRefNumber ?? "--" },
+    { title: "Order ID", value: data?.orderId?.orderId ?? "--" },
+    { title: "Date of Payment", value: moment(data?.date).format("ll") },
+    { title: "Admin’s Commission", value: "--" },
+    { title: "Payment Method", value: data?.orderId?.paymentMethod ?? "--" },
+    { title: "Amount", value: "$" + data?.orderId?.subtotal ?? "--" },
+  ];
   return (
-    <ScrollView
-      style={styles.paymentDetails}
-      horizontal={false}
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.paymentDetailsScrollViewContent}
-    >
-      <View style={styles.frameParent}>
-        <View style={styles.frameWrapper}>
-          <View style={styles.arrowLeftSmParent}>
-            <Pressable
-              style={styles.arrowLeftSm}
-              onPress={() => navigation.goBack()}
-            >
-              <Image
-                style={styles.icon}
-                resizeMode="cover"
-                source={require("../assets/arrowleftsm.png")}
-              />
-            </Pressable>
-            <Text style={[styles.paymentDetails1, styles.offTypo]}>
-              Payment Details
-            </Text>
-          </View>
-        </View>
-        <View style={styles.frameGroup}>
+    <View style={styles.container}>
+      <Header label={'Payment Details'} />
+      <ScrollView
+        style={[styles.payments, styles.paymentsLayout]}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.paymentsScrollViewContent}
+      >
+        <View style={styles.frameParent2}>
           <View style={styles.amountParent}>
             <Text style={[styles.amount, styles.amountTypo]}>Amount</Text>
             <View style={styles.parent}>
-              <Text style={[styles.text, styles.offTypo]}>$200</Text>
+              <Text style={[styles.text, styles.offTypo]}>
+                ${data?.orderId?.subtotal ?? 0}
+              </Text>
               <Image
                 style={styles.okIcon}
                 resizeMode="cover"
-                source={require("../assets/ok.png")}
+                source={require("../../assets/ok.png")}
               />
             </View>
           </View>
           <View style={styles.paymentParent}>
             <Text style={[styles.amount, styles.amountTypo]}>Payment</Text>
             <View style={[styles.frameContainer, styles.frameSpaceBlock]}>
-              <View style={styles.transactionIdParent}>
-                <Text style={[styles.transactionId, styles.textTypo]}>
-                  Transaction ID
-                </Text>
-                <Text style={[styles.xyz, styles.textTypo]}>XYZ</Text>
-              </View>
-              <View style={[styles.refIdParent, styles.parentSpaceBlock]}>
-                <Text style={[styles.transactionId, styles.textTypo]}>
-                  Ref ID
-                </Text>
-                <Text style={[styles.text1, styles.textTypo]}>1</Text>
-              </View>
-              <View
-                style={[styles.againstOrderIdParent, styles.parentSpaceBlock]}
-              >
-                <Text style={[styles.transactionId, styles.textTypo]}>
-                  Against Order ID
-                </Text>
-                <Text style={[styles.text2, styles.textTypo]}>4</Text>
-              </View>
-              <View style={[styles.refIdParent, styles.parentSpaceBlock]}>
-                <Text style={[styles.transactionId, styles.textTypo]}>SKU</Text>
-                <Text style={[styles.text3, styles.textTypo]}>1</Text>
-              </View>
-              <View style={[styles.refIdParent, styles.parentSpaceBlock]}>
-                <Text style={[styles.transactionId, styles.textTypo]}>
-                  Date of Payment
-                </Text>
-                <Text style={[styles.text4, styles.textTypo]}>1</Text>
-              </View>
-              <View
-                style={[styles.adminsCommissionParent, styles.parentSpaceBlock]}
-              >
-                <Text style={[styles.transactionId, styles.textTypo]}>
-                  Admin’s Commission
-                </Text>
-                <Text style={[styles.text5, styles.textTypo]}>5%</Text>
-              </View>
-              <View
-                style={[styles.paymentMethodParent, styles.parentSpaceBlock]}
-              >
-                <Text style={[styles.transactionId, styles.textTypo]}>
-                  Payment Method
-                </Text>
-                <Text style={[styles.upi, styles.textTypo]}>UPI</Text>
-              </View>
+              {myData1.map((element) => (
+                <View style={styles.transactionIdParent}>
+                  <Text style={[styles.transactionId, styles.textTypo]}>
+                    {element.title}
+                  </Text>
+                  <Text style={[styles.xyz, styles.textTypo]}>
+                    {element.value}
+                  </Text>
+                </View>
+              ))}
             </View>
           </View>
-          <View style={styles.paymentParent}>
+          {/* <View style={styles.paymentParent}>
             <Text style={[styles.productDetails, styles.amountTypo]}>
               Product details
             </Text>
@@ -113,7 +104,7 @@ const PaymentDetails = () => {
                 <ImageBackground
                   style={styles.imagePlaceHolder}
                   resizeMode="cover"
-                  source={require("../assets/imageplaceholder1.png")}
+                  source={require("../../assets/imageplaceholder1.png")}
                 />
                 <View style={styles.pearlBeadingTexturParent}>
                   <Text style={[styles.pearlBeadingTextur, styles.offTypo]}>
@@ -123,13 +114,13 @@ const PaymentDetails = () => {
                     <Image
                       style={styles.starsIcon}
                       resizeMode="cover"
-                      source={require("../assets/stars1.png")}
+                      source={require("../../assets/stars1.png")}
                     />
                     <Text style={[styles.reviews, styles.textTypo]}>
                       480+ Reviews
                     </Text>
                   </View>
-                  <View style={[styles.starsParent,styles.setting]}>
+                  <View style={[styles.starsParent, styles.setting]}>
                     <View style={[styles.offWrapper, styles.text6Layout]}>
                       <Text style={[styles.off, styles.offTypo]}>2 % off</Text>
                     </View>
@@ -170,20 +161,32 @@ const PaymentDetails = () => {
                 </Text>
               </View>
             </View>
-          </View>
+          </View> */}
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  paymentDetailsScrollViewContent: {
-    flexDirection: "row",
+  container: {
+    flex: 1,
+  },
+  paymentsLayout: {
+    maxWidth: responsiveWidth(100),
+    overflow: "hidden",
+    width: responsiveWidth(100),
+  },
+  paymentsScrollViewContent: {
+    flexDirection: "column",
     paddingHorizontal: responsiveWidth(5.12),
     paddingVertical: responsiveHeight(2.36),
     alignItems: "flex-start",
     justifyContent: "flex-start",
+  },
+  payments: {
+    flex: 1,
+    backgroundColor: Color.colorWhite,
   },
   offTypo: {
     textAlign: "left",
@@ -197,6 +200,7 @@ const styles = StyleSheet.create({
   frameSpaceBlock: {
     paddingVertical: responsiveHeight(2.36),
     paddingHorizontal: responsiveWidth(4.35),
+    gap: responsiveHeight(1.24),
   },
   textTypo: {
     fontFamily: FontFamily.interMedium,
@@ -217,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorWhite,
   },
   text6Layout: {
-    height:responsiveHeight(2.36),
+    height: responsiveHeight(2.36),
     alignItems: "center",
   },
   textSpaceBlock: {
@@ -230,7 +234,7 @@ const styles = StyleSheet.create({
   },
   arrowLeftSm: {
     width: responsiveHeight(2.98),
-    height:responsiveHeight(2.98),
+    height: responsiveHeight(2.98),
   },
   paymentDetails1: {
     fontSize: FontSize.size_lg,
@@ -245,6 +249,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     alignSelf: "stretch",
+    backgroundColor: Color.colorWhite,
+    paddingVertical: responsiveHeight(2.36),
+    paddingHorizontal: responsiveWidth(5.12),
+    borderBottomWidth: 1,
+    borderBottomColor: Color.colorGainsboro_200,
+    position: "sticky",
+    top: 0,
+    zIndex: 1000,
   },
   amount: {
     color: Color.colorBlack,
@@ -285,7 +297,7 @@ const styles = StyleSheet.create({
     color: Color.colorBlack,
   },
   transactionIdParent: {
-    width: responsiveWidth(40.76),
+    // width: responsiveWidth(40.76),
     flexDirection: "row",
   },
   text1: {
@@ -378,23 +390,23 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   starsIcon: {
-    width: responsiveWidth(18.20),
+    width: responsiveWidth(18.2),
     height: responsiveHeight(1.86),
   },
   reviews: {
     color: Color.black,
-    marginLeft: responsiveWidth(2.30),
+    marginLeft: responsiveWidth(2.3),
     fontSize: FontSize.size_xs,
     textAlign: "left",
     flex: 1,
   },
   starsParent: {
-    marginTop:responsiveHeight(1.11),
+    marginTop: responsiveHeight(1.11),
     flexDirection: "row",
     alignSelf: "stretch",
   },
-  setting:{
-    alignItems:'center'
+  setting: {
+    alignItems: "center",
   },
   off: {
     fontSize: FontSize.size_5xs,
@@ -435,7 +447,7 @@ const styles = StyleSheet.create({
   },
   frameView: {
     paddingHorizontal: responsiveWidth(2.82),
-    paddingVertical:responsiveHeight(1.49),
+    paddingVertical: responsiveHeight(1.49),
   },
   buyerName: {
     color: Color.colorGray_200,
@@ -451,7 +463,7 @@ const styles = StyleSheet.create({
     color: Color.colorBlack,
   },
   text8: {
-    marginLeft: responsiveWidth(28.20),
+    marginLeft: responsiveWidth(28.2),
     fontSize: FontSize.size_3xs,
     fontWeight: "500",
     textAlign: "left",
@@ -468,11 +480,14 @@ const styles = StyleSheet.create({
     color: Color.colorBlack,
   },
   frameParent2: {
-    paddingVertical:responsiveHeight(2.36),
+    paddingVertical: responsiveHeight(2.36),
     paddingHorizontal: responsiveWidth(4.35),
   },
   frameGroup: {
     marginTop: responsiveHeight(3.35),
+    alignSelf: "stretch",
+  },
+  frameParent2: {
     alignSelf: "stretch",
   },
   frameParent: {

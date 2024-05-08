@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 import { Controller } from "react-hook-form";
 import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -17,21 +17,10 @@ const ControlledSelect = memo(
     mode,
     multiple,
     max,
+    open,
+    setOpen,
   }) => {
-    const [open, setOpen] = useState(false);
-
-    const basic = {
-      autoComplete: "off",
-      autoCapitalize: "none",
-    };
-
     const { exists: errorExist } = getErrorMessage(errors, name);
-
-    const handleValue = (func, value) => {
-      let res = func(value);
-      console.log(res);
-      return res;
-    };
 
     return (
       <Controller
@@ -39,25 +28,23 @@ const ControlledSelect = memo(
         rules={rules}
         control={control}
         render={({ field: { value, onChange } }) => (
-          <>
-            <DropDownPicker
-              mode={mode}
-              max={max}
-              multiple={multiple}
-              open={open}
-              value={value}
-              onChangeValue={onChange}
-              setValue={onChange}
-              items={items}
-              setOpen={setOpen}
-              setItems={setItems}
-              zIndex={3000}
-              zIndexInverse={1000}
-              searchable
-              listMode="MODAL"
-              style={[classes.input, errorExist && classes.errorInput]}
-            />
-          </>
+          <DropDownPicker
+            mode={mode}
+            max={max}
+            multiple={multiple}
+            open={open}
+            value={value}
+            onChangeValue={onChange}
+            setValue={onChange}
+            items={items}
+            setOpen={setOpen}
+            setItems={setItems}
+            zIndex={3000}
+            zIndexInverse={1000}
+            searchable
+            listMode="MODAL"
+            style={[classes.input, errorExist && classes.errorInput]}
+          />
         )}
       />
     );
@@ -71,10 +58,10 @@ const classes = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#D9D9D9",
     borderRadius: 5,
-    padding:10,
+    padding: 10,
     fontFamily: "Inter-Medium",
     color: "#8f9095",
-    fontSize:responsiveHeight(1.49),
+    fontSize: responsiveHeight(1.49),
     fontWeight: "500",
   },
   errorInput: {
