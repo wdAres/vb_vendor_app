@@ -3,7 +3,7 @@ import ControlledInput from "../../../components/form/Controlled/ControlledInput
 import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 
-const Seller_BasicInfo = ({ control, errors , uni_style }) => {
+const Shop_Info = ({ control, errors , uni_style }) => {
   const inputFields = [
     {
       label: "Shop Name",
@@ -33,24 +33,30 @@ const Seller_BasicInfo = ({ control, errors , uni_style }) => {
       child: (data) => <ControlledInput {...data} />,
     },
     {
-      label: "Shop Email",
-      dataObj: {
-        name: "shopEmail",
-        rules: {
-          required: "shop email is required",
+        label: "Shop Email",
+        dataObj: {
+          name: "shopEmail",
+          rules: {
+            required: "shop email is required",
+          },
+          control: control,
+          errors: errors,
         },
+        child: (data) => <ControlledInput {...data} />,
+      },
+    {
+      label: "Meta Title",
+      dataObj: {
+        name: "seoMetaTitle",
         control: control,
         errors: errors,
       },
       child: (data) => <ControlledInput {...data} />,
     },
     {
-      label: "Shop Address",
+      label: "Meta Description",
       dataObj: {
-        name: "shopAddress",
-        rules: {
-          required: "shop address is required",
-        },
+        name: "seoMetaDescription",
         control: control,
         errors: errors,
       },
@@ -60,7 +66,7 @@ const Seller_BasicInfo = ({ control, errors , uni_style }) => {
 
   return (
     <View>
-      <Text style={[uni_style.title]}>Basic Info</Text>
+      <Text style={[uni_style.title]}>Shop Info</Text>
       <View style={[uni_style.container,uni_style.frameview]}>
         {inputFields.map((element) => (
           <FormItem key={element.dataObj.name} {...element} />
@@ -70,6 +76,6 @@ const Seller_BasicInfo = ({ control, errors , uni_style }) => {
   );
 };
 
-export default Seller_BasicInfo;
+export default Shop_Info;
 
 const styles = StyleSheet.create({});

@@ -21,23 +21,20 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { useForm } from "react-hook-form";
-import Seller_BasicInfo from "./components/Seller_BasicInfo";
 import PrimaryBtn from "../../components/Buttons/PrimaryBtn";
-import Seller_Bank from "./components/Seller_Bank";
-import Seller_Tax from "./components/Seller_Tax";
-import Seller_Pickup from "./components/Seller_Pickup";
-import Seller_Address from "./components/Seller_Address";
+
 import useHttp2 from "../../hooks/useHttp2";
 import Header from "../../components/Header";
+import Shop_Info from "./components/Shop_Info";
+import Shop_Social from "./components/Shop_Social";
 
-const SellerDetails = () => {
+const ShopDetails = () => {
   const { sendRequest, isLoading } = useHttp2();
-  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
     reset,
-    formState: { errors, defaultValues },
+    formState: { errors },
   } = useForm();
 
   const handleForm = (data) => {
@@ -75,17 +72,9 @@ const SellerDetails = () => {
     frameview: styles.overall_frameView,
   };
 
-  const renderCount = React.useRef(0); // Initialize a ref to store the render count
-  React.useEffect(() => {
-    renderCount.current += 1; // Increment the render count on each render
-  });
-
-  console.log(renderCount)
-
-
   return (
     <>
-      <Header label={"Seller Details"} />
+      <Header label={"Shop Setting"} />
       <View style={styles.my_parent}>
         <ScrollView
           style={styles.sellerDetails}
@@ -96,27 +85,12 @@ const SellerDetails = () => {
           <View style={styles.frameParent}>
             <View style={styles.frameParent}>
               <View style={styles.frameContainer}>
-                <Seller_BasicInfo
+                <Shop_Info
                   uni_style={uni_style}
                   control={control}
                   errors={errors}
                 />
-                <Seller_Bank
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
-                />
-                <Seller_Tax
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
-                />
-                <Seller_Address
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
-                />
-                <Seller_Pickup
+                <Shop_Social
                   uni_style={uni_style}
                   control={control}
                   errors={errors}
@@ -126,7 +100,7 @@ const SellerDetails = () => {
           </View>
         </ScrollView>
         <PrimaryBtn
-          title={`Save Details`}
+          title={"Save Changes"}
           isLoading={isLoading}
           disabled={isLoading || !isFormValid}
           onPress={handleSubmit(handleForm)}
@@ -284,7 +258,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(5.12),
     paddingVertical: responsiveHeight(2.36),
     backgroundColor: "white",
-    gap: responsiveHeight(4.10),
+    gap: responsiveHeight(4.1),
   },
   overall_heading: {
     fontSize: FontSize.size_mini,
@@ -303,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SellerDetails;
+export default ShopDetails;

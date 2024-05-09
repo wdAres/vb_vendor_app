@@ -1,60 +1,120 @@
-import * as React from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   TouchableOpacity,
+  ScrollView,
+  Modal,
 } from "react-native";
 import { FontFamily, Color, FontSize, Padding, Border } from "../GlobalStyles";
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from "react-native-responsive-dimensions";
+import useHttp2 from "../hooks/useHttp2";
+import moment from "moment";
+import RejectReason from "./RejectReason";
 
-const RefundRequest2 = ({ onClose }) => {
+const RefundRequest2 = ({ onClose, data, parentFunc }) => {
+  const { sendRequest, isLoading } = useHttp2();
+  const { _id, createdAt, amount, status, message, orderId, productId } = data;
+  const [frameButtonVisible, setFrameButtonVisible] = useState(false);
+
+  const openFrameButton = useCallback(() => {
+    setFrameButtonVisible(true);
+  }, []);
+
+  const closeFrameButton = useCallback(() => {
+    setFrameButtonVisible(false);
+  }, []);
+
+  const acceptHandler = () => {
+    sendRequest(
+      {
+        url: `refund-request/${_id}/accept`,
+        method: "PUT",
+      },
+      (result) => {
+        parentFunc();
+        onClose();
+      },
+      true
+    );
+  };
+  const rejectHandler = () => {
+    openFrameButton();
+  };
+
   return (
-    <View style={styles.refundRequest}>
-      <View style={styles.refundRequestDetailsParent}>
-        <Text style={[styles.refundRequestDetails, styles.reasonTypo]}>
-          Refund Request Details
-        </Text>
-        <View style={[styles.dateParent, styles.parentSpaceBlock]}>
-          <Text style={styles.date}>Date</Text>
-          <Text style={[styles.text, styles.textTypo]}>20/8/2023</Text>
-        </View>
-        <View style={[styles.dateParent, styles.parentSpaceBlock]}>
-          <Text style={styles.date}>Order ID</Text>
-          <Text style={[styles.text1, styles.textTypo]}>12521256</Text>
-        </View>
-        <View style={[styles.dateParent, styles.parentSpaceBlock]}>
-          <Text style={styles.date}>Product</Text>
-          <Text style={[styles.view, styles.textTypo]}>View</Text>
-        </View>
-        <View style={styles.parentSpaceBlock}>
-          <Text style={styles.reasonTypo}>Reason</Text>
-          <Text style={styles.goremIpsumDolor}>
-            Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            vulputate libero et velit interdum, ac aliquet odio mattis. Class
-            aptent taciti sociosqu ad litora torquent per conubia nostra, per
-            inceptos himenaeos.
+    <>
+      <View style={styles.refundRequest}>
+        <View style={styles.refundRequestDetailsParent}>
+          <Text style={[styles.refundRequestDetails, styles.reasonTypo]}>
+            Refund Request Details
           </Text>
-        </View>
-        <View style={styles.amountParent}>
-          <Text style={styles.date}>Amount</Text>
-          <Text style={[styles.text2, styles.textTypo]}>$500</Text>
-        </View>
-        <View style={[styles.dateParent, styles.parentSpaceBlock]}>
-          <TouchableOpacity
-            style={[styles.rejectWrapper, styles.wrapperFlexBox]}
-            activeOpacity={0.2}
-            onPress={() => {}}
-          >
-            <Text style={[styles.reject, styles.rejectTypo]}>Reject</Text>
-          </TouchableOpacity>
-          <Pressable style={[styles.approveWrapper, styles.wrapperFlexBox]}>
-            <Text style={[styles.approve, styles.rejectTypo]}>Approve</Text>
-          </Pressable>
+          <View style={[styles.dateParent, styles.parentSpaceBlock]}>
+            <Text style={styles.date}>Date</Text>
+            <Text style={[styles.text, styles.textTypo]}>
+              {moment(createdAt).format("ll")}
+            </Text>
+          </View>
+          <View style={[styles.dateParent, styles.parentSpaceBlock]}>
+            <Text style={styles.date}>Order ID</Text>
+            <Text style={[styles.text1, styles.textTypo]}>
+              {orderId.orderId}
+            </Text>
+          </View>
+          <View style={[styles.dateParent, styles.parentSpaceBlock]}>
+            <Text style={styles.date}>Product</Text>
+            <Text style={[styles.view, styles.textTypo]}>View</Text>
+          </View>
+          <View style={styles.parentSpaceBlock}>
+            <Text style={styles.reasonTypo}>Reason</Text>
+            <ScrollView
+              showsVerticalScrollIndicator={true}
+              showsHorizontalScrollIndicator={false}
+              style={styles.goremIpsumDolor}
+            >
+              <Text>{message}</Text>
+            </ScrollView>
+          </View>
+          <View style={styles.amountParent}>
+            <Text style={styles.date}>Amount</Text>
+            <Text style={[styles.text2, styles.textTypo]}>${amount}</Text>
+          </View>
+          {status === "pending" && (
+            <View style={[styles.dateParent, styles.parentSpaceBlock]}>
+              <TouchableOpacity
+                style={[styles.rejectWrapper, styles.wrapperFlexBox]}
+                activeOpacity={0.2}
+                onPress={rejectHandler}
+              >
+                <Text style={[styles.reject, styles.rejectTypo]}>Reject</Text>
+              </TouchableOpacity>
+              <Pressable
+                onPress={acceptHandler}
+                style={[styles.approveWrapper, styles.wrapperFlexBox]}
+              >
+                <Text style={[styles.approve, styles.rejectTypo]}>Approve</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       </View>
-    </View>
+
+      <Modal animationType="fade" transparent visible={frameButtonVisible}>
+        <View style={styles.frameButtonOverlay}>
+          <Pressable style={styles.frameButtonBg} onPress={closeFrameButton} />
+          <RejectReason
+            parentFunc={parentFunc}
+            id={_id}
+            onClose={closeFrameButton}
+          />
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -69,6 +129,7 @@ const styles = StyleSheet.create({
   parentSpaceBlock: {
     marginTop: responsiveHeight(2.86),
     alignSelf: "stretch",
+    justifyContent: "space-between",
   },
   textTypo: {
     textAlign: "right",
@@ -102,7 +163,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
   },
   text: {
-    marginLeft: responsiveWidth(58.46),
+    // marginLeft: responsiveWidth(58.46),
     color: Color.colorGray_100,
     textAlign: "right",
     fontSize: FontSize.size_mini,
@@ -120,7 +181,7 @@ const styles = StyleSheet.create({
   view: {
     textDecoration: "underline",
     color: Color.colorCornflowerblue_200,
-    marginLeft: responsiveWidth(63.33),
+    // marginLeft: responsiveWidth(63.33),
     textAlign: "right",
     fontSize: FontSize.size_mini,
   },
@@ -136,7 +197,7 @@ const styles = StyleSheet.create({
   },
   text2: {
     fontSize: FontSize.size_xl,
-    marginLeft: responsiveWidth(59.23),
+    // marginLeft: responsiveWidth(59.23),
     color: Color.colorBlack,
     textAlign: "right",
   },
@@ -145,6 +206,7 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(2.86),
     flexDirection: "row",
     alignSelf: "stretch",
+    justifyContent: "space-between",
   },
   reject: {
     color: Color.colorDimgray_200,
@@ -178,10 +240,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     width: responsiveWidth(100),
     paddingHorizontal: responsiveWidth(6.41),
-    paddingVertical: responsiveHeight(4.10),
+    paddingVertical: responsiveHeight(4.1),
     maxWidth: "100%",
     maxHeight: "100%",
     overflow: "hidden",
+  },
+  frameButtonOverlay: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(113, 113, 113, 0.3)",
+  },
+  frameButtonBg: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    left: 0,
+    top: 0,
   },
 });
 

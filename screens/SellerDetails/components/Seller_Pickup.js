@@ -3,47 +3,47 @@ import ControlledInput from "../../../components/form/Controlled/ControlledInput
 import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 
-const Seller_Pickup = ({ control, errors }) => {
-    const inputFields = [
-        {
-          label: "Longitude",
-          dataObj: {
-            name: 'pickupPoint.longitude',
-            control:control,
-            errors:errors,
-            rules: {
-              required: "Longitude is required",
-            },
-            forInput:{
-                keyboardType:'numeric'
-            }
-          },
-          child: (data) => <ControlledInput {...data} />,
+const Seller_Pickup = ({ control, errors, uni_style }) => {
+
+  const inputFields = [
+    {
+      label: "Longitude",
+      dataObj: {
+        name: "pickupPoint.longitude",
+        control: control,
+        errors: errors,
+        rules: {
+          required: "Longitude is required",
         },
-        {
-          label: "Latitude",
-          dataObj: {
-            name: 'pickupPoint.latitude',
-            control:control,
-            errors:errors,
-            rules: {
-              required: "Latitude is required",
-            },
-            forInput:{
-                keyboardType:'numeric'
-            }
-          },
-          child: (data) => <ControlledInput {...data} />,
+        forInput: {
+          keyboardType: "numeric",
         },
-      ];
-      
-      
+      },
+      child: (data) => <ControlledInput {...data} />,
+    },
+    {
+      label: "Latitude",
+      dataObj: {
+        name: "pickupPoint.latitude",
+        control: control,
+        errors: errors,
+        rules: {
+          required: "Latitude is required",
+        },
+        forInput: {
+          keyboardType: "numeric",
+        },
+      },
+      child: (data) => <ControlledInput {...data} />,
+    },
+  ];
+
   return (
-    <View style={styles.frameParent}>
-      <Text style={[styles.basicInfo, styles.saveTypo]}>Pickup Point</Text>
-      <View style={styles.frameView}>
+    <View>
+      <Text style={[uni_style.title]}>Pickup Point</Text>
+      <View style={[uni_style.container, uni_style.frameview]}>
         {inputFields.map((element) => (
-          <FormItem  key={element.dataObj.name} {...element} />
+          <FormItem key={element.dataObj.name} {...element} />
         ))}
       </View>
     </View>

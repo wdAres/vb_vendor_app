@@ -3,7 +3,7 @@ import ControlledInput from "../../../components/form/Controlled/ControlledInput
 import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 
-const Seller_Tax = ({ control, errors }) => {
+const Seller_Tax = ({ control, errors , uni_style }) => {
     const inputFields = [
         {
           label: "GST No.",
@@ -39,14 +39,14 @@ const Seller_Tax = ({ control, errors }) => {
       
       
   return (
-    <View style={styles.frameParent}>
-      <Text style={[styles.basicInfo, styles.saveTypo]}>Account</Text>
-      <View style={styles.frameView}>
-        {inputFields.map((element) => (
-          <FormItem  key={element.dataObj.name} {...element} />
-        ))}
-      </View>
+    <View>
+    <Text style={[uni_style.title]}>Tax</Text>
+    <View style={[uni_style.container,uni_style.frameview]}>
+      {inputFields.map((element) => (
+        <FormItem key={element.dataObj.name} {...element} />
+      ))}
     </View>
+  </View>
   );
 };
 

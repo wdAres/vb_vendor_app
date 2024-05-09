@@ -3,7 +3,7 @@ import ControlledInput from "../../../components/form/Controlled/ControlledInput
 import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 
-const Seller_Bank = ({ control, errors }) => {
+const Seller_Bank = ({ control, errors , uni_style }) => {
     const inputFields = [
         {
           label: "Bank Name",
@@ -66,11 +66,11 @@ const Seller_Bank = ({ control, errors }) => {
       
       
   return (
-    <View style={styles.frameParent}>
-      <Text style={[styles.basicInfo, styles.saveTypo]}>Account</Text>
-      <View style={styles.frameView}>
+    <View>
+      <Text style={[uni_style.title]}>Account</Text>
+      <View style={[uni_style.container,uni_style.frameview]}>
         {inputFields.map((element) => (
-          <FormItem  key={element.dataObj.name} {...element} />
+          <FormItem key={element.dataObj.name} {...element} />
         ))}
       </View>
     </View>

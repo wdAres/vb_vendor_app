@@ -26,6 +26,7 @@ import useHttp2 from "../../hooks/useHttp2";
 import { useForm } from "react-hook-form";
 import Coupon_Info from "./components/Coupon_Info";
 import PrimaryBtn from "../../components/Buttons/PrimaryBtn";
+import Header from "../../components/Header";
 
 const Coupons1 = () => {
   const { sendRequest, isLoading } = useHttp2();
@@ -53,43 +54,24 @@ const Coupons1 = () => {
   };
 
   return (
-    <ScrollView
-      style={styles.coupons}
-      horizontal={false}
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.shopSettingScrollViewContent}
-    >
-      <View style={styles.frameParent}>
-        <View style={styles.frameGroup}>
-          <View style={[styles.frameWrapper, styles.frameWrapperFlexBox]}>
-            <View style={styles.frameWrapperFlexBox}>
-              <Pressable
-                style={styles.arrowLeftSm}
-                onPress={() => navigation.goBack()}
-              >
-                <Image
-                  style={styles.icon}
-                  resizeMode="cover"
-                  source={require("../../assets/arrowleftsm.png")}
-                />
-              </Pressable>
-              <Text style={[styles.addCoupon, styles.couponClr]}>
-                Add Coupon
-              </Text>
-            </View>
-          </View>
-          <View style={styles.frameContainer}>
-            <Coupon_Info control={control} errors={errors} />
-          </View>
-        </View>
+    <>
+      <Header label={"Add Coupon"} />
+      <View style={styles.my_parent}>
+        <ScrollView
+          style={styles.coupons}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.shopSettingScrollViewContent}
+        >
+          <Coupon_Info control={control} errors={errors} />
+        </ScrollView>
         <PrimaryBtn
-          style={styles.createWrapper}
-          title={"Add Coupon"}
+          title={"Create Coupon"}
           onPress={handleSubmit(handleForm)}
         />
       </View>
-    </ScrollView>
+    </>
   );
 };
 
@@ -112,19 +94,6 @@ const styles = StyleSheet.create({
     color: "#8f9095",
     fontSize: responsiveHeight(1.49),
   },
-  frameDatePickerValue: {},
-  frameWrapperFlexBox: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  couponClr: {
-    color: Color.colorBlack,
-    textAlign: "left",
-  },
-  couponTypeTypo: {
-    fontFamily: FontFamily.interMedium,
-    fontWeight: "500",
-  },
   frameBorder: {
     paddingVertical: responsiveHeight(1.49),
     paddingHorizontal: responsiveWidth(3.33),
@@ -143,14 +112,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interSemiBold,
     fontWeight: "600",
   },
-  icon: {
-    height: "100%",
-    width: "100%",
-  },
-  arrowLeftSm: {
-    width: responsiveWidth(6.15),
-    height: responsiveHeight(2.98),
-  },
   addCoupon: {
     fontSize: FontSize.size_lg,
     marginLeft: responsiveWidth(2.56),
@@ -158,20 +119,11 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interSemiBold,
     fontWeight: "600",
   },
-  frameWrapper: {
-    alignSelf: "stretch",
-  },
   couponType: {
     fontSize: FontSize.size_mini,
     textAlign: "left",
     color: Color.colorBlack,
     alignSelf: "stretch",
-  },
-  dropdownpicker: {
-    borderWidth: 1,
-    borderColor: Color.colorGainsboro_200,
-    borderStyle: "solid",
-    backgroundColor: Color.colorWhite,
   },
   wrapper: {
     justifyContent: "space-between",
@@ -185,50 +137,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     overflow: "hidden",
   },
-  frameGroup: {
-    alignSelf: "stretch",
-  },
   frameChild: {
     fontSize: FontSize.size_xs,
     fontFamily: FontFamily.interMedium,
     fontWeight: "500",
   },
-  couponCodeParent: {
-    marginTop: responsiveHeight(4.35),
-    alignSelf: "stretch",
-  },
   frameRnkdatepicker: {
     marginTop: responsiveHeight(4.35),
   },
-  frameContainer: {
-    marginTop: responsiveHeight(3.6),
-    alignSelf: "stretch",
-    rowGap: responsiveHeight(5.34),
-  },
-  create: {
-    fontSize: FontSize.size_sm,
-    color: Color.colorWhite,
-    textAlign: "left",
-  },
-  createWrapper: {
-    marginTop: responsiveHeight(29.85),
-  },
-  frameParent: {
-    flex: 1,
-  },
-  coupons: {
-    backgroundColor: Color.colorWhite,
-    width: responsiveWidth(100),
-    flex: 1,
-    maxWidth: "100%",
-  },
   shopSettingScrollViewContent: {
-    flexDirection: "row",
-    paddingHorizontal: responsiveWidth(5.12),
-    paddingVertical: responsiveHeight(2.36),
+    flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
+    gap:responsiveHeight(5.34)
+  },
+  my_parent: {
+    flex: 1,
+    paddingHorizontal: responsiveWidth(5.12),
+    paddingVertical: responsiveHeight(2.36),
+    backgroundColor: "white",
+    gap: responsiveHeight(5.34),
   },
 });
+
 
 export default Coupons1;

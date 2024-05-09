@@ -9,7 +9,7 @@ import UpdateLog from "./screens/UpdateLog";
 import ProductsDetails from "./screens/ProductsDetails";
 import OtherDetails from "./screens/OtherDetails";
 import AddProduct from "./screens/AddProduct";
-import RefundRequest from "./screens/RefundRequest";
+import RefundRequest from "./screens/RefundRequest/RefundRequest";
 import RefundRequestPOPUP from "./components/RefundRequestPOPUP";
 import ProductsDetails1 from "./screens/ProductsDetails1";
 import OtherDetails1 from "./screens/OtherDetails1";
@@ -30,12 +30,12 @@ import Frame13 from "./components/Frame13";
 import Products from "./screens/Products";
 import Reviews from "./components/Reviews";
 import SellerDetails from "./screens/SellerDetails/SellerDetails";
-import RefundRequest1 from "./screens/RefundRequest1";
+import RefundRequest1 from "./screens/RefundRequest/RefundRequest1";
 import VendorProfile from "./screens/VendorProfile";
 import RefundRequest2 from "./components/RefundRequest2";
 import Payments from "./screens/Payment/Payments";
 import PaymentDetails from "./screens/Payment/PaymentDetails";
-import WithdrawMoney from "./screens/WithdrawMoney";
+import WithdrawMoney from "./screens/Withdraw/WithdrawMoney";
 // import Frame from "./components/Frame";
 // import Frame1 from "./components/Frame1";
 // import Frame2 from "./components/Frame2";
@@ -88,6 +88,7 @@ import InputCheker from "./screens/InputCheker";
 import ViewCoupon from "./screens/Coupon/ViewCoupon";
 import EditCoupon from "./screens/Coupon/EditCoupon";
 import Withdraw from "./screens/Withdraw/Withdraw";
+import ShopDetails from "./screens/ShopDetails/ShopDetails";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -370,10 +371,15 @@ const NaviCon = () => {
                   name="InputChecker"
                   component={InputCheker}
                   options={{ headerShown: false }}
-                />
+                /> 
                 <Stack.Screen
                   name="Withdraw"
                   component={Withdraw}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="ShopDetails"
+                  component={ShopDetails}
                   options={{ headerShown: false }}
                 />
               </>

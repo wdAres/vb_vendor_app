@@ -126,7 +126,7 @@ const VendorProfile = () => {
             <TouchableOpacity
               style={[styles.shopSettingsParent, styles.parentFlexBox]}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("ShopSetting")}
+              onPress={() => navigation.navigate("ShopDetails")}
             >
               <Text style={[styles.shopSettings, styles.companyTypo]}>
                 Shop Settings

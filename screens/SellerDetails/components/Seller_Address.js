@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import ControlledSelect from "../../../components/form/Controlled/ControlledSelect";
 
-const Seller_Address = ({ control, errors }) => {
+const Seller_Address = ({ control, errors, uni_style }) => {
   const [openCitySelect, setOpenCitySelect] = useState(false);
   const [cities, setCities] = useState([
     { value: "Calgary", label: "Calgary" },
@@ -51,21 +51,20 @@ const Seller_Address = ({ control, errors }) => {
 
   const [openProvinceSelect, setOpenProvinceSelect] = useState(false);
   const [province, setProvince] = useState([
-        { "value": "AB", "label": "Alberta" },
-        { "value": "BC", "label": "British Columbia" },
-        { "value": "MB", "label": "Manitoba" },
-        { "value": "NB", "label": "New Brunswick" },
-        { "value": "NL", "label": "Newfoundland and Labrador" },
-        { "value": "NS", "label": "Nova Scotia" },
-        { "value": "NT", "label": "Northwest Territories" },
-        { "value": "NU", "label": "Nunavut" },
-        { "value": "ON", "label": "Ontario" },
-        { "value": "PE", "label": "Prince Edward Island" },
-        { "value": "QC", "label": "Quebec" },
-        { "value": "SK", "label": "Saskatchewan" },
-        { "value": "YT", "label": "Yukon" }
-    ]);
-
+    { value: "AB", label: "Alberta" },
+    { value: "BC", label: "British Columbia" },
+    { value: "MB", label: "Manitoba" },
+    { value: "NB", label: "New Brunswick" },
+    { value: "NL", label: "Newfoundland and Labrador" },
+    { value: "NS", label: "Nova Scotia" },
+    { value: "NT", label: "Northwest Territories" },
+    { value: "NU", label: "Nunavut" },
+    { value: "ON", label: "Ontario" },
+    { value: "PE", label: "Prince Edward Island" },
+    { value: "QC", label: "Quebec" },
+    { value: "SK", label: "Saskatchewan" },
+    { value: "YT", label: "Yukon" },
+  ]);
 
   const inputFields = [
     {
@@ -98,10 +97,10 @@ const Seller_Address = ({ control, errors }) => {
         name: "province",
         control: control,
         errors: errors,
-        open:openProvinceSelect,
-        setOpen:setOpenProvinceSelect,
-        items:province,
-        setItems:setProvince,
+        open: openProvinceSelect,
+        setOpen: setOpenProvinceSelect,
+        items: province,
+        setItems: setProvince,
         rules: {
           required: "Province is required",
         },
@@ -114,10 +113,10 @@ const Seller_Address = ({ control, errors }) => {
         name: "city",
         control: control,
         errors: errors,
-        open:openCitySelect,
-        setOpen:setOpenCitySelect,
-        items:cities,
-        setItems:setCities,
+        open: openCitySelect,
+        setOpen: setOpenCitySelect,
+        items: cities,
+        setItems: setCities,
         rules: {
           required: "City is required",
         },
@@ -138,13 +137,13 @@ const Seller_Address = ({ control, errors }) => {
         },
       },
       child: (data) => <ControlledInput {...data} />,
-    }
+    },
   ];
 
   return (
-    <View style={styles.frameParent}>
-      <Text style={[styles.basicInfo, styles.saveTypo]}>Address</Text>
-      <View style={styles.frameView}>
+    <View>
+      <Text style={[uni_style.title]}>Address</Text>
+      <View style={[uni_style.container, uni_style.frameview]}>
         {inputFields.map((element) => (
           <FormItem key={element.dataObj.name} {...element} />
         ))}
