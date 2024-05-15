@@ -68,26 +68,14 @@ const Seller_Address = ({ control, errors, uni_style }) => {
 
   const inputFields = [
     {
-      label: "Pickup Address",
+      label: "Shop Address",
       dataObj: {
-        name: "pickupAddress.address",
+        name: "shopAddress",
+        rules: {
+          required: "shop address is required",
+        },
         control: control,
         errors: errors,
-        rules: {
-          required: "Pickup Address is required",
-        },
-      },
-      child: (data) => <ControlledInput {...data} />,
-    },
-    {
-      label: "Available Hours",
-      dataObj: {
-        name: "pickupAddress.availableHours",
-        control: control,
-        errors: errors,
-        rules: {
-          required: "Available hours is required",
-        },
       },
       child: (data) => <ControlledInput {...data} />,
     },
@@ -142,7 +130,7 @@ const Seller_Address = ({ control, errors, uni_style }) => {
 
   return (
     <View>
-      <Text style={[uni_style.title]}>Address</Text>
+      <Text style={[uni_style.title]}>Shop Address</Text>
       <View style={[uni_style.container, uni_style.frameview]}>
         {inputFields.map((element) => (
           <FormItem key={element.dataObj.name} {...element} />

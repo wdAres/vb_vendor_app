@@ -43,18 +43,6 @@ const Seller_BasicInfo = ({ control, errors , uni_style }) => {
         errors: errors,
       },
       child: (data) => <ControlledInput {...data} />,
-    },
-    {
-      label: "Shop Address",
-      dataObj: {
-        name: "shopAddress",
-        rules: {
-          required: "shop address is required",
-        },
-        control: control,
-        errors: errors,
-      },
-      child: (data) => <ControlledInput {...data} />,
     }
   ];
 

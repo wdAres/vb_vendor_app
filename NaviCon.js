@@ -9,7 +9,7 @@ import UpdateLog from "./screens/UpdateLog";
 import ProductsDetails from "./screens/ProductsDetails";
 import OtherDetails from "./screens/OtherDetails";
 import AddProduct from "./screens/AddProduct";
-import RefundRequest from "./screens/RefundRequest/RefundRequest";
+// import RefundRequest from "./screens/RefundRequest/RefundRequest";
 import RefundRequestPOPUP from "./components/RefundRequestPOPUP";
 import ProductsDetails1 from "./screens/ProductsDetails1";
 import OtherDetails1 from "./screens/OtherDetails1";
@@ -51,7 +51,7 @@ import Coupons from "./screens/Coupon/Coupons";
 import BulkUpload from "./screens/BulkUpload";
 import ShopSetting1 from "./screens/ShopSetting1";
 import Coupons1 from "./screens/Coupon/Coupons1";
-import Support from "./screens/Support";
+import Support from "./screens/Support/Support";
 import TicketDetails from "./screens/TicketDetails";
 import Frame5 from "./components/Frame5";
 import Frame6 from "./components/Frame6";
@@ -89,6 +89,10 @@ import ViewCoupon from "./screens/Coupon/ViewCoupon";
 import EditCoupon from "./screens/Coupon/EditCoupon";
 import Withdraw from "./screens/Withdraw/Withdraw";
 import ShopDetails from "./screens/ShopDetails/ShopDetails";
+import AddSupportTicket from "./screens/Support/AddSupportTicket";
+import ChangePassword from "./screens/ChangePassword/ChangePassword";
+import Attributes from "./screens/Attributes/Attributes";
+import AddAttributes from "./screens/Attributes/AddAttributes";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -237,11 +241,11 @@ const NaviCon = () => {
                   component={AddProduct}
                   options={{ headerShown: false }}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                   name="RefundRequest"
                   component={RefundRequest}
                   options={{ headerShown: false }}
-                />
+                /> */}
                 <Stack.Screen
                   name="ProductsDetails1"
                   component={ProductsDetails1}
@@ -358,6 +362,11 @@ const NaviCon = () => {
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen
+                  name="AddSupportTicket"
+                  component={AddSupportTicket}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
                   name="TicketDetails"
                   component={TicketDetails}
                   options={{ headerShown: false }}
@@ -380,6 +389,21 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="ShopDetails"
                   component={ShopDetails}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="ChangePassword"
+                  component={ChangePassword}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Attributes"
+                  component={Attributes}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddAttributes"
+                  component={AddAttributes}
                   options={{ headerShown: false }}
                 />
               </>

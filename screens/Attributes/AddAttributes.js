@@ -21,17 +21,12 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { useForm } from "react-hook-form";
-import Seller_BasicInfo from "./components/Seller_BasicInfo";
 import PrimaryBtn from "../../components/Buttons/PrimaryBtn";
-import Seller_Bank from "./components/Seller_Bank";
-import Seller_Tax from "./components/Seller_Tax";
-import Seller_Pickup from "./components/Seller_Pickup";
-import Seller_Address from "./components/Seller_Address";
 import useHttp2 from "../../hooks/useHttp2";
 import Header from "../../components/Header";
-import Seller_PickupAddress from "./components/Seller_PickupAddress";
+import Att_Info from "./components/Att_Info";
 
-const SellerDetails = () => {
+const AddAttributes = () => {
   const { sendRequest, isLoading } = useHttp2();
   const navigation = useNavigation();
   const {
@@ -42,33 +37,22 @@ const SellerDetails = () => {
   } = useForm();
 
   const handleForm = (data) => {
+    console.log(data)
     sendRequest(
       {
-        url: `seller`,
-        method: "PUT",
+        url: `variation`,
+        method: "POST",
         body: data,
       },
-      (result) => {},
+      (result) => {
+        navigation.replace('Attributes')
+      },
       true
     );
   };
 
   const isFormValid = Object.keys(errors).length === 0;
 
-  const getData = () => {
-    sendRequest(
-      {
-        url: `seller`,
-      },
-      (result) => {
-        reset(result.data);
-      }
-    );
-  };
-
-  React.useEffect(() => {
-    getData();
-  }, []);
 
   const uni_style = {
     title: styles.overall_heading,
@@ -76,63 +60,30 @@ const SellerDetails = () => {
     frameview: styles.overall_frameView,
   };
 
-  const renderCount = React.useRef(0); // Initialize a ref to store the render count
-  React.useEffect(() => {
-    renderCount.current += 1; // Increment the render count on each render
-  });
-
-  console.log(renderCount)
-
-
   return (
     <>
-      <Header label={"Seller Details"} />
+      <Header label={"Change Password"} />
       <View style={styles.my_parent}>
         <ScrollView
-          style={styles.sellerDetails}
+          style={styles.AddAttributes}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.sellerDetailsScrollViewContent}
+          contentContainerStyle={styles.ChangePasswordScrollViewContent}
         >
           <View style={styles.frameParent}>
             <View style={styles.frameParent}>
               <View style={styles.frameContainer}>
-                <Seller_BasicInfo
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
-                />
-                  <Seller_Address
-                    uni_style={uni_style}
-                    control={control}
-                    errors={errors}
-                  />
-                <Seller_PickupAddress
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
-                />
-                <Seller_Bank
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
-                />
-                <Seller_Tax
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
-                />
-                <Seller_Pickup
-                  uni_style={uni_style}
-                  control={control}
-                  errors={errors}
+                <Att_Info
+                control={control}
+                uni_style={uni_style}
+                errors={errors}
                 />
               </View>
             </View>
           </View>
         </ScrollView>
         <PrimaryBtn
-          title={`Save Details`}
+          title={`Update Password`}
           isLoading={isLoading}
           disabled={isLoading || !isFormValid}
           onPress={handleSubmit(handleForm)}
@@ -143,7 +94,7 @@ const SellerDetails = () => {
 };
 
 const styles = StyleSheet.create({
-  sellerDetailsScrollViewContent: {
+  ChangePasswordScrollViewContent: {
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
@@ -174,7 +125,7 @@ const styles = StyleSheet.create({
     width: responsiveHeight(2.98),
     height: responsiveHeight(2.98),
   },
-  sellerDetails1: {
+  ChangePassword1: {
     fontSize: FontSize.size_lg,
     marginLeft: 10,
     color: Color.colorBlack,
@@ -278,7 +229,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     overflow: "hidden",
   },
-  sellerDetails: {
+  AddAttributes: {
     flex: 1,
     maxWidth: "100%",
     overflow: "hidden",
@@ -290,7 +241,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(5.12),
     paddingVertical: responsiveHeight(2.36),
     backgroundColor: "white",
-    gap: responsiveHeight(4.10),
+    gap: responsiveHeight(4.1),
   },
   overall_heading: {
     fontSize: FontSize.size_mini,
@@ -304,9 +255,8 @@ const styles = StyleSheet.create({
     gap: responsiveHeight(2.98),
   },
   overall_frameView: {
-    marginTop: responsiveHeight(4.1),
     alignSelf: "stretch",
   },
 });
 
-export default SellerDetails;
+export default AddAttributes;

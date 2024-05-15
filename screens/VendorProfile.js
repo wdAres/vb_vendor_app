@@ -151,6 +151,20 @@ const VendorProfile = () => {
                 source={require("../assets/icon.png")}
               />
             </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.shopSettingsParent, styles.parentFlexBox]}
+              activeOpacity={0.2}
+              onPress={() => navigation.navigate("ChangePassword")}
+            >
+              <Text style={[styles.shopSettings, styles.companyTypo]}>
+                Change Password
+              </Text>
+              <Image
+                style={[styles.icon1, styles.iconLayout]}
+                resizeMode="cover"
+                source={require("../assets/icon.png")}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.frameParent}>
             <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
@@ -297,6 +311,20 @@ const VendorProfile = () => {
             <TouchableOpacity
               style={[styles.shopSettingsParent, styles.parentFlexBox]}
               activeOpacity={0.2}
+              onPress={() => navigation.navigate("AddSupportTicket")}
+            >
+              <Text style={[styles.shopSettings, styles.companyTypo]}>
+                Add Support Ticket
+              </Text>
+              <Image
+                style={[styles.icon10, styles.iconLayout]}
+                resizeMode="cover"
+                source={require("../assets/icon.png")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.shopSettingsParent, styles.parentFlexBox]}
+              activeOpacity={0.2}
               onPress={logout}
             >
               <Text style={[styles.shopSettings, styles.companyTypo]}>
@@ -310,6 +338,24 @@ const VendorProfile = () => {
             >
               <Text style={[styles.shopSettings, styles.companyTypo]}>
                 Input Checker
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.shopSettingsParent, styles.parentFlexBox]}
+              activeOpacity={0.2}
+              onPress={() => navigation.navigate("InputChecker")}
+            >
+              <Text style={[styles.shopSettings, styles.companyTypo]}>
+                Input Checker
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.shopSettingsParent, styles.parentFlexBox]}
+              activeOpacity={0.2}
+              onPress={() => navigation.navigate("Attributes")}
+            >
+              <Text style={[styles.shopSettings, styles.companyTypo]}>
+                Attributes
               </Text>
             </TouchableOpacity>
             {/* <Pressable
