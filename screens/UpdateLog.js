@@ -1,178 +1,182 @@
 import * as React from "react";
 import {
+  ScrollView,
+  Pressable,
   Image,
   StyleSheet,
-  Pressable,
   Text,
   View,
   TextInput,
-  ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { FontFamily, Color, Border, FontSize, Padding } from "../GlobalStyles";
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from "react-native-responsive-dimensions";
+import { useForm } from "react-hook-form";
+import PrimaryBtn from "../components/Buttons/PrimaryBtn";
+import useHttp2 from "../hooks/useHttp2";
+import Header from "../components/Header";
+import UL_Info from "./Support/components/UL_Info";
 
 const UpdateLog = () => {
+  const { sendRequest, isLoading } = useHttp2();
+  const route = useRoute();
+  const { id } = route.params;
   const navigation = useNavigation();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, defaultValues },
+  } = useForm();
+
+  const handleForm = (data) => {
+    sendRequest(
+      {
+        url: `order/${id}/status`,
+        method: "PUT",
+        body: data,
+      },
+      (result) => {
+        reset();
+        navigation.goBack();
+      },
+      true
+    );
+  };
+
+  const isFormValid = Object.keys(errors).length === 0;
+
+  const uni_style = {
+    title: styles.overall_heading,
+    container: styles.overall_container,
+    frameview: styles.overall_frameView,
+  };
 
   return (
-
-    // <View style={styles.updateLog}>
-    <ScrollView
-    horizontal={false}
-    showsVerticalScrollIndicator={false}
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.ordersScrollViewContent}
-    style={[styles.orders, styles.ordersSpaceBlock]}
-  >
-      <View style={styles.frameParent}>
-        <View style={styles.arrowLeftSmParent}>
-          <Pressable
-            style={styles.arrowLeftSm}
-            onPress={() => navigation.goBack()}
-          >
-            <Image
-              style={styles.icon}
-              resizeMode="cover"
-              source={require("../assets/arrowleftsm.png")}
-            />
-          </Pressable>
-          <Text style={[styles.updateLog1, styles.updateFlexBox]}>
-            Update log
-          </Text>
-        </View>
-        <View style={styles.frameGroup}>
-          <View style={styles.frameContainer}>
-            <View style={styles.frameContainer}>
-              <Text style={[styles.updateStage, styles.updateFlexBox]}>
-                Update Stage
-              </Text>
-              <TextInput style={[styles.frameChild, styles.frameBorder]} />
-            </View>
-            <View style={styles.logParent}>
-              <Text style={[styles.updateStage, styles.updateFlexBox]}>
-                Log
-              </Text>
-              <TextInput
-                style={[styles.frameItem, styles.frameBorder]}
-                multiline={true}
-              />
+    <>
+      <Header label={"Update Log"} />
+      <View style={styles.my_parent}>
+        <ScrollView
+          style={styles.sellerDetails}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.sellerDetailsScrollViewContent}
+        >
+          <View style={styles.frameParent}>
+            <View style={styles.frameParent}>
+              <View style={styles.frameContainer}>
+                <UL_Info
+                  control={control}
+                  errors={errors}
+                  uni_style={uni_style}
+                />
+              </View>
             </View>
           </View>
-          <Pressable style={styles.createWrapper}>
-            <Text style={[styles.create, styles.createTypo]}>Create</Text>
-          </Pressable>
-        </View>
+        </ScrollView>
+        <PrimaryBtn
+          title={`Update Log`}
+          isLoading={isLoading}
+          disabled={isLoading || !isFormValid}
+          onPress={handleSubmit(handleForm)}
+        />
       </View>
-      </ScrollView>
-    // </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  ordersSpaceBlock: {
-    backgroundColor: Color.colorWhite,
-  },
-  orders: {
-    overflow: "hidden",
-    width: responsiveWidth(100),
-    flex: 1,
-  },
-  ordersScrollViewContent: {
-    flexDirection: "row",
-    paddingHorizontal: responsiveWidth(5.12),
-    paddingVertical: responsiveHeight(2.36),
+  sellerDetailsScrollViewContent: {
+    flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
-  updateFlexBox: {
-    textAlign: "left",
-    color: Color.colorBlack,
-  },
   frameBorder: {
-    marginTop: responsiveHeight(0.87),
     borderWidth: 1,
     borderColor: Color.colorGainsboro_200,
     borderStyle: "solid",
     borderRadius: Border.br_8xs,
-    alignSelf: "stretch",
     backgroundColor: Color.colorWhite,
-  },
-  createTypo: {
-    fontFamily: FontFamily.interSemiBold,
-    fontWeight: "600",
-  },
-  icon: {
-    height: "100%",
-    width: "100%",
-  },
-  arrowLeftSm: {
-    width: responsiveHeight(2.98),
-    height: responsiveHeight(2.98),
-  },
-  updateLog1: {
-    fontSize: FontSize.size_lg,
-    marginLeft: responsiveWidth(2.56),
-    fontFamily: FontFamily.interSemiBold,
-    fontWeight: "600",
-  },
-  arrowLeftSmParent: {
-    alignItems: "center",
-    alignSelf: "stretch",
-    flexDirection: "row",
-  },
-  updateStage: {
-    fontSize: FontSize.size_xs,
-    fontWeight: "500",
-    fontFamily: FontFamily.interMedium,
-    alignSelf: "stretch",
   },
   frameChild: {
-    height: responsiveHeight(5.22),
-  },
-  frameContainer: {
-    alignSelf: "stretch",
-  },
-  frameItem: {
-    height: responsiveHeight(55.59),
-  },
-  logParent: {
-    marginTop: responsiveHeight(3.10),
-    alignSelf: "stretch",
-  },
-  create: {
-    fontSize: FontSize.size_sm,
-    color: Color.colorWhite,
-    textAlign: "center",
-    flex: 1,
-  },
-  createWrapper: {
-    backgroundColor: Color.colorFirebrick_200,
-    justifyContent: "center",
-    // paddingHorizontal: responsiveWidth(38.46),
-    paddingVertical: responsiveHeight(2.11),
-    marginTop: responsiveHeight(27.36),
-    borderRadius: Border.br_8xs,
+    paddingVertical: responsiveHeight(1.49),
+    paddingHorizontal: responsiveWidth(3.33),
+    marginTop: responsiveHeight(0.87),
+    borderWidth: 1,
+    borderColor: Color.colorGainsboro_200,
+    borderStyle: "solid",
+    fontFamily: FontFamily.interMedium,
+    fontWeight: "500",
+    fontSize: FontSize.size_xs,
+    flexDirection: "row",
+    overflow: "hidden",
     alignItems: "center",
+  },
+  frameParent: {
     alignSelf: "stretch",
+  },
+  frameInner: {
+    height: responsiveHeight(13.93),
+    paddingVertical: responsiveHeight(1.49),
+    paddingHorizontal: responsiveWidth(3.33),
+    marginTop: responsiveHeight(0.87),
+    borderWidth: 1,
+    borderColor: Color.colorGainsboro_200,
+    borderStyle: "solid",
+    fontFamily: FontFamily.interMedium,
+    fontWeight: "500",
+    fontSize: FontSize.size_xs,
     flexDirection: "row",
     overflow: "hidden",
   },
-  frameGroup: {
-    marginTop: responsiveHeight(3.35),
-    alignSelf: "stretch",
+  rectangleTextinput: {
+    height: responsiveHeight(5.22),
+    marginTop: responsiveHeight(0.87),
+    borderWidth: 1,
+    borderColor: Color.colorGainsboro_200,
+    borderStyle: "solid",
   },
-  frameParent: {
-    flex: 1,
-  },
-  updateLog: {
-    paddingHorizontal:responsiveWidth(5.12),
-    paddingVertical: responsiveHeight(2.36),
+  saveWrapper: {
+    backgroundColor: Color.colorFirebrick_200,
+    paddingHorizontal: responsiveWidth(38.46),
+    paddingVertical: responsiveHeight(2.11),
+    marginTop: responsiveHeight(6.21),
+    borderRadius: Border.br_8xs,
+    alignItems: "center",
     flexDirection: "row",
+    alignSelf: "stretch",
+    overflow: "hidden",
+  },
+  sellerDetails: {
+    flex: 1,
+    maxWidth: "100%",
     overflow: "hidden",
     backgroundColor: Color.colorWhite,
     width: "100%",
+  },
+  my_parent: {
     flex: 1,
+    paddingHorizontal: responsiveWidth(5.12),
+    paddingVertical: responsiveHeight(2.36),
+    backgroundColor: "white",
+    gap: responsiveHeight(4.1),
+  },
+  overall_heading: {
+    fontSize: FontSize.size_mini,
+    color: Color.colorFirebrick_200,
+    fontFamily: FontFamily.interSemiBold,
+    fontWeight: "600",
+    textAlign: "left",
+    alignSelf: "stretch",
+  },
+  overall_container: {
+    gap: responsiveHeight(2.98),
+  },
+  overall_frameView: {
+    alignSelf: "stretch",
   },
 });
 

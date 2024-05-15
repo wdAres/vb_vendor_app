@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -8,231 +8,264 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { FontFamily, Color, FontSize, Padding, Border } from "../GlobalStyles";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  FontFamily,
+  Color,
+  FontSize,
+  Padding,
+  Border,
+} from "../../GlobalStyles";
 import {
   responsiveHeight,
   responsiveWidth,
 } from "react-native-responsive-dimensions";
+import Header from "../../components/Header";
+import useHttp2 from "../../hooks/useHttp2";
+import moment from "moment";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { id } = route.params;
+  const { sendRequest, isLoading } = useHttp2();
+  const [data, setData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+
+  const getData = () => {
+    sendRequest(
+      {
+        url: `order/${id}/show`,
+      },
+      (result) => {
+        let items = result?.data?.items?.map((element, index) => ({
+          index: index + 1,
+          price: element?.price,
+          qty: element?.qty,
+          name: element?.productId?.name,
+          url: element?.productId?.url,
+          inStock: element?.productId?.inStock,
+        }));
+        setTableData(items);
+        setData(result.data);
+      }
+    );
+  };
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   return (
-    <ScrollView
-      horizontal={false}
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.ordersScrollViewContent}
-      style={[styles.orders, styles.ordersSpaceBlock]}
-    >
-      <View style={styles.frameParent}>
-        <View style={styles.arrowLeftSmParent}>
-          <Pressable
-            style={styles.arrowLeftSm}
-            onPress={() => navigation.goBack()}
-          >
-            <Image
-              style={styles.icon}
-              resizeMode="cover"
-              source={require("../assets/arrowleftsm.png")}
-            />
-          </Pressable>
-          <Text style={[styles.orderDetails1, styles.orderTypo]}>
-            Order Details
-          </Text>
-        </View>
-        <View style={styles.frameGroup}>
-          <View style={styles.frameWrapper}>
-            <View style={styles.frameContainer}>
-              <View style={styles.orderDateParent}>
-                <Text style={[styles.orderDate, styles.textTypo]}>
-                  Order Date
+    <>
+      <Header label={"Order Details"} />
+      <ScrollView
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.ordersScrollViewContent}
+        style={[styles.orders, styles.ordersSpaceBlock]}
+      >
+        <View style={styles.frameParent}>
+          <View style={styles.frameGroup}>
+            <View style={styles.frameWrapper}>
+              <View style={styles.frameContainer}>
+                <View style={styles.orderDateParent}>
+                  <Text style={[styles.orderDate, styles.textTypo]}>
+                    Order Date
+                  </Text>
+                  <Text style={[styles.text, styles.textTypo]}>
+                    {moment(data?.createdAt).format("YYYY-MM-DD")}
+                  </Text>
+                </View>
+                <View style={styles.orderNoParent}>
+                  <Text style={[styles.orderDate, styles.textTypo]}>
+                    Order ID
+                  </Text>
+                  <Text style={[styles.text1, styles.textTypo]}>
+                    {data?.orderId}
+                  </Text>
+                </View>
+                <View style={styles.orderNoParent}>
+                  <Text style={[styles.orderDate, styles.textTypo]}>
+                    Order Total
+                  </Text>
+                  <Text style={[styles.text2, styles.textTypo]}>
+                    ${data?.total}
+                  </Text>
+                </View>
+                <Text style={[styles.downloadInvoice, styles.updateLog1Typo]}>
+                  Download invoice
                 </Text>
-                <Text style={[styles.text, styles.textTypo]}>13/08/2023</Text>
               </View>
-              <View style={styles.orderNoParent}>
-                <Text style={[styles.orderDate, styles.textTypo]}>
-                  Order No
-                </Text>
-                <Text style={[styles.text1, styles.textTypo]}>
-                  895958729320
-                </Text>
-              </View>
-              <View style={styles.orderNoParent}>
-                <Text style={[styles.orderDate, styles.textTypo]}>
-                  Order Total
-                </Text>
-                <Text style={[styles.text2, styles.textTypo]}>$899</Text>
-              </View>
-              <Text style={[styles.downloadInvoice, styles.updateLog1Typo]}>
-                Download invoice
+            </View>
+            <View style={styles.orderStatusParent}>
+              <Text style={[styles.orderStatus, styles.logsTypo]}>
+                Order Status
               </Text>
-            </View>
-          </View>
-          <View style={styles.orderStatusParent}>
-            <Text style={[styles.orderStatus, styles.logsTypo]}>
-              Order Status
-            </Text>
-            <View style={[styles.frameView, styles.frameParentSpaceBlock]}>
-              <View style={styles.frameContainer}>
+              <View style={[styles.frameView, styles.frameParentSpaceBlock]}>
                 <View style={styles.frameContainer}>
-                  <View style={styles.frameParent3}>
-                    <View style={styles.thJuneParent}>
-                      <Text style={[styles.thJune, styles.juneClr]}>
-                        29th June
-                      </Text>
-                      <Text style={[styles.orderConfirmed, styles.textTypo]}>
-                        Order confirmed
-                      </Text>
+                  <View style={styles.frameContainer}>
+                    <View style={styles.frameParent3}>
+                      <View style={styles.thJuneParent}>
+                        <Text style={[styles.thJune, styles.juneClr]}>
+                          29th June
+                        </Text>
+                        <Text style={[styles.orderConfirmed, styles.textTypo]}>
+                          Order confirmed
+                        </Text>
+                      </View>
+                      <View style={[styles.thJuneGroup, styles.juneSpaceBlock]}>
+                        <Text style={[styles.thJune1, styles.thJune1Typo]}>
+                          29th June
+                        </Text>
+                        <Text style={[styles.shipped, styles.thJune1Typo]}>
+                          Shipped
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.thJuneContainer, styles.juneSpaceBlock]}
+                      >
+                        <Text style={[styles.thJune1, styles.thJune1Typo]}>
+                          29th June
+                        </Text>
+                        <Text style={[styles.orderConfirmed, styles.textTypo]}>
+                          Out for delivery
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.thJuneParent1, styles.juneSpaceBlock]}
+                      >
+                        <Text style={[styles.thJune3, styles.thJune3Typo]}>
+                          29th June
+                        </Text>
+                        <Text style={[styles.delivered, styles.thJune3Typo]}>
+                          Delivered
+                        </Text>
+                      </View>
+                      <Image
+                        style={styles.imageIcon}
+                        resizeMode="cover"
+                        source={require("../../assets/image4.png")}
+                      />
                     </View>
-                    <View style={[styles.thJuneGroup, styles.juneSpaceBlock]}>
-                      <Text style={[styles.thJune1, styles.thJune1Typo]}>
-                        29th June
-                      </Text>
-                      <Text style={[styles.shipped, styles.thJune1Typo]}>
-                        Shipped
-                      </Text>
+                    <View style={styles.logsParent}>
+                      <Text style={[styles.logs, styles.logsTypo]}>Logs</Text>
+                      <View style={[styles.frameParentSpaceBlock,styles.gap]}>
+                        {data && data?.logs?.length > 0 && data.logs.map((element,index)=>(
+                        <Text
+                        key={index}
+                          style={[styles.packageIsShipped, styles.packageTypo]}
+                        >
+                          {element.log}
+                        </Text>
+                        ))}
+                      </View>
                     </View>
-                    <View
-                      style={[styles.thJuneContainer, styles.juneSpaceBlock]}
-                    >
-                      <Text style={[styles.thJune1, styles.thJune1Typo]}>
-                        29th June
-                      </Text>
-                      <Text style={[styles.orderConfirmed, styles.textTypo]}>
-                        Out for delivery
-                      </Text>
-                    </View>
-                    <View style={[styles.thJuneParent1, styles.juneSpaceBlock]}>
-                      <Text style={[styles.thJune3, styles.thJune3Typo]}>
-                        29th June
-                      </Text>
-                      <Text style={[styles.delivered, styles.thJune3Typo]}>
-                        Delivered
-                      </Text>
-                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.updateLog}
+                    activeOpacity={0.2}
+                    onPress={() => navigation.navigate("UpdateLog",{id:data?._id})}
+                  >
+                    <Text style={styles.updateLog1Typo}>Update Log</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <View style={styles.orderStatusParent}>
+              <Text style={[styles.orderStatus, styles.logsTypo]}>
+                Product details
+              </Text>
+              <View
+                style={[
+                  styles.imagePlaceHolderParent,
+                  styles.frameParentSpaceBlock,
+                ]}
+              >
+                <Image
+                  style={styles.imagePlaceHolder}
+                  resizeMode="cover"
+                  source={require("../../assets/imageplaceholder1.png")}
+                />
+                <View style={styles.pearlBeadingTexturParent}>
+                  <Text style={[styles.pearlBeadingTextur, styles.orderTypo]}>
+                    Pearl Beading Textured Faux Fur Furnitures
+                  </Text>
+                  <View style={[styles.starsParent, styles.parentSpaceBlock]}>
                     <Image
-                      style={styles.imageIcon}
+                      style={styles.starsIcon}
                       resizeMode="cover"
-                      source={require("../assets/image4.png")}
+                      source={require("../../assets/stars2.png")}
                     />
+                    <Text style={[styles.reviews, styles.logsTypo]}>
+                      480+ Reviews
+                    </Text>
                   </View>
-                  <View style={styles.logsParent}>
-                    <Text style={[styles.logs, styles.logsTypo]}>Logs</Text>
-                    <View style={styles.frameParentSpaceBlock}>
-                      <Text
-                        style={[styles.packageIsShipped, styles.packageTypo]}
-                      >
-                        Package is shipped 20/2/2018 18:30pm
-                      </Text>
-                      <Text
-                        style={[
-                          styles.packageIsDelivered,
-                          styles.apt45352466FlexBox,
-                        ]}
-                      >
-                        Package is Delivered 20/2/2018 18:30pm
+                  <View style={styles.parentSpaceBlock}>
+                    <View style={[styles.offWrapper, styles.text3Layout]}>
+                      <Text style={[styles.off, styles.orderTypo]}>
+                        2 % off
                       </Text>
                     </View>
+                    <Text style={[styles.text3, styles.textSpaceBlock]}>
+                      $1399
+                    </Text>
+                    <Text style={[styles.text4, styles.textSpaceBlock]}>
+                      $1299
+                    </Text>
                   </View>
                 </View>
-                <TouchableOpacity
-                  style={styles.updateLog}
-                  activeOpacity={0.2}
-                  onPress={() => navigation.navigate("UpdateLog")}
-                >
-                  <Text style={styles.updateLog1Typo}>Update Log</Text>
-                </TouchableOpacity>
               </View>
             </View>
-          </View>
-          <View style={styles.orderStatusParent}>
-            <Text style={[styles.orderStatus, styles.logsTypo]}>
-              Product details
-            </Text>
-            <View
-              style={[
-                styles.imagePlaceHolderParent,
-                styles.frameParentSpaceBlock,
-              ]}
-            >
-              <Image
-                style={styles.imagePlaceHolder}
-                resizeMode="cover"
-                source={require("../assets/imageplaceholder1.png")}
-              />
-              <View style={styles.pearlBeadingTexturParent}>
-                <Text style={[styles.pearlBeadingTextur, styles.orderTypo]}>
-                  Pearl Beading Textured Faux Fur Furnitures
-                </Text>
-                <View style={[styles.starsParent, styles.parentSpaceBlock]}>
-                  <Image
-                    style={styles.starsIcon}
-                    resizeMode="cover"
-                    source={require("../assets/stars2.png")}
-                  />
-                  <Text style={[styles.reviews, styles.logsTypo]}>
-                    480+ Reviews
+            <View style={styles.orderStatusParent}>
+              <Text style={[styles.orderStatus, styles.logsTypo]}>
+                Payment Info
+              </Text>
+              <View style={[styles.frameParent5, styles.frameBorder]}>
+                <View style={styles.frameContainer}>
+                  <Text style={[styles.paymentMethods, styles.orderTypo]}>
+                    Payment Methods
                   </Text>
+                  <Text style={styles.pickup}>{data?.paymentMethod}</Text>
                 </View>
-                <View style={styles.parentSpaceBlock}>
-                  <View style={[styles.offWrapper, styles.text3Layout]}>
-                    <Text style={[styles.off, styles.orderTypo]}>2 % off</Text>
-                  </View>
-                  <Text style={[styles.text3, styles.textSpaceBlock]}>
-                    $1399
+                <View
+                  style={[styles.frameChild, styles.frameParentSpaceBlock]}
+                />
+                <View style={styles.frameParentSpaceBlock}>
+                  <Text style={[styles.paymentMethods, styles.orderTypo]}>
+                    Billing Address
                   </Text>
-                  <Text style={[styles.text4, styles.textSpaceBlock]}>
-                    $1299
+                  <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
+                    {data?.billingAddress}
                   </Text>
                 </View>
               </View>
             </View>
-          </View>
-          <View style={styles.orderStatusParent}>
-            <Text style={[styles.orderStatus, styles.logsTypo]}>
-              Payment Info
-            </Text>
-            <View style={[styles.frameParent5, styles.frameBorder]}>
-              <View style={styles.frameContainer}>
-                <Text style={[styles.paymentMethods, styles.orderTypo]}>
-                  Payment Methods
-                </Text>
-                <Text style={styles.pickup}>Pickup</Text>
-              </View>
-              <View style={[styles.frameChild, styles.frameParentSpaceBlock]} />
-              <View style={styles.frameParentSpaceBlock}>
-                <Text style={[styles.paymentMethods, styles.orderTypo]}>
-                  Billing Address
-                </Text>
-                <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
-                  Apt. 453 52466 Kimberlie Trail, Emardmouth, IL 70724
-                </Text>
+            {data?.pickupAddress && 
+            <View style={styles.orderStatusParent}>
+              <Text style={[styles.orderStatus, styles.logsTypo]}>
+                Pickup Address
+              </Text>
+              <View style={[styles.frameWrapper1, styles.frameBorder]}>
+                <View style={styles.frameContainer}>
+                  <Text style={[styles.paymentMethods, styles.orderTypo]}>
+                    Nishant Choudhary
+                  </Text>
+                  <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
+                    Apt. 453 52466 Kimberlie Trail, Emardmouth, IL 70724
+                  </Text>
+                  <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
+                    7503063585
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-          <View style={styles.orderStatusParent}>
-            <Text style={[styles.orderStatus, styles.logsTypo]}>
-              Pickup Address
-            </Text>
-            <View style={[styles.frameWrapper1, styles.frameBorder]}>
-              <View style={styles.frameContainer}>
-                <Text style={[styles.paymentMethods, styles.orderTypo]}>
-                  Nishant Choudhary
-                </Text>
-                <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
-                  Apt. 453 52466 Kimberlie Trail, Emardmouth, IL 70724
-                </Text>
-                <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
-                  7503063585
-                </Text>
-              </View>
-            </View>
+}
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
@@ -276,6 +309,9 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(1.61),
     alignSelf: "stretch",
   },
+  gap:{
+    gap: responsiveHeight(1.61),
+  },
   juneClr: {
     color: Color.colorMediumseagreen_200,
     fontSize: FontSize.size_4xs,
@@ -310,7 +346,7 @@ const styles = StyleSheet.create({
   parentSpaceBlock: {
     marginTop: responsiveHeight(1.11),
     flexDirection: "row",
-    alignItems:'center'
+    alignItems: "center",
   },
   text3Layout: {
     height: responsiveHeight(2.36),
@@ -613,7 +649,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(4.61),
   },
   frameGroup: {
-    marginTop: responsiveHeight(3.1),
+    // marginTop: responsiveHeight(3.1),
     alignSelf: "stretch",
   },
   frameParent: {

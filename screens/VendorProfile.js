@@ -16,365 +16,278 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { useAuth } from "../context/AuthContext";
+import Header from "../components/Header";
+
+const renderMenuItems = (menuItems) => {
+  return menuItems.map((item, index) => (
+    <TouchableOpacity
+      key={index}
+      style={[styles.shopSettingsParent, styles.parentFlexBox]}
+      activeOpacity={0.2}
+      onPress={item.onPress}
+    >
+      <Text style={[styles.shopSettings, styles.companyTypo]}>
+        {item.title}
+      </Text>
+      <Image
+        style={[styles.icon, styles.iconLayout]}
+        resizeMode="cover"
+        source={require("../assets/icon.png")}
+      />
+    </TouchableOpacity>
+  ));
+};
 
 const VendorProfile = () => {
   const navigation = useNavigation();
-  const {logout} = useAuth()
+  const { logout } = useAuth();
+
+  const touchablesData = [
+    {
+      title: "Shop Settings",
+      onPress: () => navigation.navigate("ShopDetails"),
+    },
+    {
+      title: "Seller Details",
+      onPress: () => navigation.navigate("SellerDetails"),
+    },
+    {
+      title: "Change Password",
+      onPress: () => navigation.navigate("ChangePassword"),
+    },
+    {
+      title: "Products",
+      onPress: () => navigation.navigate("Products1"),
+    },
+    {
+      title: "Add Product",
+      onPress: () => navigation.navigate("AddProduct1"),
+    },
+    {
+      title: "Product Bulk Upload",
+      onPress: () => navigation.navigate("BulkUpload"),
+    },
+    {
+      title: "All Coupons",
+      onPress: () => navigation.navigate("Coupons"),
+    },
+    {
+      title: "Add New Coupons",
+      onPress: () => navigation.navigate("Coupons1"),
+    },
+    {
+      title: "My Payments",
+      onPress: () =>
+        navigation.navigate("BottomTabsRoot", { screen: "Payments" }),
+    },
+    {
+      title: "Refund Request",
+      onPress: () => navigation.navigate("RefundRequest1"),
+    },
+    {
+      title: "Withdraw",
+      onPress: () => navigation.navigate("Withdraw"),
+    },
+    {
+      title: "All Tickets",
+      onPress: () => navigation.navigate("Support"),
+    },
+    {
+      title: "Add Support Ticket",
+      onPress: () => navigation.navigate("AddSupportTicket"),
+    },
+    {
+      title: "Logout",
+      onPress: logout,
+    },
+    {
+      title: "Attributes",
+      onPress: () => navigation.navigate("Attributes"),
+    },
+  ];
+
+  const myShopAndProfile = [
+    touchablesData[0], // Shop Settings
+    touchablesData[1], // Seller Details
+    touchablesData[2], // Change Password
+  ];
+  const products = [
+    touchablesData[3], // Products
+    touchablesData[4], // Add Product
+    touchablesData[5], // Product Bulk Upload
+  ];
+  const coupons = [
+    touchablesData[6], // All Coupons
+    touchablesData[7], // Add New Coupons
+  ];
+
+  const payments = [
+    touchablesData[8], // My Payments
+    touchablesData[9], // Refund Request
+    touchablesData[10], // Withdraw
+  ];
+
+  const support = [
+    touchablesData[11], // All Tickets
+    touchablesData[12], // Add Support Ticket
+  ];
+
+  const otherLinks = [
+    touchablesData[14], // Attributes
+  ];
+
+  const logoutData = [
+    touchablesData[13], // Logout
+  ];
 
   return (
-    <ScrollView
-      style={styles.vendorProfile}
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.vendorProfileScrollViewContent}
-    >
-      <View style={styles.vendorProfileParent}>
-        <Text style={[styles.vendorProfile1, styles.modernTimberTypo1]}>
+    <>
+      {/* <Text style={[styles.vendorProfile1, styles.modernTimberTypo1]}>
           Vendor Profile
-        </Text>
-        <View style={styles.frameParent}>
-          <Pressable style={[styles.frameGroup, styles.groupBorder]}>
-            <View style={styles.ellipseParent}>
-              <Image
-                style={styles.frameChild}
-                resizeMode="cover"
-                source={require("../assets/ellipse-262.png")}
-              />
-              <View style={styles.modernTimberParent}>
-                <Text style={[styles.modernTimber, styles.modernTimberTypo]}>
-                  Modern Timber
-                </Text>
-                <Text style={[styles.company, styles.companyTypo]}>
-                  Company
-                </Text>
-                <Text style={[styles.company, styles.companyTypo]}>
-                  520 Products
-                </Text>
+        </Text> */}
+      <Header label={"Vendor Profile"} hideArrow={true} />
+      <ScrollView
+        style={styles.vendorProfile}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.vendorProfileScrollViewContent}
+      >
+        <View style={styles.vendorProfileParent}>
+          <View style={[styles.frameParent, styles.parent_gap]}>
+            <Pressable style={[styles.frameGroup, styles.groupBorder]}>
+              <View style={styles.ellipseParent}>
+                <Image
+                  style={styles.frameChild}
+                  resizeMode="cover"
+                  source={require("../assets/ellipse-262.png")}
+                />
+                <View style={styles.modernTimberParent}>
+                  <Text style={[styles.modernTimber, styles.modernTimberTypo]}>
+                    Modern Timber
+                  </Text>
+                  <Text style={[styles.company, styles.companyTypo]}>
+                    Company
+                  </Text>
+                  <Text style={[styles.company, styles.companyTypo]}>
+                    520 Products
+                  </Text>
+                </View>
               </View>
-            </View>
-            <Image
-              style={styles.arrowRightSmIcon}
+              <Image
+                style={styles.arrowRightSmIcon}
+                resizeMode="cover"
+                source={require("../assets/arrowrightsm2.png")}
+              />
+            </Pressable>
+            <ImageBackground
+              style={styles.imageIcon}
               resizeMode="cover"
-              source={require("../assets/arrowrightsm2.png")}
+              source={require("../assets/image1.png")}
             />
-          </Pressable>
-          <ImageBackground
-            style={styles.imageIcon}
-            resizeMode="cover"
-            source={require("../assets/image1.png")}
-          />
-          <ScrollView
-            style={styles.frameContainer}
-            horizontal={true}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={true}
-            contentContainerStyle={styles.frameScrollViewContent}
-          >
-            <Pressable style={styles.frameBorder}>
-              <View>
-                <Text style={[styles.totalOrders, styles.inTransitTypo]}>
-                  Total Orders
+            <ScrollView
+              style={styles.frameContainer}
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={true}
+              contentContainerStyle={styles.frameScrollViewContent}
+            >
+              <Pressable style={styles.frameBorder}>
+                <View>
+                  <Text style={[styles.totalOrders, styles.inTransitTypo]}>
+                    Total Orders
+                  </Text>
+                  <Text style={[styles.text, styles.textTypo]}>878</Text>
+                </View>
+                <Image
+                  style={[styles.arrowRightSmIcon1, styles.iconLayout1]}
+                  resizeMode="cover"
+                  source={require("../assets/arrowrightsm3.png")}
+                />
+              </Pressable>
+              <Pressable style={[styles.frameParent1, styles.frameBorder]}>
+                <View>
+                  <Text style={[styles.totalOrders, styles.inTransitTypo]}>
+                    Total Products
+                  </Text>
+                  <Text style={[styles.text, styles.textTypo]}>032</Text>
+                </View>
+                <Image
+                  style={[styles.arrowRightSmIcon2, styles.iconLayout1]}
+                  resizeMode="cover"
+                  source={require("../assets/arrowrightsm3.png")}
+                />
+              </Pressable>
+              <View style={[styles.rectangleParent, styles.groupChildLayout]}>
+                <View style={[styles.groupChild, styles.groupChildLayout]} />
+                <Image
+                  style={[styles.arrowRightSmIcon3, styles.iconLayout1]}
+                  resizeMode="cover"
+                  source={require("../assets/arrowrightsm3.png")}
+                />
+                <Text style={[styles.inTransit, styles.text2Position]}>
+                  In Transit
                 </Text>
-                <Text style={[styles.text, styles.textTypo]}>878</Text>
+                <Text style={[styles.text2, styles.text2Position]}>70</Text>
               </View>
-              <Image
-                style={[styles.arrowRightSmIcon1, styles.iconLayout1]}
-                resizeMode="cover"
-                source={require("../assets/arrowrightsm3.png")}
-              />
-            </Pressable>
-            <Pressable style={[styles.frameParent1, styles.frameBorder]}>
-              <View>
-                <Text style={[styles.totalOrders, styles.inTransitTypo]}>
-                  Total Products
+              <View style={[styles.rectangleParent, styles.groupChildLayout]}>
+                <View style={[styles.groupChild, styles.groupChildLayout]} />
+                <Image
+                  style={[styles.arrowRightSmIcon3, styles.iconLayout1]}
+                  resizeMode="cover"
+                  source={require("../assets/arrowrightsm3.png")}
+                />
+                <Text style={[styles.inTransit, styles.text2Position]}>
+                  RTO
                 </Text>
-                <Text style={[styles.text, styles.textTypo]}>032</Text>
+                <Text style={[styles.text2, styles.text2Position]}>02</Text>
               </View>
-              <Image
-                style={[styles.arrowRightSmIcon2, styles.iconLayout1]}
-                resizeMode="cover"
-                source={require("../assets/arrowrightsm3.png")}
-              />
-            </Pressable>
-            <View style={[styles.rectangleParent, styles.groupChildLayout]}>
-              <View style={[styles.groupChild, styles.groupChildLayout]} />
-              <Image
-                style={[styles.arrowRightSmIcon3, styles.iconLayout1]}
-                resizeMode="cover"
-                source={require("../assets/arrowrightsm3.png")}
-              />
-              <Text style={[styles.inTransit, styles.text2Position]}>
-                In Transit
+            </ScrollView>
+            <View style={styles.frameParent}>
+              <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
+                My Shop and Profile
               </Text>
-              <Text style={[styles.text2, styles.text2Position]}>70</Text>
+              {renderMenuItems(myShopAndProfile)}
             </View>
-            <View style={[styles.rectangleParent, styles.groupChildLayout]}>
-              <View style={[styles.groupChild, styles.groupChildLayout]} />
-              <Image
-                style={[styles.arrowRightSmIcon3, styles.iconLayout1]}
-                resizeMode="cover"
-                source={require("../assets/arrowrightsm3.png")}
-              />
-              <Text style={[styles.inTransit, styles.text2Position]}>RTO</Text>
-              <Text style={[styles.text2, styles.text2Position]}>02</Text>
-            </View>
-          </ScrollView>
-          <View style={styles.frameParent}>
-            <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
-              My Shop and profile
-            </Text>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("ShopDetails")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Shop Settings
-              </Text>
-              <Image
-                style={[styles.icon, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("SellerDetails")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Seller Details
-              </Text>
-              <Image
-                style={[styles.icon1, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("ChangePassword")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Change Password
-              </Text>
-              <Image
-                style={[styles.icon1, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.frameParent}>
-            <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
-              Products
-            </Text>
-            <Pressable
-              style={[styles.allProductsParent, styles.parentFlexBox]}
-              onPress={() => navigation.navigate("Products1")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
+            <View style={styles.frameParent}>
+              <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
                 Products
               </Text>
-              <Image
-                style={[styles.icon3, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </Pressable>
-            <Pressable
-              style={[styles.allProductsParent, styles.parentFlexBox]}
-              onPress={() => navigation.navigate("AddProduct1")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Add Product
+              {renderMenuItems(products)}
+            </View>
+            <View style={styles.frameParent}>
+              <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
+                Coupons
               </Text>
-              <Image
-                style={[styles.icon3, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </Pressable>
-            <Pressable
-              style={[styles.allProductsParent, styles.parentFlexBox]}
-              onPress={() => navigation.navigate("BulkUpload")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Product Bulk Upload
+              {renderMenuItems(coupons)}
+            </View>
+            <View style={styles.frameParent}>
+              <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
+                Payments
               </Text>
-              <Image
-                style={[styles.icon4, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </Pressable>
-          </View>
-          <View style={styles.frameParent}>
-            <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
-              Coupons
-            </Text>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("Coupons")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                All Coupons
+              {renderMenuItems(payments)}
+            </View>
+            <View style={styles.frameParent}>
+              <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
+                Other Links
               </Text>
-              <Image
-                style={[styles.icon5, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-            <Pressable
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              onPress={() => navigation.navigate("Coupons1")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Add New Coupons
+              {renderMenuItems(otherLinks)}
+            </View>
+            <View style={styles.frameParent}>
+              <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
+                Support
               </Text>
-              <Image
-                style={[styles.icon6, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </Pressable>
-          </View>
-          <View style={styles.frameParent}>
-            <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
-              Payments
-            </Text>
-            <TouchableOpacity
-              style={[styles.allProductsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() =>
-                navigation.navigate("BottomTabsRoot", { screen: "Payments" })
-              }
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                My Payments
-              </Text>
-              <Image
-                style={[styles.icon7, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.allProductsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("RefundRequest1")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Refund Request
-              </Text>
-              <Image
-                style={[styles.icon8, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-            <Pressable
-              style={[styles.allProductsParent, styles.parentFlexBox]}
-              onPress={() => navigation.navigate("Withdraw")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Withdraw
-              </Text>
-              <Image
-                style={[styles.icon9, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </Pressable>
-          </View>
-          <View style={styles.frameParent}>
-            <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
-              Support
-            </Text>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("Support")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                All Tickets
-              </Text>
-              <Image
-                style={[styles.icon10, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("AddSupportTicket")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Add Support Ticket
-              </Text>
-              <Image
-                style={[styles.icon10, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={logout}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
+              {renderMenuItems(support)}
+            </View>
+            <View style={styles.frameParent}>
+              <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
                 Logout
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("InputChecker")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Input Checker
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("InputChecker")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Input Checker
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              activeOpacity={0.2}
-              onPress={() => navigation.navigate("Attributes")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Attributes
-              </Text>
-            </TouchableOpacity>
-            {/* <Pressable
-              style={[styles.shopSettingsParent, styles.parentFlexBox]}
-              onPress={() => navigation.navigate("TicketDetails")}
-            >
-              <Text style={[styles.shopSettings, styles.companyTypo]}>
-                Add new ticket
-              </Text>
-              <Image
-                style={[styles.icon11, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/icon.png")}
-              />
-            </Pressable> */}
+              {renderMenuItems(logoutData)}
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
@@ -464,7 +377,7 @@ const styles = StyleSheet.create({
   },
   iconLayout: {
     height: responsiveHeight(0.87),
-    width: responsiveWidth(2.05),
+    width: responsiveHeight(0.87),
   },
   frameLayout: {
     height: responsiveHeight(0.62),
@@ -587,7 +500,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    marginLeft: responsiveWidth(57.69),
+    // marginLeft: responsiveWidth(57.69),
   },
   shopSettingsParent: {
     marginTop: responsiveHeight(1.74),
@@ -596,44 +509,48 @@ const styles = StyleSheet.create({
     marginLeft: responsiveWidth(59.23),
   },
   frameParent: {
-    marginTop: responsiveHeight(3.48),
+    // marginTop: responsiveHeight(3.48),
+
     alignSelf: "stretch",
-  },
-  icon2: {
-    marginLeft: responsiveHeight(60.51),
   },
   allProductsParent: {
     marginTop: responsiveHeight(1.61),
   },
-  icon3: {
-    marginLeft: responsiveWidth(60),
-  },
-  icon4: {
-    marginLeft: responsiveWidth(48.2),
-  },
-  icon5: {
-    marginLeft: responsiveWidth(60.76),
-  },
-  icon6: {
-    marginLeft: responsiveWidth(50.76),
-  },
-  icon7: {
-    marginLeft: responsiveWidth(58.46),
-  },
-  icon8: {
-    marginLeft: responsiveWidth(54.87),
-  },
-  icon9: {
-    marginLeft: responsiveWidth(64.1),
-  },
-  icon10: {
-    marginLeft: responsiveWidth(63.07),
-  },
-  icon11: {
-    marginLeft: responsiveWidth(56.41),
-  },
+  // icon2: {
+  //   marginLeft: responsiveHeight(60.51),
+  // },
+  // icon3: {
+  //   marginLeft: responsiveWidth(60),
+  // },
+  // icon4: {
+  //   marginLeft: responsiveWidth(48.2),
+  // },
+  // icon5: {
+  //   marginLeft: responsiveWidth(60.76),
+  // },
+  // icon6: {
+  //   marginLeft: responsiveWidth(50.76),
+  // },
+  // icon7: {
+  //   marginLeft: responsiveWidth(58.46),
+  // },
+  // icon8: {
+  //   marginLeft: responsiveWidth(54.87),
+  // },
+  // icon9: {
+  //   marginLeft: responsiveWidth(64.1),
+  // },
+  // icon10: {
+  //   marginLeft: responsiveWidth(63.07),
+  // },
+  // icon11: {
+  //   marginLeft: responsiveWidth(56.41),
+  // },
   vendorProfileParent: {
     alignSelf: "stretch",
+  },
+  parent_gap: {
+    gap: responsiveHeight(3.48),
   },
   vendorProfile: {
     maxWidth: responsiveWidth(100),

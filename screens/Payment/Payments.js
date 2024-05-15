@@ -106,20 +106,6 @@ const Payments = () => {
       >
         <View style={styles.frameParent}>
           <View style={styles.frameGroup}>
-            <View style={styles.frameWrapper}>
-              <View style={styles.walletAmountParent}>
-                <Text style={[styles.walletAmount, styles.textTypo]}>
-                  Wallet Amount
-                </Text>
-                <Text style={[styles.text, styles.textTypo]}>₹5,345</Text>
-              </View>
-              <Pressable
-                style={[styles.withdrawWrapper, styles.home04ParentFlexBox]}
-                onPress={() => navigation.navigate("WithdrawMoney")}
-              >
-                <Text style={styles.withdraw}>Withdraw</Text>
-              </Pressable>
-            </View>
             <Image
               style={[styles.imageIcon, styles.imageIconSpaceBlock]}
               resizeMode="cover"
@@ -218,7 +204,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   imageIconSpaceBlock: {
-    marginTop: responsiveHeight(2.48),
+    // marginTop: responsiveHeight(2.48),
     alignSelf: "stretch",
   },
   paymentHistory: {

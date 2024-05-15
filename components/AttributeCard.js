@@ -2,10 +2,14 @@ import { View, Text, Pressable, Image, StyleSheet } from "react-native";
 import React from "react";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import { responsiveHeight } from "react-native-responsive-dimensions";
+import { useNavigation } from "@react-navigation/core";
 
 export default function AttributeCard({_id,name}) {
+
+  const navigation = useNavigation()
+
   return (
-    <Pressable style={styles.refundCardBorder}>
+    <Pressable onPress={()=>navigation.navigate('EditAttributes',{id:_id})} style={styles.refundCardBorder}>
       <View style={[styles.colorsParent, styles.parentFlexBox]}>
         <Text style={styles.colors}>{name}</Text>
         <Image

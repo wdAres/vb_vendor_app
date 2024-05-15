@@ -4,14 +4,20 @@ import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 import SecondaryBtn from "../../../components/Buttons/SecondaryBtn";
 
-const Att_Info = ({ control, errors, uni_style }) => {
-  const [currentInx, setInx] = useState(1);
+const Att_Info = ({
+  control,
+  errors,
+  uni_style,
+  updateOption,
+  initial_value,
+}) => {
+  const [currentInx, setInx] = useState(initial_value);
 
   let valueField = (index) => {
     return {
       label: `Option ${index + 1}`,
       dataObj: {
-        name: `option.${index}.value`,
+        name: `options.${index}.value`,
         control: control,
         errors: errors,
         rules: {
@@ -37,6 +43,11 @@ const Att_Info = ({ control, errors, uni_style }) => {
     },
   ];
 
+  const removeItem = (index) => {
+    setInx((prev) => prev - 1);
+    updateOption(index);
+  };
+
   return (
     <View>
       <View style={[uni_style.container, uni_style.frameview]}>
@@ -48,15 +59,14 @@ const Att_Info = ({ control, errors, uni_style }) => {
           .map((element, index) => (
             <>
               <FormItem key={index} {...valueField(index)} />
-              <SecondaryBtn
-                title={"Remove"}
-                onPress={() => setInx((prev) => prev - 1)}
-              />
+              {currentInx > 1 && (
+                <SecondaryBtn title={"Remove"} onPress={removeItem} />
+              )}
             </>
           ))}
         <SecondaryBtn
           onPress={() => setInx((prev) => prev + 1)}
-          title={"Add Value"}
+          title={"Add Options"}
         />
       </View>
     </View>
@@ -64,5 +74,3 @@ const Att_Info = ({ control, errors, uni_style }) => {
 };
 
 export default Att_Info;
-
-const styles = StyleSheet.create({});

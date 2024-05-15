@@ -43,7 +43,7 @@ import Frame3 from "./components/Frame3";
 import Frame4 from "./components/Frame4";
 import Dashboard1 from "./screens/Dashboard1";
 import Products1 from "./screens/Products1";
-import Orders from "./screens/Orders";
+import Orders from "./screens/Orders/Orders";
 import Frame8 from "./components/Frame8";
 import ShopSetting from "./screens/ShopSetting";
 import AddProduct1 from "./screens/AddProduct1";
@@ -55,7 +55,7 @@ import Support from "./screens/Support/Support";
 import TicketDetails from "./screens/TicketDetails";
 import Frame5 from "./components/Frame5";
 import Frame6 from "./components/Frame6";
-import OrderDetails from "./screens/OrderDetails";
+import OrderDetails from "./screens/Orders/OrderDetails";
 import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { IconRegistry, ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -93,6 +93,7 @@ import AddSupportTicket from "./screens/Support/AddSupportTicket";
 import ChangePassword from "./screens/ChangePassword/ChangePassword";
 import Attributes from "./screens/Attributes/Attributes";
 import AddAttributes from "./screens/Attributes/AddAttributes";
+import EditAttributes from "./screens/Attributes/EditAttributes";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -404,6 +405,11 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="AddAttributes"
                   component={AddAttributes}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditAttributes"
+                  component={EditAttributes}
                   options={{ headerShown: false }}
                 />
               </>

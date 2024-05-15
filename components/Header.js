@@ -7,12 +7,16 @@ import {
 } from "react-native-responsive-dimensions";
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 
-export default function Header({ label , handlePress }) {
+export default function Header({ label , handlePress,children ,hideArrow}) {
   const navigation = useNavigation();
+
+
+  let src = require("../assets/add-product.png")
 
   return (
     <View style={styles.frameWrapper}>
       <View style={styles.arrowLeftSmParent}>
+        {!hideArrow && 
         <Pressable
           style={styles.arrowLeftSm}
           onPress={() => navigation.goBack()}
@@ -23,6 +27,7 @@ export default function Header({ label , handlePress }) {
             source={require("../assets/arrowleftsm.png")}
           />
         </Pressable>
+}
         <Text style={[styles.paymentDetails1, styles.offTypo]}>{label}</Text>
       </View>
       {handlePress && (
@@ -30,10 +35,14 @@ export default function Header({ label , handlePress }) {
           <Image
             style={styles.addProductIcon}
             resizeMode="cover"
-            source={require("../assets/add-product.png")}
+            source={src}
           />
         </Pressable>
+        
       )}
+      {
+        children
+      }
     </View>
   );
 }

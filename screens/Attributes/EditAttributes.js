@@ -8,7 +8,7 @@ import {
   View,
   TextInput,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   FontFamily,
   Color,
@@ -25,10 +25,13 @@ import PrimaryBtn from "../../components/Buttons/PrimaryBtn";
 import useHttp2 from "../../hooks/useHttp2";
 import Header from "../../components/Header";
 import Att_Info from "./components/Att_Info";
+import SecondaryBtn from "../../components/Buttons/SecondaryBtn";
 
-const AddAttributes = () => {
+const EditAttributes = () => {
   const { sendRequest, isLoading } = useHttp2();
   const navigation = useNavigation();
+  const route = useRoute();
+  const { id } = route.params;
   const {
     control,
     handleSubmit,
@@ -38,28 +41,40 @@ const AddAttributes = () => {
     getValues,
     formState: { errors, defaultValues },
   } = useForm();
+  const [initial_value, setInitialValue] = React.useState(1);
+
+  React.useEffect(() => {
+    sendRequest(
+      {
+        url: `variation/${id}/show`,
+      },
+      (result) => {
+        reset(result.data);
+        setInitialValue(result.data.options.length);
+      }
+    );
+  }, []);
 
   const handleForm = (data) => {
-    console.log(data);
-    // sendRequest(
-    //   {
-    //     url: `variation`,
-    //     method: "POST",
-    //     body: data,
-    //   },
-    //   (result) => {
-    //     navigation.replace('Attributes')
-    //   },
-    //   true
-    // );
+    sendRequest(
+      {
+        url: `variation/${id}/edit`,
+        method: "PUT",
+        body: data,
+      },
+      (result) => {
+        navigation.replace("Attributes");
+      },
+      true
+    );
   };
 
   const isFormValid = Object.keys(errors).length === 0;
 
   const updateOption = (index) => {
-    let options = getValues("options");
+    let options = getValues("option");
     options.splice(index, 1);
-    setValue('options',options)
+    setValue("option", options);
   };
 
   const uni_style = {
@@ -68,9 +83,29 @@ const AddAttributes = () => {
     frameview: styles.overall_frameView,
   };
 
+  const handleDelete = () => {
+    sendRequest(
+      {
+        url: `variation/${id}/delete`,
+        method: "DELETE",
+      },
+      (result) => {
+        navigation.replace("Attributes");
+      },
+      true
+    );
+  };
+
   return (
     <>
-      <Header label={"Add Attribute"} />
+      <Header label={"Edit Attribute"}>
+        <PrimaryBtn
+          isLoading={isLoading}
+          onPress={handleDelete}
+          title={"Delete"}
+          style={styles.btn}
+        />
+      </Header>
       <View style={styles.my_parent}>
         <ScrollView
           style={styles.AddAttributes}
@@ -85,7 +120,7 @@ const AddAttributes = () => {
                   control={control}
                   uni_style={uni_style}
                   errors={errors}
-                  initial_value={1}
+                  initial_value={initial_value}
                   updateOption={updateOption}
                 />
               </View>
@@ -93,7 +128,7 @@ const AddAttributes = () => {
           </View>
         </ScrollView>
         <PrimaryBtn
-          title={`Add Attribute`}
+          title={`Update Attribute`}
           isLoading={isLoading}
           disabled={isLoading || !isFormValid}
           onPress={handleSubmit(handleForm)}
@@ -267,6 +302,15 @@ const styles = StyleSheet.create({
   overall_frameView: {
     alignSelf: "stretch",
   },
+  delete_text: {
+    fontWeight: "500",
+    color: "red",
+  },
+  btn: {
+    width: "auto",
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+  },
 });
 
-export default AddAttributes;
+export default EditAttributes;
