@@ -75,7 +75,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     isLoggedIn();
-  // logout()
   }, []);
 
   return (

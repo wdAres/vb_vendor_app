@@ -94,6 +94,7 @@ import ChangePassword from "./screens/ChangePassword/ChangePassword";
 import Attributes from "./screens/Attributes/Attributes";
 import AddAttributes from "./screens/Attributes/AddAttributes";
 import EditAttributes from "./screens/Attributes/EditAttributes";
+import SplashScreen from "./screens/SplashScreen";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -190,13 +191,12 @@ function BottomTabsRoot({ navigation }) {
 }
 
 const NaviCon = () => {
-  const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
-  const { userInfo } = useAuth();
+  const { userInfo, splashLoading } = useAuth();
 
   return (
     <>
       <NavigationContainer>
-        {hideSplashScreen ? (
+        {!splashLoading ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {!userInfo.token ? (
               <>
@@ -381,7 +381,7 @@ const NaviCon = () => {
                   name="InputChecker"
                   component={InputCheker}
                   options={{ headerShown: false }}
-                /> 
+                />
                 <Stack.Screen
                   name="Withdraw"
                   component={Withdraw}
@@ -415,7 +415,15 @@ const NaviCon = () => {
               </>
             )}
           </Stack.Navigator>
-        ) : null}
+        ) : (
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="SplashScreen"
+              component={SplashScreen}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </>
   );
