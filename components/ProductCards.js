@@ -14,81 +14,77 @@ import {
 } from "react-native-responsive-dimensions";
 import { useNavigation } from "@react-navigation/core";
 
-const getStyleValue = (key, value) => {
-  if (value === undefined) return;
-  return { [key]: value === "unset" ? undefined : value };
-};
 const ProductCards = memo(
   ({
     sku,
-    productname,
-    statusgroupbuy,
+    name: productname,
+    groupBy,
+    instabuild,
     price,
-    stockstatus,
-    image,
-    productCardsMarginTop,
-    frameViewBackgroundColor,
-    groupBuyColor,
+    inStock,
+    url,
   }) => {
-    const productCardsStyle = useMemo(() => {
-      return {
-        ...getStyleValue("marginTop", productCardsMarginTop),
-      };
-    }, [productCardsMarginTop]);
 
-    const frameViewStyle = useMemo(() => {
-      return {
-        ...getStyleValue("backgroundColor", frameViewBackgroundColor),
-      };
-    }, [frameViewBackgroundColor]);
-
-    const groupBuyStyle = useMemo(() => {
-      return {
-        ...getStyleValue("color", groupBuyColor),
-      };
-    }, [groupBuyColor]);
-
-    const navigation = useNavigation()
+    const navigation = useNavigation();
 
     return (
       <Pressable
-        onPress={() => navigation.navigate('ProductsDetails')}
+        onPress={() => navigation.navigate("ProductsDetails")}
         style={[
           styles.productCards,
           styles.skuParentFlexBox,
-          productCardsStyle,
         ]}
       >
         <View style={styles.frameParent}>
           <View style={styles.skuParentFlexBox}>
-            <Text style={styles.skuTypo}>{sku}</Text>
-            <Text style={[styles.text, styles.skuTypo]}>11025885</Text>
+            <Text style={styles.skuTypo}>SKU</Text>
+            <Text style={[styles.text, styles.skuTypo]}>{sku}</Text>
           </View>
           <Text style={[styles.kayraDecor3d, styles.text1Typo]}>
             {productname}
           </Text>
-          <Text style={[styles.text1, styles.text1Typo]}>{price}</Text>
-          <View
-            style={[
-              styles.groupBuyWrapper,
-              styles.wrapperFlexBox,
-              frameViewStyle,
-            ]}
-          >
-            <Text style={[styles.groupBuy, styles.inStockTypo, groupBuyStyle]}>
-              {statusgroupbuy}
-            </Text>
+          <Text style={[styles.text1, styles.text1Typo]}>${price}</Text>
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            {groupBy && (
+              <View
+                style={[
+                  styles.groupBuyWrapper,
+                  styles.wrapperFlexBox,
+                ]}
+              >
+                <Text
+                  style={[styles.groupBuy, styles.inStockTypo]}
+                >
+                  {"Group Buy"}
+                </Text>
+              </View>
+            )}
+            {instabuild && (
+              <View
+                style={[
+                  styles.groupBuyWrapper,
+                  styles.wrapperFlexBox,
+                  styles.ib_bg,
+                ]}
+              >
+                <Text
+                  style={[styles.groupBuy, styles.inStockTypo, styles.ib_cl]}
+                >
+                  {"Instabuild"}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
         <View style={styles.imagePlaceholderParent}>
           <Image
             style={styles.imagePlaceholderIcon}
             resizeMode="cover"
-            source={image}
+            source={url ? {uri: url} : require('../assets/error.png')}
           />
           <View style={[styles.inStockWrapper, styles.wrapperFlexBox]}>
             <Text style={[styles.inStock, styles.inStockTypo]}>
-              {stockstatus}
+              {inStock ? "Avaiable" : "Out of Stock"}
             </Text>
           </View>
         </View>
@@ -180,6 +176,8 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveHeight(1.61),
     paddingHorizontal: responsiveWidth(3.33),
   },
+  ib_bg:{backgroundColor:'#E9D8FF'},
+  ib_cl:{color:'#9747FF'},
 });
 
 export default ProductCards;

@@ -24,7 +24,6 @@ const WithdrawMoney = () => {
   const {sendRequest,isLoading} = useHttp2()
 
   const approveWithdraw = () =>{
-    console.log(input)
     sendRequest({
       url:`withdraw-request`,
       method:'POST',
@@ -32,7 +31,7 @@ const WithdrawMoney = () => {
         amount:input
       }
     },_=>{
-      navigation.replace('Withdraw')
+      navigation.goBack()
     })
   }
   

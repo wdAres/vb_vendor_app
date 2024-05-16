@@ -53,7 +53,7 @@ const TicketDetails = () => {
         method: "PUT",
       },
       (data) => {
-        navigation.navigate("Support");
+        navigation.goBack();
       },
       true
     );
@@ -158,28 +158,28 @@ const TicketDetails = () => {
                   ))}
               </View>
             </ScrollView>
-              {data.status !== "closed" && (
-                <View style={styles.frameParent3}>
-                  <TextInput
-                    style={[styles.frameChild, styles.frameChildLayout]}
-                    placeholder="Message ..."
-                    value={message}
-                    onChangeText={(val) => setMessage(val)}
-                    placeholderTextColor="#7d7d7d"
+            {data.status !== "closed" && (
+              <View style={styles.frameParent3}>
+                <TextInput
+                  style={[styles.frameChild, styles.frameChildLayout]}
+                  placeholder="Message ..."
+                  value={message}
+                  onChangeText={(val) => setMessage(val)}
+                  placeholderTextColor="#7d7d7d"
+                />
+                <Pressable
+                  onPress={sendMessage}
+                  style={[styles.send01Wrapper, styles.frameChildLayout]}
+                  disabled={loading3}
+                >
+                  <Image
+                    style={styles.send01Icon}
+                    resizeMode="cover"
+                    source={require("../assets/send01.png")}
                   />
-                  <Pressable
-                    onPress={sendMessage}
-                    style={[styles.send01Wrapper, styles.frameChildLayout]}
-                    disabled={loading3}
-                  >
-                    <Image
-                      style={styles.send01Icon}
-                      resizeMode="cover"
-                      source={require("../assets/send01.png")}
-                    />
-                  </Pressable>
-                </View>
-              )}
+                </Pressable>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>

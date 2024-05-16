@@ -6,20 +6,23 @@ import {
 } from "react-native-responsive-dimensions";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
+import moment from "moment";
 
-export default function PaymentCard({ style, total, date, orderId, id }) {
+export default function PaymentCard({ style, data}) {
+
+  const {total, date, orderId, _id } = data
 
   const navigation = useNavigation()
 
   return (
     <Pressable
       style={[styles.paymentCardBorder, style]}
-      onPress={() => navigation.navigate("PaymentDetails", { id: id })}
+      onPress={() => navigation.navigate("PaymentDetails", { id: _id })}
     >
       <View style={styles.walletAmountParent}>
-        <Text style={styles.date2082023Typo}>Order Id {orderId}</Text>
-        <Text style={[styles.text1, styles.textTypo]}>${total}</Text>
-        <Text style={[styles.date2082023, styles.date2082023Typo]}>{date}</Text>
+        <Text style={styles.date2082023Typo}>Order Id {orderId.orderId}</Text>
+        <Text style={[styles.text1, styles.textTypo]}>${orderId.total}</Text>
+        <Text style={[styles.date2082023, styles.date2082023Typo]}>{moment(date).format('ll')}</Text>
       </View>
       <Image
         style={[styles.arrowRightSmIcon, styles.iconLayout]}

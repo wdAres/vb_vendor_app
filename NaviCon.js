@@ -27,7 +27,7 @@ import Frame10 from "./components/Frame10";
 import Frame11 from "./components/Frame11";
 import Frame12 from "./components/Frame12";
 import Frame13 from "./components/Frame13";
-import Products from "./screens/Products";
+import Products from "./screens/Product/Products";
 import Reviews from "./components/Reviews";
 import SellerDetails from "./screens/SellerDetails/SellerDetails";
 import RefundRequest1 from "./screens/RefundRequest/RefundRequest1";
@@ -42,7 +42,7 @@ import WithdrawMoney from "./screens/Withdraw/WithdrawMoney";
 import Frame3 from "./components/Frame3";
 import Frame4 from "./components/Frame4";
 import Dashboard1 from "./screens/Dashboard1";
-import Products1 from "./screens/Products1";
+// import Products1 from "./screens/Products1";
 import Orders from "./screens/Orders/Orders";
 import Frame8 from "./components/Frame8";
 import ShopSetting from "./screens/ShopSetting";
@@ -169,7 +169,7 @@ function BottomTabsRoot({ navigation }) {
       />
       <Tab.Screen
         name="Products1"
-        component={Products1}
+        component={Products}
         options={{ headerShown: false }}
       />
       <Tab.Screen
@@ -288,11 +288,7 @@ const NaviCon = () => {
                   component={AddProduct5}
                   options={{ headerShown: false }}
                 />
-                <Stack.Screen
-                  name="Products"
-                  component={Products}
-                  options={{ headerShown: false }}
-                />
+                
                 <Stack.Screen
                   name="SellerDetails"
                   component={SellerDetails}

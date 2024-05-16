@@ -17,6 +17,7 @@ import {
 } from "react-native-responsive-dimensions";
 import { useAuth } from "../context/AuthContext";
 import Header from "../components/Header";
+import PaymentGraph from "../components/PaymentGraph/PaymentGraph";
 
 const renderMenuItems = (menuItems) => {
   return menuItems.map((item, index) => (
@@ -184,11 +185,7 @@ const VendorProfile = () => {
                 source={require("../assets/arrowrightsm2.png")}
               />
             </Pressable>
-            <ImageBackground
-              style={styles.imageIcon}
-              resizeMode="cover"
-              source={require("../assets/image1.png")}
-            />
+            <PaymentGraph />
             <ScrollView
               style={styles.frameContainer}
               horizontal={true}
