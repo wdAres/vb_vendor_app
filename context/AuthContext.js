@@ -67,7 +67,10 @@ export const AuthProvider = ({ children }) => {
         setUserInfo(userInfo);
       }
 
-      setSplashLoading(false);
+      setTimeout(()=>{
+        setSplashLoading(false);
+      },3000)
+
     } catch (e) {
       setSplashLoading(false);
     }

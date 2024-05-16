@@ -40,18 +40,17 @@ const AddAttributes = () => {
   } = useForm();
 
   const handleForm = (data) => {
-    console.log(data);
-    // sendRequest(
-    //   {
-    //     url: `variation`,
-    //     method: "POST",
-    //     body: data,
-    //   },
-    //   (result) => {
-    //     navigation.replace('Attributes')
-    //   },
-    //   true
-    // );
+    sendRequest(
+      {
+        url: `variation`,
+        method: "POST",
+        body: data,
+      },
+      (result) => {
+        navigation.replace("Attributes");
+      },
+      true
+    );
   };
 
   const isFormValid = Object.keys(errors).length === 0;
@@ -59,7 +58,7 @@ const AddAttributes = () => {
   const updateOption = (index) => {
     let options = getValues("options");
     options.splice(index, 1);
-    setValue('options',options)
+    setValue("options", options);
   };
 
   const uni_style = {

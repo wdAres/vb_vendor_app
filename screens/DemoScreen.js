@@ -6,47 +6,47 @@ import {
   View,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
-import Header from "../../components/Header";
-import { Color } from "../../GlobalStyles";
+import Header from "../components/Header";
+import { Color } from "../GlobalStyles";
 import {
   responsiveHeight,
   responsiveWidth,
 } from "react-native-responsive-dimensions";
-import SearchBar from "../../components/SearchBar";
-import ToggleBtns from "../../components/ToggleBtns";
-import useHttp2 from "../../hooks/useHttp2";
-import CouponCard from "../../components/CouponCard";
+import SearchBar from "../components/SearchBar";
+import ToggleBtns from "../components/ToggleBtns";
+import OrderCard from "../components/OrderCard";
+import useHttp2 from "../hooks/useHttp2";
 
-export default function Coupons({ navigation }) {
+export default function DemoScreen() {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const { sendRequest, isLoading } = useHttp2();
   const [query, setQuery] = useState("");
   const [nextPageExist, setNextPageExist] = useState(false);
+  const [delivery_status, setDeliveryStatus] = useState("");
 
-  const getData = useCallback((pageNumber, searchQuery = "") => {
-    sendRequest(
-      {
-        url: `coupon?limit=10&page=${pageNumber}&search=${searchQuery}}`,
-      },
-      (result) => {
-        setData((prevData) =>
-          pageNumber === 1
-            ? result.data.docs
-            : [...prevData, ...result.data.docs]
-        );
-        setNextPageExist(result.data.hasNextPage);
-      }
-    );
-  }, []);
-
-  // Fetch data when the screen gains focus
-  useFocusEffect(
-    useCallback(() => {
-      getData(page, query);
-    }, [page, query])
+  const getData = useCallback(
+    (pageNumber, searchQuery = "", delivery_status = "") => {
+      sendRequest(
+        {
+          url: `order?limit=10&page=${pageNumber}&search=${searchQuery}&orderStatus=${delivery_status}`,
+        },
+        (result) => {
+          setData((prevData) =>
+            pageNumber === 1
+              ? result.data.docs
+              : [...prevData, ...result.data.docs]
+          );
+          setNextPageExist(result.data.hasNextPage);
+        }
+      );
+    },
+    []
   );
+
+  useEffect(() => {
+    getData(page, query, delivery_status);
+  }, [page, query, delivery_status]);
 
   const handleEndReached = () => {
     if (nextPageExist) {
@@ -60,7 +60,7 @@ export default function Coupons({ navigation }) {
   };
 
   const renderItem = ({ item }) => {
-    return <CouponCard data={item} />;
+    return <OrderCard data={item} />;
   };
 
   const renderFooter = () => {
@@ -68,18 +68,44 @@ export default function Coupons({ navigation }) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
 
+  const handleDeliveryStatus = (status) => {
+    setDeliveryStatus(status);
+    setPage(1);
+  };
+
+  const pressableData = [
+    {
+      label: "Pending",
+      value: "pending",
+    },
+    {
+      label: "Processing",
+      value: "processing",
+    },
+    {
+      label: "Shipped",
+      value: "shipped",
+    },
+    {
+      label: "Delivered",
+      value: "delivered",
+    },
+    {
+      label: "Cancelled",
+      value: "cancelled",
+    },
+  ];
+
   return (
     <>
-      <Header
-        label={"My Coupons"}
-        handlePress={() => navigation.navigate("AddCoupon")}
-      />
+      <Header label={"Demo Component"} />
       <View style={styles.screen}>
         <View style={styles.block1}>
           <SearchBar
             placeholder={"search by order id"}
             onSearch={handleSearch}
           />
+          <ToggleBtns onPress={handleDeliveryStatus} data={pressableData} />
         </View>
         <FlatList
           data={data}
@@ -110,5 +136,3 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 });
-
-// 355 - 143 lines

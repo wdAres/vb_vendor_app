@@ -7,6 +7,8 @@ import * as eva from "@eva-design/eva";
 import NaviCon from "./NaviCon";
 import Toast from "react-native-toast-message";
 import { AuthProvider } from "./context/AuthContext";
+import { Provider } from "react-redux";
+import { reduxStore } from "./redux/reduxStore";
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
@@ -37,13 +39,17 @@ const App = () => {
     icons: createIconsMap(),
   };
 
+  console.log(reduxStore)
+
   return (
     <>
       <AuthProvider>
-        <IconRegistry icons={[MaterialIconsPack]} />
-        <ApplicationProvider {...eva} theme={eva.light}>
-        <NaviCon />
-        </ApplicationProvider>
+        <Provider store={reduxStore}>
+          <IconRegistry icons={[MaterialIconsPack]} />
+          <ApplicationProvider {...eva} theme={eva.light}>
+            <NaviCon />
+          </ApplicationProvider>
+        </Provider>
         <Toast />
       </AuthProvider>
     </>

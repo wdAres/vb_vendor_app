@@ -95,6 +95,7 @@ import Attributes from "./screens/Attributes/Attributes";
 import AddAttributes from "./screens/Attributes/AddAttributes";
 import EditAttributes from "./screens/Attributes/EditAttributes";
 import SplashScreen from "./screens/SplashScreen";
+import DemoScreen from "./screens/DemoScreen";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -353,7 +354,7 @@ const NaviCon = () => {
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                  name="Coupons1"
+                  name="AddCoupon"
                   component={Coupons1}
                   options={{ headerShown: false }}
                 />
@@ -410,6 +411,11 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="EditAttributes"
                   component={EditAttributes}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="DemoScreen"
+                  component={DemoScreen}
                   options={{ headerShown: false }}
                 />
               </>

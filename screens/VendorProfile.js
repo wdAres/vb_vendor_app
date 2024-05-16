@@ -72,8 +72,8 @@ const VendorProfile = () => {
       onPress: () => navigation.navigate("Coupons"),
     },
     {
-      title: "Add New Coupons",
-      onPress: () => navigation.navigate("Coupons1"),
+      title: "Add Coupon",
+      onPress: () => navigation.navigate("AddCoupon"),
     },
     {
       title: "My Payments",
@@ -93,7 +93,7 @@ const VendorProfile = () => {
       onPress: () => navigation.navigate("Support"),
     },
     {
-      title: "Add Support Ticket",
+      title: "Add Ticket",
       onPress: () => navigation.navigate("AddSupportTicket"),
     },
     {
@@ -103,6 +103,10 @@ const VendorProfile = () => {
     {
       title: "Attributes",
       onPress: () => navigation.navigate("Attributes"),
+    },
+    {
+      title: "DemoScreen",
+      onPress: () => navigation.navigate("DemoScreen"),
     },
   ];
 
@@ -134,6 +138,7 @@ const VendorProfile = () => {
 
   const otherLinks = [
     touchablesData[14], // Attributes
+    touchablesData[15], // Attributes
   ];
 
   const logoutData = [

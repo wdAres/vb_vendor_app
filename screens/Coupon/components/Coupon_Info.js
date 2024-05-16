@@ -14,7 +14,7 @@ export default function Coupon_Info({ control, errors }) {
   const [ct, setCT] = useState([{ label: "Product", value: "product" }]);
   const [openDTSelect, setOpenDTSelect] = useState(false);
   const [dt, setDT] = useState([
-    { label: "Flat", value: "flat" },
+    { label: "Fixed", value: "fixed" },
     { label: "Percentage", value: "percentage" },
   ]);
 
@@ -64,6 +64,14 @@ export default function Coupon_Info({ control, errors }) {
         errors: errors,
         rules: {
           required: "Coupon Code is required",
+          validate: (value) => {
+            console.log(value)
+            return (
+              [/^[^\s]+$/].every((pattern) =>
+                pattern.test(value)
+              ) ||"Your input cannot contain any spaces"
+            );
+          },
         },
       },
       child: (data) => <ControlledInput {...data} />,
@@ -89,7 +97,7 @@ export default function Coupon_Info({ control, errors }) {
         rules: {
           required: "Expiry Date is required",
         },
-        placeholder:'Select Expirty Date'
+        placeholder:'Select Expiry Date'
       },
       child: (data) => <ControlledDate {...data} />,
     },
