@@ -47,8 +47,9 @@ const ProductCard = ({
             <Text style={[classes.price]}>${price}</Text>
             <View style={[classes.tag]}>
               <Text style={[classes.tagText]}>
+              {discountType === "flat" && "$"}
                 {discount}
-                {discountType === "flat" ? "$" : "%"} off
+                {discountType === "percentage" && "%"} off
               </Text>
             </View>
           </View>
@@ -79,6 +80,7 @@ const classes = StyleSheet.create({
     width: "100%",
     color: "black",
     fontSize: responsiveHeight(1.24),
+    textTransform:'capitalize'
   },
   my_flex: {
     display: "flex",
