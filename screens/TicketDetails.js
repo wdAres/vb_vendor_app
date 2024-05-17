@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  ScrollView,
   Pressable,
-  Image,
   StyleSheet,
   Text,
   View,
   TextInput,
+  FlatList,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
+import { Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 import {
   responsiveHeight,
   responsiveWidth,
@@ -19,8 +17,9 @@ import Header from "../components/Header";
 import useHttp2 from "../hooks/useHttp2";
 import moment from "moment";
 import Toast from "react-native-toast-message";
-import PrimaryBtn from "../components/Buttons/PrimaryBtn";
-import SecondaryBtn from "../components/Buttons/SecondaryBtn";
+import SendBtn from "../components/Buttons/SendBtn";
+import { Colors } from "react-native-paper";
+import Message from "../components/Support/Message";
 
 const TicketDetails = () => {
   const navigation = useNavigation();
@@ -32,7 +31,7 @@ const TicketDetails = () => {
   const [data, setData] = useState([]);
   const [myChat, setMyChat] = useState([]);
   const [message, setMessage] = useState("");
-  const scrollViewRef = useRef();
+  const flatListRef = useRef();
 
   const getData = () => {
     sendRequest(
@@ -42,6 +41,7 @@ const TicketDetails = () => {
       (data) => {
         setData({ ...data.data, responds: null });
         setMyChat(data.data.responds);
+        scrollToBottom();
       }
     );
   };
@@ -92,282 +92,150 @@ const TicketDetails = () => {
   };
 
   const scrollToBottom = () => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
+    if (flatListRef.current) {
+      flatListRef.current.scrollToEnd({ animated: true });
     }
   };
 
   useEffect(() => {
     getData();
-    scrollToBottom(); // Scroll to bottom on initial load
   }, []);
+
+  const renderItem = ({ item }) => {
+    return <Message {...item} />;
+  };
 
   return (
     <>
-      <Header label={"Ticket Details"} />
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.ticketDetails}
-        horizontal={false}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.ticketDetailsScrollViewContent}
-      >
-        <View style={styles.frameParent}>
-          <View style={styles.frameGroup}>
-            {data.status !== "closed" && (
-              <SecondaryBtn
-                style={{ paddingVertical: 10, marginBottom: 20 }}
-                title={"Close Chat"}
-                onPress={closeReq}
-              />
-            )}
-            <View style={styles.frameContainer}>
-              <View style={styles.ticketIdParent}>
-                <Text style={styles.ticketId}>Ticket ID</Text>
-                <Text style={[styles.text, styles.textTypo1]}>
-                  #{data.ticketId ?? "--"}
-                </Text>
-              </View>
-              <View style={styles.dateParent}>
-                <Text style={styles.ticketId}>Date</Text>
-                <Text style={[styles.text1, styles.textTypo1]}>
-                  {moment(data.createdAt).format("YYYY-MM-DD") ?? "--"}
-                </Text>
-              </View>
+      <Header label={"Ticket Details"}>
+        {data?.status !== "closed" && (
+          <Pressable disabled={isLoading} onPress={closeReq}>
+            <Text style={styles.close}>
+              {isLoading ? "Loading" : "Close Chat"}
+            </Text>
+          </Pressable>
+        )}
+      </Header>
+      <View style={styles.td}>
+        <View style={styles.td_child_1}>
+          <View style={styles.td_ul}>
+            <View style={styles.td_li}>
+              <Text style={styles.td_li_i1}>Ticket ID</Text>
+              <Text style={styles.td_li_i2}>#{data?.ticketId ?? "--"}</Text>
             </View>
-            <ScrollView style={styles.frameGroup}>
-              <View style={[styles.frameView, styles.frameFlexBox]}>
-                {myChat.length > 0 &&
-                  myChat.map((element) => (
-                    <View key={element._id} style={[styles.frameParent1]}>
-                      <View
-                        style={[
-                          styles.goremIpsumDolorSitAmetCoWrapper,
-                          styles.goremFlexBox,
-                        ]}
-                      >
-                        <Text style={styles.goremIpsumDolor}>
-                          {element.message}
-                        </Text>
-                      </View>
-                      <Text style={[styles.text2, styles.textTypo]}>
-                        {moment(element.createdAt).format("YYYY-MM-DD")}
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-            </ScrollView>
-            {data.status !== "closed" && (
-              <View style={styles.frameParent3}>
-                <TextInput
-                  style={[styles.frameChild, styles.frameChildLayout]}
-                  placeholder="Message ..."
-                  value={message}
-                  onChangeText={(val) => setMessage(val)}
-                  placeholderTextColor="#7d7d7d"
-                />
-                <Pressable
-                  onPress={sendMessage}
-                  style={[styles.send01Wrapper, styles.frameChildLayout]}
-                  disabled={loading3}
-                >
-                  <Image
-                    style={styles.send01Icon}
-                    resizeMode="cover"
-                    source={require("../assets/send01.png")}
-                  />
-                </Pressable>
-              </View>
-            )}
+            <View style={styles.td_li}>
+              <Text style={styles.td_li_i1}>Date</Text>
+              <Text style={styles.td_li_i2}>
+                {moment(data?.createdAt).format("ll")}
+              </Text>
+            </View>
           </View>
+          <FlatList
+            style={styles.chat_container}
+            data={myChat}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            contentContainerStyle={styles.inp_con}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: responsiveHeight(2.36) }} />
+            )}
+            ref={flatListRef} // Set ref for FlatList
+          />
         </View>
-      </ScrollView>
+        {data?.status !== "closed" && (
+          <View style={styles.td_footer}>
+            <View style={[styles.td_footer_input]}>
+              <TextInput
+                style={styles.input}
+                value={message}
+                onChangeText={(text) => setMessage(text)}
+                placeholder={"write your message"}
+              />
+            </View>
+            <SendBtn
+              onPress={sendMessage}
+              disabled={isLoading}
+              isLoading={isLoading}
+              style={styles.td_footer_btn}
+            />
+          </View>
+        )}
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  ticketDetailsScrollViewContent: {
-    flexDirection: "row",
+  td: {
     paddingHorizontal: responsiveWidth(5.12),
     paddingVertical: responsiveHeight(2.36),
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
+    backgroundColor: Colors.white,
+    flex: 1,
+    gap: responsiveHeight(3.6),
   },
-  textTypo1: {
-    color: Color.colorDimgray_200,
-    fontSize: FontSize.size_xs,
-    textAlign: "left",
-    fontFamily: FontFamily.interSemiBold,
-    fontWeight: "600",
+  td_child_1: {
+    flex: 1,
+    gap: responsiveHeight(3.6),
   },
-  frameFlexBox: {
-    alignItems: "flex-end",
-    alignSelf: "stretch",
+  td_ul: {
+    gap: responsiveHeight(3.6),
   },
-  goremFlexBox: {
-    borderRadius: Border.br_6xs,
-    justifyContent: "center",
-    alignItems: "center",
+  td_li: {
     flexDirection: "row",
-    alignSelf: "stretch",
-    overflow: "hidden",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  textTypo: {
-    height: responsiveHeight(1.86),
-    color: Color.colorDarkgray_500,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.size_3xs,
-    alignSelf: "stretch",
+  td_li_i1: {
+    fontSize: responsiveHeight(1.49),
+    fontWeight: "600",
+    color: "black",
   },
-  frameChildLayout: {
+  td_li_i2: {
+    fontSize: responsiveHeight(1.49),
+    fontWeight: "600",
+    color: "#59595A",
+  },
+  td_footer: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  td_footer_input: {
+    flex: 6,
+    position: "relative",
+  },
+  td_footer_btn: {
+    flex: 1,
+  },
+  input: {
+    paddingHorizontal: responsiveWidth(2.82),
+    paddingVertical: responsiveHeight(1.24),
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: Color.colorGainsboro_200,
+    borderStyle: "solid",
     borderRadius: Border.br_8xs,
+    alignItems: "center",
     flexDirection: "row",
     overflow: "hidden",
-  },
-  icon: {
-    height: "100%",
-    width: "100%",
-  },
-  arrowLeftSm: {
-    width: responsiveHeight(2.98),
-    height: responsiveHeight(2.98),
-  },
-  ticketDetails1: {
-    fontSize: FontSize.size_lg,
-    marginLeft: responsiveWidth(2.56),
-    textAlign: "left",
-    color: Color.colorBlack,
-    fontFamily: FontFamily.interSemiBold,
-    fontWeight: "600",
-  },
-  arrowLeftSmParent: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  frameWrapper: {
-    alignItems: "center",
-    flexDirection: "row",
-    alignSelf: "stretch",
-  },
-  ticketId: {
-    fontSize: FontSize.size_xs,
-    textAlign: "left",
-    color: Color.colorBlack,
-    fontFamily: FontFamily.interSemiBold,
-    fontWeight: "600",
-    flex: 1,
-  },
-  text: {
-    marginLeft: responsiveWidth(5.89),
-  },
-  ticketIdParent: {
-    width: responsiveWidth(42.3),
-    flexDirection: "row",
-  },
-  text1: {
-    marginLeft: responsiveWidth(12.05),
-  },
-  dateParent: {
-    width: responsiveWidth(35.64),
-    marginTop: responsiveHeight(3.6),
-    flexDirection: "row",
-  },
-  frameContainer: {
-    alignSelf: "stretch",
-    marginBottom: responsiveHeight(3.6),
-  },
-  goremIpsumDolor: {
-    fontFamily: FontFamily.poppinsRegular,
+    backgroundColor: Color.colorWhite,
+    fontFamily: FontFamily.interRegular,
+    color: "#b9b9b9",
     fontSize: FontSize.size_3xs,
     textAlign: "left",
-    color: Color.colorBlack,
-    flex: 1,
-  },
-  goremIpsumDolorSitAmetCoWrapper: {
-    backgroundColor: "#faf9f9",
-    paddingHorizontal: responsiveWidth(2.3),
-    paddingVertical: responsiveHeight(1.11),
-  },
-  text2: {
-    marginTop: responsiveHeight(1.24),
-    textAlign: "left",
-  },
-  frameParent1: {
-    justifyContent: "center",
-    alignSelf: "stretch",
-  },
-  goremIpsumDolorSitAmetCoContainer: {
-    paddingHorizontal: responsiveWidth(2.3),
-    paddingVertical: responsiveHeight(1.49),
-    borderWidth: 1,
-    borderColor: Color.colorGainsboro_200,
-    borderStyle: "solid",
-    backgroundColor: Color.colorWhite,
-  },
-  text3: {
-    textAlign: "right",
-    marginTop: responsiveHeight(0.87),
-  },
-  frameParent2: {
-    marginTop: responsiveHeight(12.06),
-  },
-  frameView: {
-    borderRadius: Border.br_3xs,
-    height: responsiveHeight(74.5),
-    paddingHorizontal: responsiveWidth(5.64),
-    paddingVertical: responsiveHeight(3.73),
-    borderWidth: 1,
-    borderColor: Color.colorGainsboro_200,
-    borderStyle: "solid",
-    backgroundColor: Color.colorWhite,
-    overflow: "hidden",
-  },
-  frameChild: {
-    paddingHorizontal: responsiveWidth(3.58),
-    paddingVertical: responsiveHeight(1.74),
-    fontWeight: "500",
-    fontFamily: FontFamily.interMedium,
-    fontSize: FontSize.size_sm,
-    borderWidth: 1,
-    borderColor: Color.colorGainsboro_200,
-    borderStyle: "solid",
-    backgroundColor: Color.colorWhite,
-    alignItems: "center",
-    flex: 1,
-  },
-  send01Icon: {
-    width: responsiveWidth(8.46),
-    height: responsiveHeight(4.22),
-  },
-  send01Wrapper: {
-    backgroundColor: Color.colorFirebrick_200,
-    width: responsiveWidth(12.56),
-    alignItems: "center",
-    // justifyContent:'center',
-    paddingVertical: responsiveHeight(0.62),
-    paddingHorizontal: responsiveWidth(1.28),
-    marginLeft: responsiveWidth(3.07),
-  },
-  frameParent3: {
-    marginTop: responsiveHeight(3.23),
-    flexDirection: "row",
-    alignSelf: "stretch",
-  },
-  frameGroup: {
-    // marginTop: responsiveHeight(3.60),
-    alignSelf: "stretch",
-  },
-  frameParent: {
-    flex: 1,
-  },
-  ticketDetails: {
-    maxWidth: "100%",
-    overflow: "hidden",
     width: "100%",
-    flex: 1,
-    backgroundColor: Color.colorWhite,
+  },
+  close: {
+    fontSize: responsiveHeight(1.49),
+    color: "#AE0000",
+    fontWeight: "400",
+  },
+  chat_container: {
+    borderStyle: "solid",
+    borderColor: "#e8e8e8",
+    borderWidth: 1,
+  },
+  inp_con: {
+    padding: 10,
   },
 });
 

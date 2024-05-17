@@ -1,7 +1,8 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, Image } from "react-native";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
-const PrimaryBtn = ({
+const  SendBtn = ({
   title,
   onPress,
   disabled,
@@ -20,13 +21,11 @@ const PrimaryBtn = ({
       onPress={onPress}
       disabled={disabled}
     >
-      {children ? (
-        children
-      ) : (
-        <Text style={styles.buttonText}>
-          {disabled ? (isLoading ? "Loading" : title) : title}
-        </Text>
-      )}
+      <Image
+        style={styles.icon}
+        resizeMode="cover"
+        source={require("../../assets/send01.png")}
+      />
     </TouchableOpacity>
   );
 };
@@ -34,10 +33,8 @@ const PrimaryBtn = ({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#AE0000",
-    width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 17,
     borderRadius: 5,
   },
   buttonText: {
@@ -49,6 +46,11 @@ const styles = StyleSheet.create({
   disabledButton: {
     backgroundColor: "#CCCCCC", // Change to your preferred disabled color
   },
+  icon:{
+    // width: responsiveWidth(8.46),
+    width:  responsiveHeight(4.22),
+    height: responsiveHeight(4.22),
+  }
 });
 
-export default PrimaryBtn;
+export default SendBtn;

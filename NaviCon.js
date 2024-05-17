@@ -2,7 +2,7 @@ const Stack = createNativeStackNavigator();
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 
-import Dashboard from "./screens/Dashboard";
+// import Dashboard from "./screens/Dashboard";
 // import Frame9 from "./components/Frame9";
 import UpdateLog from "./screens/UpdateLog";
 // import Frame7 from "./components/Frame7";
@@ -96,6 +96,7 @@ import AddAttributes from "./screens/Attributes/AddAttributes";
 import EditAttributes from "./screens/Attributes/EditAttributes";
 import SplashScreen from "./screens/SplashScreen";
 import DemoScreen from "./screens/DemoScreen";
+import Dashboard from "./screens/Dashboard/Dashboard";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -164,7 +165,7 @@ function BottomTabsRoot({ navigation }) {
     >
       <Tab.Screen
         name="Dashboard1"
-        component={Dashboard1}
+        component={Dashboard}
         options={{ headerShown: false }}
       />
       <Tab.Screen

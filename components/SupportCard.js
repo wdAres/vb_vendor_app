@@ -30,7 +30,6 @@ export default function SupportCard({subject,status,ticketId,_id}) {
       <View style={styles.frameParent}>
         <Text style={styles.text}>#{ticketId}</Text>
         <Text style={styles.voremIpsumDolor}>
-          {/* Vorem ipsum dolor sit amet, consectetur adipiscing elit. */}
           {subject}
         </Text>
         <View style={[styles.solvedContainer, styles.solvedSpaceBlock , colored_bg[status]]}>

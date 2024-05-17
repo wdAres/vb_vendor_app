@@ -6,7 +6,7 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 
-const SearchBar = ({ placeholder = null , onSearch }) => {
+const SearchBar = ({ placeholder = null , onSearch , needIcon = true,style}) => {
   const [query, setQuery] = useState("");
 
   let ph = placeholder ?? "Search items";
@@ -17,18 +17,19 @@ const SearchBar = ({ placeholder = null , onSearch }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,style]}>
       <TextInput
         style={styles.input}
         value={query}
         onChangeText={(text) => handleSearch(text)}
         placeholder={ph}
       />
+      {needIcon && 
       <Image
         style={styles.icon}
         resizeMode="cover"
         source={require("../assets/search01.png")}
-      />
+      />}
     </View>
   );
 };
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     color: "#b9b9b9",
     fontSize: FontSize.size_3xs,
     textAlign: "left",
+    width:'100%'
   },
   icon: {
     position:'absolute',

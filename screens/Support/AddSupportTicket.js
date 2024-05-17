@@ -44,8 +44,8 @@ const AddSupportTicket = () => {
         body: data,
       },
       (result) => {
-        navigation.navigate('Support')
         reset()
+        navigation.goBack()
       },
       true
     );
