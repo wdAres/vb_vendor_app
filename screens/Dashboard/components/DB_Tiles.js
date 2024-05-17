@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import {
   responsiveHeight,
@@ -16,6 +16,10 @@ const DB_Tiles = () => {
       setData(result.data);
     });
   };
+
+  useEffect(()=>{
+    getData()
+  },[])
 
   return (
     <View>

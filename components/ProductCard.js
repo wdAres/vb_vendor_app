@@ -8,11 +8,29 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 
-const ProductCard = ({ style }) => {
+const ProductCard = ({
+  style,
+  url,
+  numReviews,
+  avgRating,
+  discount,
+  price,
+  name,
+  tags,
+  _id,
+  discountType,
+}) => {
+  const navigation = useNavigation();
 
-  const navigation = useNavigation()
+  const new_price = (discountType) => {
+    if (discountType==='flat') {
+      return price - discount
+    }else{
+      return price - (price*(discount/100))
+    }
+  }
 
-    const handlePress = () => navigation.navigate('ProductsDetails')
+  const handlePress = () => navigation.navigate("ProductsDetails", { id: _id });
   return (
     <Pressable onPress={handlePress}>
       <View style={[classes.card, style]}>
@@ -22,13 +40,16 @@ const ProductCard = ({ style }) => {
         />
         <View style={[classes.cardBody]}>
           <Text style={[classes.title]}>
-            Rust-Oleum varathane ultra thick floor finishi..
+            {name.length > 46 ? name.slice(0, 46) + "..." : name}
           </Text>
           <View style={[classes.my_flex]}>
-            <Text style={[classes.discount]}>$999</Text>
-            <Text style={[classes.price]}>$1,999</Text>
+            <Text style={[classes.discount]}>${new_price(discountType)}</Text>
+            <Text style={[classes.price]}>${price}</Text>
             <View style={[classes.tag]}>
-              <Text style={[classes.tagText]}>45%</Text>
+              <Text style={[classes.tagText]}>
+                {discount}
+                {discountType === "flat" ? "$" : "%"} off
+              </Text>
             </View>
           </View>
         </View>
@@ -46,7 +67,7 @@ const classes = StyleSheet.create({
     width: responsiveWidth(42.05),
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: responsiveHeight(14.8),
   },
   cardBody: {
