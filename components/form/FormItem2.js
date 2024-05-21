@@ -5,28 +5,27 @@ import { responsiveHeight } from "react-native-responsive-dimensions";
 
 
 
-const FormItem = ({ label, child, dataObj, style }) => {
+const FormItem2 = ({ label, child, dataObj, style }) => {
   const { errors = {}, name } = dataObj; 
 
    const {exists,message} = getErrorMessage(errors,name)
 
   return (
     <View style={[styles.container, style]}>
-      {label &&
-      <Text style={styles.label}>{label}</Text>}
+      <Text style={styles.label}>{label}</Text>
       {child(dataObj)}
-      {exists && <Text style={styles.error}>{message}</Text>}
     </View>
   );
 };
 
-export default FormItem;
+export default FormItem2;
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    flexDirection: "column",
-    gap: responsiveHeight(1.86),
+    flexDirection: "row",
+    justifyContent:'space-between',
+    alignContent:'center'
   },
   label: {
     fontSize: responsiveHeight(1.86),

@@ -1,0 +1,106 @@
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import Header from "../../../components/Header";
+import PrimaryBtn from "../../../components/Buttons/PrimaryBtn";
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from "react-native-responsive-dimensions";
+import { useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/core";
+import P_Info from "../components/P_Info";
+import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import useHttp2 from "../../../hooks/useHttp2";
+import P_Price from "../components/P_Price";
+
+const AddProduct_1 = () => {
+  const navigation = useNavigation();
+  const [returnApplicable, setReturnApplicable] = useState("");
+
+  const {
+    control,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      returnApplicable: "none",
+    },
+  });
+
+  const uni_style = {
+    title: styles.overall_heading,
+    container: styles.overall_container,
+    frameview: styles.overall_frameView,
+  };
+
+  const handleForm = (data) => {
+    console.log(data);
+    navigation.navigate('AddProduct_2')
+  };
+
+  return (
+    <>
+      <Header label={"Add Product"} />
+      <View style={styles.container}>
+        <ScrollView
+          horizontal={false}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.scrollview}
+          contentContainerStyle={styles.inner_container}
+        >
+          <P_Info
+            control={control}
+            errors={errors}
+            uni_style={uni_style}
+            watch={watch}
+          />
+          <P_Price
+            control={control}
+            errors={errors}
+            uni_style={uni_style}
+            watch={watch}
+          />
+        </ScrollView>
+        <PrimaryBtn title={"Next Page"} onPress={handleSubmit(handleForm)} />
+      </View>
+    </>
+  );
+};
+
+export default AddProduct_1;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: responsiveWidth(5.12),
+    paddingVertical: responsiveHeight(2.36),
+    backgroundColor: "white",
+    gap: responsiveHeight(4.1),
+    width: "100%",
+  },
+  inner_container: {
+    gap: responsiveHeight(5.34),
+    width: "100%",
+  },
+  scrollview: {
+    flex: 1,
+    width: "100%",
+  },
+  overall_heading: {
+    fontSize: FontSize.size_mini,
+    color: Color.colorFirebrick_200,
+    fontFamily: FontFamily.interSemiBold,
+    fontWeight: "600",
+    textAlign: "left",
+    alignSelf: "stretch",
+  },
+  overall_container: {
+    gap: responsiveHeight(2.98),
+  },
+  overall_frameView: {
+    marginTop: responsiveHeight(4.1),
+    alignSelf: "stretch",
+  },
+});

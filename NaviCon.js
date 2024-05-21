@@ -97,6 +97,11 @@ import EditAttributes from "./screens/Attributes/EditAttributes";
 import SplashScreen from "./screens/SplashScreen";
 import DemoScreen from "./screens/DemoScreen";
 import Dashboard from "./screens/Dashboard/Dashboard";
+import AddProduct_1 from "./screens/Product/AddProduct/AddProduct_1";
+import AddProduct_2 from "./screens/Product/AddProduct/AddProduct_2";
+import AddProduct_3 from "./screens/Product/AddProduct/AddProduct_3";
+import AddProduct_4 from "./screens/Product/AddProduct/AddProduct_4";
+import AddProduct_5 from "./screens/Product/AddProduct/AddProduct_5";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -413,6 +418,31 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="DemoScreen"
                   component={DemoScreen}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddProduct_1"
+                  component={AddProduct_1}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddProduct_2"
+                  component={AddProduct_2}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddProduct_3"
+                  component={AddProduct_3}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddProduct_4"
+                  component={AddProduct_4}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddProduct_5"
+                  component={AddProduct_5}
                   options={{ headerShown: false }}
                 />
               </>
