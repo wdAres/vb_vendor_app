@@ -2,6 +2,7 @@ import React from 'react'
 import { Pressable, StyleSheet } from 'react-native';
 import { Text } from 'react-native';
 import { View } from 'react-native';
+import { responsiveHeight } from 'react-native-responsive-dimensions';
 
 const P_Image = ({ uni_style }) => {
   // const [productImage, setProductImage] = useState("");
