@@ -1,60 +1,57 @@
-import React, { useState, useEffect } from "react";
-import FormItem from "../../../components/form/FormItem";
-import { PermissionsAndroid, Platform, Pressable, StyleSheet, Text, View } from "react-native";
-import { responsiveHeight } from "react-native-responsive-dimensions";
-import Toast from "react-native-toast-message";
-import { launchImageLibrary } from "react-native-image-picker";
-import { log } from "console";
+import React from 'react'
+import { Pressable, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
+import { View } from 'react-native';
 
 const P_Image = ({ uni_style }) => {
-  const [productImage, setProductImage] = useState("");
-  const requestPermissions = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-        ]);
-        return (
-          granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED
-        );
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
+  // const [productImage, setProductImage] = useState("");
+  // const requestPermissions = async () => {
+  //   if (Platform.OS === 'android') {
+  //     try {
+  //       const granted = await PermissionsAndroid.requestMultiple([
+  //         PermissionsAndroid.PERMISSIONS.CAMERA,
+  //         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+  //       ]);
+  //       return (
+  //         granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED &&
+  //         granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED &&
+  //         granted['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED
+  //       );
+  //     } catch (err) {
+  //       console.warn(err);
+  //       return false;
+  //     }
+  //   } else {
+  //     return true;
+  //   }
+  // };
 
-  const selectProductImage = async () => {
-    const hasPermission = await requestPermissions();
+  // const selectProductImage = async () => {
+  //   const hasPermission = await requestPermissions();
 
-    console.log(hasPermission);
+  //   console.log(hasPermission);
 
-    if (!hasPermission) {
-      console.log('Permission denied');
-      return;
-    }
+  //   if (!hasPermission) {
+  //     console.log('Permission denied');
+  //     return;
+  //   }
 
-    try {
-      const options = {
-        mediaType: "photo",
-      };
+  //   try {
+  //     const options = {
+  //       mediaType: "photo",
+  //     };
 
-      let res = await launchImageLibrary(options);
+  //     let res = await launchImageLibrary(options);
 
-      if (res.assets && res.assets.length > 0) {
-        console.log(res.assets[0]);
-        setProductImage(res.assets[0].uri);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     if (res.assets && res.assets.length > 0) {
+  //       console.log(res.assets[0]);
+  //       setProductImage(res.assets[0].uri);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <View>
@@ -62,7 +59,7 @@ const P_Image = ({ uni_style }) => {
       <View style={[uni_style.container, uni_style.frameview]}>
         <View style={[styles.container2]}>
           <Text style={styles.label}>Product Image</Text>
-          <Pressable onPress={selectProductImage} style={styles.upload_btn}>
+          <Pressable style={styles.upload_btn}>
             <Text style={styles.upload_text}>Upload Product Image</Text>
           </Pressable>
         </View>
