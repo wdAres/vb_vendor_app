@@ -12,15 +12,19 @@ import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import P_ShippingConfig from "../components/P_ShippingConfig";
 import P_Extras from "../components/P_Extras";
 import P_Category from "../components/P_Category";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProductData } from "../../../redux/Slices/productSlice";
 
 const AddProduct_3 = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {productData} = useSelector(state=>state.product)
 
   const {
     control,
     watch,
     handleSubmit,
-    getValues,
+    reset,
     setValue,
     formState: { errors },
   } = useForm({
@@ -35,6 +39,8 @@ const AddProduct_3 = () => {
     },
   });
 
+
+
   const uni_style = {
     title: styles.overall_heading,
     container: styles.overall_container,
@@ -42,10 +48,21 @@ const AddProduct_3 = () => {
   };
 
   const handleForm = (data) => {
-    console.log(data);
-    navigation.navigate('AddProduct_4')
+    console.log(productData);
+    dispatch(updateProductData(data));
+    if (data.groupBy) {
+      navigation.navigate("AddProduct_4");
+    }else{
+      navigation.navigate("AddProduct_5");
+    }
+    
   };
 
+  useEffect(()=>{
+    reset(productData)
+  },[])
+
+  
   useEffect(()=>{
     if (watch('shipping.type' === 'free')) {
         setValue('shipping.fee' , '0')

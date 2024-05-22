@@ -10,16 +10,19 @@ import { useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/core";
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import P_GroupBuy from "../components/P_GroupBuy";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProductData } from "../../../redux/Slices/productSlice";
 
 const AddProduct_4 = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { productData } = useSelector((state) => state.product);
 
   const {
     control,
-    watch,
     handleSubmit,
-    getValues,
-    setValue,
+    watch,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -30,9 +33,14 @@ const AddProduct_4 = () => {
   };
 
   const handleForm = (data) => {
-    console.log(data);
-    navigation.navigate('AddProduct_5')
+    console.log(productData);
+    dispatch(updateProductData(data));
+    navigation.navigate("AddProduct_5");
   };
+
+  useEffect(() => {
+    reset(productData);
+  }, []);
 
   return (
     <>
@@ -51,7 +59,6 @@ const AddProduct_4 = () => {
             uni_style={uni_style}
             watch={watch}
           />
-          
         </ScrollView>
         <PrimaryBtn title={"Next Page"} onPress={handleSubmit(handleForm)} />
       </View>

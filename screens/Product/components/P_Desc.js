@@ -75,7 +75,7 @@ const P_Desc = ({ control, errors, uni_style, initial_value = 1,updateOption }) 
           .map((element, index) => (
             <>
               <FormItem key={index} {...valueField(index)[0]} />
-              <FormItem key={index} {...valueField(index)[1]} />
+              <FormItem key={index+'new'} {...valueField(index)[1]} />
               {currentInx > 1 && (
                 <SecondaryBtn title={"Remove"} onPress={removeItem} />
               )}

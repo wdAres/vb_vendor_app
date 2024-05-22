@@ -15,8 +15,9 @@ import {
   updateDataExceptGroupBuy,
   updateProductData,
 } from "../../../redux/Slices/productSlice";
+import P_Image from "../components/P_Image";
 
-const AddProduct_5 = () => {
+const AddProduct_6 = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { productData } = useSelector((state) => state.product);
@@ -27,20 +28,7 @@ const AddProduct_5 = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      dimension: [
-        { name: "Assembled Depth (in inches)", value: "0" },
-        { name: "Assembled Weight (in lbs)", value: "0" },
-        { name: "Packaged Depth (in inches)", value: "0" },
-        { name: "Packaged Weight (in lbs)", value: "0" },
-        { name: "Assembled Height (in inches)", value: "0" },
-        { name: "Assembled Width (in inches)", value: "0" },
-        { name: "Packaged Height (in inches)", value: "0" },
-        { name: "Packaged Width (in inches)", value: "0" },
-      ],
-    },
-  });
+  } = useForm();
 
   const uni_style = {
     title: styles.overall_heading,
@@ -49,12 +37,6 @@ const AddProduct_5 = () => {
   };
 
   const handleForm = (data) => {
-    if (!productData.groupBy) {
-      dispatch(updateDataExceptGroupBuy(data));
-    } else {
-      dispatch(updateProductData(data));
-    }
-
     console.log(productData);
   };
 
@@ -73,12 +55,9 @@ const AddProduct_5 = () => {
           style={styles.scrollview}
           contentContainerStyle={styles.inner_container}
         >
-          <P_Dimensions
-            control={control}
-            errors={errors}
-            uni_style={uni_style}
-            watch={watch}
-          />
+         <P_Image
+         uni_style={uni_style}
+         /> 
         </ScrollView>
         <PrimaryBtn
           title={"Create Product"}
@@ -89,7 +68,7 @@ const AddProduct_5 = () => {
   );
 };
 
-export default AddProduct_5;
+export default AddProduct_6;
 
 const styles = StyleSheet.create({
   container: {

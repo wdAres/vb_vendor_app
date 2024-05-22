@@ -10,13 +10,8 @@ const useHttp2 = () => {
 
     const {userInfo} = useAuth() || {}
 
-    // console.log(userInfo);
-
     const {token} = userInfo || '' 
     const [isLoading, setLoading] = useState(false)
-    // const current_user = Cookies.get('vendor') ? JSON.parse(Cookies.get('vendor')) : null 
-    // let token = current_user?.token
-    // let token = ''
     const [error, setError] = useState(null)
 
     const sendRequest = useCallback(async (reqConfig, setterFuntion, needToast) => {

@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://vnb.onrender.com/api/vendor';
+export const BASE_URL = 'https://vnb.awarno.com/api/vendor';

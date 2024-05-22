@@ -13,9 +13,13 @@ import useHttp2 from "../../../hooks/useHttp2";
 import P_Price from "../components/P_Price";
 import P_Desc from "../components/P_Desc";
 import P_Meta from "../components/P_Meta";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProductData } from "../../../redux/Slices/productSlice";
 
 const AddProduct_2 = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {productData} = useSelector(state=>state.product)
 
   const {
     control,
@@ -23,6 +27,7 @@ const AddProduct_2 = () => {
     handleSubmit,
     getValues,
     setValue,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -34,8 +39,13 @@ const AddProduct_2 = () => {
 
   const handleForm = (data) => {
     console.log(data);
-    navigation.navigate('AddProduct_3')
+    dispatch(updateProductData(data));
+    navigation.navigate("AddProduct_3");
   };
+
+  useEffect(()=>{
+    reset(productData)
+  },[])
 
   const updateOption = (index) => {
     let options = getValues("specifications");

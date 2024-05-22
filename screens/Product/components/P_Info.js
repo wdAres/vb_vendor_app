@@ -69,6 +69,9 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
         rules: {
           required: "weight is required",
         },
+        forInput:{
+          keyboardType:'numeric'
+        },
         control: control,
         errors: errors,
       },
@@ -130,6 +133,9 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
       name: "restockingFee",
       rules: {
         required: "restocking fee is required",
+      },
+      forInput:{
+        keyboardType:'numeric'
       },
       control: control,
       errors: errors,

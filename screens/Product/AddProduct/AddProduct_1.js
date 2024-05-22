@@ -10,17 +10,20 @@ import { useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/core";
 import P_Info from "../components/P_Info";
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
-import useHttp2 from "../../../hooks/useHttp2";
 import P_Price from "../components/P_Price";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProductData } from "../../../redux/Slices/productSlice";
 
 const AddProduct_1 = () => {
   const navigation = useNavigation();
-  const [returnApplicable, setReturnApplicable] = useState("");
+  const dispatch = useDispatch();
+  const { productData } = useSelector((state) => state.product);
 
   const {
     control,
     watch,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -35,9 +38,14 @@ const AddProduct_1 = () => {
   };
 
   const handleForm = (data) => {
-    console.log(data);
-    navigation.navigate('AddProduct_2')
+    console.log(productData);
+    dispatch(updateProductData(data));
+    navigation.navigate("AddProduct_2");
   };
+
+  useEffect(() => {
+    reset(productData);
+  }, []);
 
   return (
     <>
