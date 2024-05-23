@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { Text } from "react-native";
 import { View } from "react-native";
-import { launchImageLibrary } from "react-native-image-picker";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 
 const P_Image = ({ uni_style }) => {
@@ -38,33 +37,7 @@ const P_Image = ({ uni_style }) => {
   };
 
   const selectProductImage =async  () => {
-    console.log('clicked!')
-    const hasPermission = await requestPermissions();
-
-    console.log(hasPermission);
-
-    if (!hasPermission) {
-      console.log('Permission denied');
-      return;
-    }
-
-    const options = {
-      mediaType: 'photo',
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
-    };
-
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('Image picker error: ', response.error);
-      } else {
-        let imageUri = response.uri || response.assets?.[0]?.uri;
-        setProductImage(imageUri);
-      }
-    });
+ 
   };
 
   return (
