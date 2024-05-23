@@ -1,26 +1,27 @@
 import React, { useCallback, useState } from 'react'
-import { toast } from 'react-toastify';
-import Cookies from 'js-cookie';
-import { base_url } from '../UI/base_url';
+import { BASE_URL } from '../variables';
+import Toast from 'react-native-toast-message';
+import { useAuth } from '../context/AuthContext';
 
 const useHttpForm = () => {
 
+    const {userInfo} = useAuth() || {}
+
+    const {token} = userInfo || '' 
     const [isLoading, setLoading] = useState(false)
-    const current_user = Cookies.get('vendor') ? JSON.parse(Cookies.get('vendor')) : null
-    let token = current_user?.token
     const [error, setError] = useState(null)
 
     const sendRequest = useCallback(async (reqConfig, setterFuntion, needToast) => {
 
         setLoading(true)
 
-        const baseUrl = `${base_url}/${reqConfig.url}`
-        const myToast = needToast && toast.loading('Please Wait...')
+        const baseUrl = `${BASE_URL}/${reqConfig.url}`
+        // const myToast = needToast && Toast.show('Please Wait...')
         try {
             const req = await fetch(baseUrl, {
                 method: reqConfig.method || 'GET',
-                headers: reqConfig.headers || { 'Authorization': `Bearer ${token}` },
-                body: reqConfig.body ? reqConfig.body : null,
+                headers: reqConfig.headers || {'Authorization': `Bearer ${token}` },
+                body: reqConfig.body ? (reqConfig.body) : null,
             })
 
             const resp = await req.json()
@@ -31,27 +32,20 @@ const useHttpForm = () => {
             }
 
             if (needToast) {
-                toast.update(myToast, {
-                    render: resp.message,
-                    type: 'success',
-                    isLoading: false,
-                    autoClose: 1500,
-                    pauseOnHover: false,
-                    closeOnClick: true
+                Toast.show({
+                    text1: resp.message,
+                    type: 'success'
                 });
             }
 
             setterFuntion(resp)
         } catch (error) {
 
-            toast.update(myToast, {
-                render: error.message,
-                type: 'error',
-                isLoading: false,
-                autoClose: 1500,
-                closeOnClick: true,
-                pauseOnHover: false
+            Toast.show({
+                text1: error.message,
+                type: 'error'
             })
+            console.log(error)
 
         }
         finally {

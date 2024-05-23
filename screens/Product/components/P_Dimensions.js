@@ -9,7 +9,7 @@ const P_Dimensions = ({ control, errors, uni_style }) => {
       {
         // label: `Dimension ${index + 1}`,
         dataObj: {
-          name: `dimension.${index}.name`,
+          name: `dimensions.${index}.name`,
           control: control,
           errors: errors,
           rules: {
@@ -24,7 +24,7 @@ const P_Dimensions = ({ control, errors, uni_style }) => {
       {
         // label: `Value ${index + 1}`,
         dataObj: {
-          name: `dimension.${index}.value`,
+          name: `dimensions.${index}.value`,
           control: control,
           errors: errors,
           rules: {

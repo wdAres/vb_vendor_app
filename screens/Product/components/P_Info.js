@@ -49,7 +49,7 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
     {
       label: "Unit Type",
       dataObj: {
-        name: "uniyType",
+        name: "unitType",
         open: selectUT,
         setOpen: setSelectUT,
         items: ut,
@@ -96,7 +96,7 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
     {
       label: "Category",
       dataObj: {
-        name: "category",
+        name: "categories",
         open: select,
         setOpen: setSelect,
         items: categories,

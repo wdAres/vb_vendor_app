@@ -92,14 +92,11 @@ const AddProduct_5 = () => {
       }
     });
 
-
-    console.log(formData)
-
     sendRequest(
       {
         url: `product`,
         method: "POST",
-        body: formData._parts,
+        body: formData,
       },
       () => {
         // dispatch(emptyProductData());

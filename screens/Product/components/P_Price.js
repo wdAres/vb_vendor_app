@@ -3,8 +3,14 @@ import ControlledInput from "../../../components/form/Controlled/ControlledInput
 import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 import ControlledSelect from "../../../components/form/Controlled/ControlledSelect";
+import DateInput from "../../../components/form/Controlled/DateInput";
 
-const P_Price = ({ control, errors, uni_style, watch }) => {
+const P_Price = ({
+  control,
+  errors,
+  uni_style,
+  watch
+}) => {
   const [selectDt, setSelectDt] = useState(false);
   const [dt, setDtData] = useState([
     { value: "percentage", label: "Percentage" },
@@ -24,8 +30,8 @@ const P_Price = ({ control, errors, uni_style, watch }) => {
         control: control,
         errors: errors,
         forInput: {
-            keyboardType: "numeric",
-          },
+          keyboardType: "numeric",
+        },
       },
       child: (data) => <ControlledInput {...data} />,
     },
@@ -55,8 +61,8 @@ const P_Price = ({ control, errors, uni_style, watch }) => {
         control: control,
         errors: errors,
         forInput: {
-            keyboardType: "numeric",
-          },
+          keyboardType: "numeric",
+        },
       },
       child: (data) => <ControlledInput {...data} />,
     },
@@ -106,8 +112,8 @@ const P_Price = ({ control, errors, uni_style, watch }) => {
         control: control,
         errors: errors,
         forInput: {
-            keyboardType: "numeric",
-          },
+          keyboardType: "numeric",
+        },
       },
       child: (data) => <ControlledInput {...data} />,
     },
@@ -120,6 +126,7 @@ const P_Price = ({ control, errors, uni_style, watch }) => {
         {inputFields.map((element) => (
           <FormItem key={element.dataObj.name} {...element} />
         ))}
+        
       </View>
     </View>
   );

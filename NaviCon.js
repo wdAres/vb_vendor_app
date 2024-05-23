@@ -423,7 +423,7 @@ const NaviCon = () => {
                 />
                 <Stack.Screen
                   name="AddProduct_1"
-                  component={AddProduct_6}
+                  component={AddProduct_1}
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen
@@ -444,6 +444,11 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="AddProduct_5"
                   component={AddProduct_5}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddProduct_6"
+                  component={AddProduct_6}
                   options={{ headerShown: false }}
                 />
               </>

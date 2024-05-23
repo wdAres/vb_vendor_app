@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   productData: {},
+  productLoadingState:false
 };
 
 const productSlice = createSlice({
@@ -46,14 +47,15 @@ const productSlice = createSlice({
         }
       });
 
-      console.log(state.productData)
-
       state.productData = {...state.productData , ...action.payload}
 
     },
+    updateLoading:(state,action)=>{
+      state.productLoadingState = !state.productLoadingState
+    }
   },
 });
 
-export const { emptyProductData, updateProductData ,deletingGroupBuyFields,updateDataExceptGroupBuy } = productSlice.actions;
+export const { emptyProductData, updateProductData ,deletingGroupBuyFields,updateDataExceptGroupBuy , updateLoading } = productSlice.actions;
 
 export default productSlice.reducer;

@@ -1,61 +1,56 @@
-import React, { useState } from "react";
-import {
-  PermissionsAndroid,
-  Platform,
-  Pressable,
-  StyleSheet,
-} from "react-native";
-import { Text } from "react-native";
-import { View } from "react-native";
-import { responsiveHeight } from "react-native-responsive-dimensions";
+import React, { useEffect, useMemo, useState } from "react";
+import { Text, View, StyleSheet } from "react-native";
+import ImgComp from "../../../components/form/ImgComp";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProductData } from "../../../redux/Slices/productSlice";
 
 const P_Image = ({ uni_style }) => {
+  const dispatch = useDispatch();
+  const { productData } = useSelector((state) => state.product);
+
   const [productImage, setProductImage] = useState("");
-  const requestPermissions = async () => {
-    if (Platform.OS === "android") {
-      try {
-        const granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        ]);
-        return (
-          granted["android.permission.CAMERA"] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          granted["android.permission.READ_EXTERNAL_STORAGE"] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          granted["android.permission.WRITE_EXTERNAL_STORAGE"] ===
-            PermissionsAndroid.RESULTS.GRANTED
-        );
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else {
-      return true;
-    }
+  const productImageOptions = {
+    width: 400,
+    height: 400,
+    mediaType: "photo",
+    // includeBase64: true,
   };
 
-  const selectProductImage =async  () => {
- 
+  const props_for_productImage = {
+    imgState: productImage,
+    imgStateFunc: setProductImage,
+    options: productImageOptions,
+    label: "Product Image",
   };
+
+  useEffect(() => {
+
+    console.log(productImage)
+
+  
+
+    if (productImage) {
+
+      console.log(productImage.mime.split('/'));
+
+      let [_,ext] = productImage.mime.split('/')
+
+      dispatch(
+        updateProductData({
+          image: {...productImage,filename:`${Date.now()}.${ext}`},
+        })
+      );
+    }
+    else if (productData.image) {
+      setProductImage(productData.image)
+    }
+  }, [productImage]);
 
   return (
     <View>
       <Text style={[uni_style.title]}>Product Images</Text>
       <View style={[uni_style.container, uni_style.frameview]}>
-        <View style={[styles.container2]}>
-          <Text style={styles.label}>Product Image</Text>
-          <Pressable onPress={selectProductImage} style={styles.upload_btn}>
-            <Text style={styles.upload_text}>Upload Product Image</Text>
-          </Pressable>
-        </View>
-        <View style={[styles.container2]}>
-          <Text style={styles.label}>Additional Images</Text>
-          <Pressable style={styles.upload_btn}>
-            <Text style={styles.upload_text}>Upload Product Image</Text>
-          </Pressable>
-        </View>
+        <ImgComp {...props_for_productImage} />
       </View>
     </View>
   );
@@ -63,26 +58,4 @@ const P_Image = ({ uni_style }) => {
 
 export default P_Image;
 
-const styles = StyleSheet.create({
-  container2: {
-    width: "100%",
-    flexDirection: "column",
-    gap: responsiveHeight(1.86),
-  },
-  label: {
-    fontSize: responsiveHeight(1.86),
-    color: "black",
-    fontWeight: "400",
-  },
-  upload_btn: {
-    borderWidth: 1,
-    borderColor: "#D9D9D9",
-    borderRadius: 5,
-    padding: 10,
-    color: "#8F9095",
-    fontSize: responsiveHeight(1.49),
-    fontFamily: "Inter-Medium",
-    fontWeight: "500",
-  },
-  upload_text: {},
-});
+const styles = StyleSheet.create({});

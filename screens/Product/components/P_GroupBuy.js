@@ -3,6 +3,7 @@ import ControlledInput from "../../../components/form/Controlled/ControlledInput
 import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 import ControlledSelect from "../../../components/form/Controlled/ControlledSelect";
+import ControlledDate from "../../../components/form/Controlled/ControlledDate";
 
 const P_GroupBuy = ({ control, errors, uni_style, watch }) => {
   const [selectDt, setSelectDt] = useState(false);
@@ -85,7 +86,7 @@ const P_GroupBuy = ({ control, errors, uni_style, watch }) => {
         control: control,
         errors: errors,
       },
-      child: (data) => <ControlledInput {...data} />,
+      child: (data) => <ControlledDate {...data} />,
     },
     {
       label: "Discount End Date",
@@ -97,7 +98,7 @@ const P_GroupBuy = ({ control, errors, uni_style, watch }) => {
         control: control,
         errors: errors,
       },
-      child: (data) => <ControlledInput {...data} />,
+      child: (data) => <ControlledDate {...data} />,
     }
   ];
 
