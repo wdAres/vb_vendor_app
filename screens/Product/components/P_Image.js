@@ -1,24 +1,32 @@
-import React, { useState } from 'react'
-import { PermissionsAndroid, Platform, Pressable, StyleSheet } from 'react-native';
-import { Text } from 'react-native';
-import { View } from 'react-native';
-import { responsiveHeight } from 'react-native-responsive-dimensions';
-import {launchImageLibrary} from 'react-native-image-picker'
+import React, { useState } from "react";
+import {
+  PermissionsAndroid,
+  Platform,
+  Pressable,
+  StyleSheet,
+} from "react-native";
+import { Text } from "react-native";
+import { View } from "react-native";
+import { launchImageLibrary } from "react-native-image-picker";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
 const P_Image = ({ uni_style }) => {
   const [productImage, setProductImage] = useState("");
   const requestPermissions = async () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       try {
         const granted = await PermissionsAndroid.requestMultiple([
           PermissionsAndroid.PERMISSIONS.CAMERA,
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         ]);
         return (
-          granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED
+          granted["android.permission.CAMERA"] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          granted["android.permission.READ_EXTERNAL_STORAGE"] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          granted["android.permission.WRITE_EXTERNAL_STORAGE"] ===
+            PermissionsAndroid.RESULTS.GRANTED
         );
       } catch (err) {
         console.warn(err);
@@ -29,30 +37,34 @@ const P_Image = ({ uni_style }) => {
     }
   };
 
-  const selectProductImage = async () => {
-    // const hasPermission = await requestPermissions();
+  const selectProductImage =async  () => {
+    console.log('clicked!')
+    const hasPermission = await requestPermissions();
 
-    // console.log(hasPermission);
+    console.log(hasPermission);
 
-    // if (!hasPermission) {
-    //   console.log('Permission denied');
-    //   return;
-    // }
-
-    try {
-      const options = {
-        mediaType: "photo",
-      };
-
-      let res = await launchImageLibrary(options);
-
-      if (res.assets && res.assets.length > 0) {
-        console.log(res.assets[0]);
-        setProductImage(res.assets[0].uri);
-      }
-    } catch (error) {
-      console.log(error);
+    if (!hasPermission) {
+      console.log('Permission denied');
+      return;
     }
+
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setProductImage(imageUri);
+      }
+    });
   };
 
   return (
