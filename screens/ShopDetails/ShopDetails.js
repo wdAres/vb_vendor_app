@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   Pressable,
@@ -27,9 +27,12 @@ import useHttp2 from "../../hooks/useHttp2";
 import Header from "../../components/Header";
 import Shop_Info from "./components/Shop_Info";
 import Shop_Social from "./components/Shop_Social";
+import Shop_Media from "./components/Shop_Media";
+import useHttpForm from "../../hooks/useHttpForm";
 
 const ShopDetails = () => {
   const { sendRequest, isLoading } = useHttp2();
+  const { sendRequest: sendRequest2 } = useHttpForm();
   const {
     control,
     handleSubmit,
@@ -37,14 +40,73 @@ const ShopDetails = () => {
     formState: { errors },
   } = useForm();
 
+  const [shopLogo, setShopLogo] = useState("");
+  const [shopBanner, setShopBanner] = useState("");
+  const [slideBanners, setSlideBanners] = useState("");
+
+  const __props = {
+    shopLogo,
+    setShopLogo,
+    shopBanner,
+    setShopBanner,
+    setSlideBanners,
+    slideBanners,
+  };
+
   const handleForm = (data) => {
-    sendRequest(
+    const formData = new FormData();
+
+    const appendFormData = (data, prefix = "") => {
+      for (const [key, value] of Object.entries(data)) {
+        const newKey = prefix ? `${prefix}.${key}` : key;
+        if (typeof value === "object") {
+          appendFormData(value, newKey);
+        } else {
+          formData.append(newKey, value);
+        }
+      }
+    };
+
+    appendFormData(data);
+
+    if (shopLogo.mime) {
+      let shopLogoObj = {
+        uri: shopLogo.path,
+        name: "mainShopLogo." + shopLogo.mime.split("/")[1],
+        type: shopLogo.mime,
+      };
+      formData.append("shopLogo", shopLogoObj);
+    }
+
+    if (shopBanner.mime) {
+      let shopBannerObj = {
+        uri: shopBanner.path,
+        name: "mainShopBanner." + shopBanner.mime.split("/")[1],
+        type: shopBanner.mime,
+      };
+      formData.append("topBanner", shopBannerObj);
+    }
+
+    if (slideBanners[0].mime) {
+      slideBanners.forEach((element, index) => {
+        formData.append("sliderBanners", {
+          name: `${index}_shopbanner.` + element.mime.split("/")[1],
+          uri: element.path,
+          type: element.mime,
+        });
+      });
+    }
+
+    sendRequest2(
       {
         url: `seller`,
         method: "PUT",
-        body: data,
+        body: formData,
       },
-      (result) => {},
+      (result) => {
+        console.log(result);
+        getData();
+      },
       true
     );
   };
@@ -57,12 +119,32 @@ const ShopDetails = () => {
         url: `seller`,
       },
       (result) => {
-        reset(result.data);
+        let res = result.data;
+        reset({
+          shopName: res?.shopName,
+          shopPhone: res?.shopPhone,
+          shopEmail: res?.shopEmail,
+          seoMetaTitle: res?.seoMetaTitle,
+          seoMetaDescription: res?.seoMetaDescription,
+          socialMediaLinks: {
+            instagram: res?.socialMediaLinks?.instagram,
+            facebook: res?.socialMediaLinks?.facebook,
+            twitter: res?.socialMediaLinks?.twitter,
+            website: res?.socialMediaLinks?.website,
+            youtube: res?.socialMediaLinks?.youtube,
+          },
+        });
+        setShopLogo({ url: res.shopLogoUrl });
+        setShopBanner({ url: res.topBannerUrl });
+        let newArr = res.sliderBannersUrl.map((element) => ({ url: element }));
+        if (newArr.length >= 1) {
+          setSlideBanners(newArr)
+        }
       }
     );
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getData();
   }, []);
 
@@ -89,6 +171,12 @@ const ShopDetails = () => {
                   uni_style={uni_style}
                   control={control}
                   errors={errors}
+                />
+                <Shop_Media
+                  uni_style={uni_style}
+                  control={control}
+                  errors={errors}
+                  {...__props}
                 />
                 <Shop_Social
                   uni_style={uni_style}

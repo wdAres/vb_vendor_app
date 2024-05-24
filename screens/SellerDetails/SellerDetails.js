@@ -61,7 +61,14 @@ const SellerDetails = () => {
         url: `seller`,
       },
       (result) => {
-        reset(result.data);
+        reset({
+          ...result.data,
+          postalCode: String(result.data.postalCode),
+          pickupPoint: {
+            latitude: String(result.data.pickupPoint.latitude),
+            longitude: String(result.data.pickupPoint.longitude),
+          },
+        });
       }
     );
   };
@@ -75,14 +82,6 @@ const SellerDetails = () => {
     container: styles.overall_container,
     frameview: styles.overall_frameView,
   };
-
-  const renderCount = React.useRef(0); // Initialize a ref to store the render count
-  React.useEffect(() => {
-    renderCount.current += 1; // Increment the render count on each render
-  });
-
-  console.log(renderCount)
-
 
   return (
     <>
@@ -102,11 +101,11 @@ const SellerDetails = () => {
                   control={control}
                   errors={errors}
                 />
-                  <Seller_Address
-                    uni_style={uni_style}
-                    control={control}
-                    errors={errors}
-                  />
+                <Seller_Address
+                  uni_style={uni_style}
+                  control={control}
+                  errors={errors}
+                />
                 <Seller_PickupAddress
                   uni_style={uni_style}
                   control={control}
@@ -290,7 +289,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(5.12),
     paddingVertical: responsiveHeight(2.36),
     backgroundColor: "white",
-    gap: responsiveHeight(4.10),
+    gap: responsiveHeight(4.1),
   },
   overall_heading: {
     fontSize: FontSize.size_mini,

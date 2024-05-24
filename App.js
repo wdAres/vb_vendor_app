@@ -39,8 +39,7 @@ const App = () => {
     icons: createIconsMap(),
   };
 
-  console.log(reduxStore)
-
+  
   return (
     <>
       <AuthProvider>

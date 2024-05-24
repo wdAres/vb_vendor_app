@@ -6,7 +6,7 @@ import ImageCropPicker from "react-native-image-crop-picker";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 import Toast from "react-native-toast-message";
 
-const ImgComp = ({ imgState, imgStateFunc, options, label }) => {
+const ImgComp = ({ imgState, imgStateFunc, options, label , ph }) => {
   const imageBase64 = async () => {
     let img = await ImageCropPicker.openPicker(options);
 
@@ -33,12 +33,11 @@ const ImgComp = ({ imgState, imgStateFunc, options, label }) => {
     }
   };
 
-
   return (
     <View style={[styles.container2]}>
-      <Text style={styles.label}>Product Image</Text>
+      <Text style={styles.label}>{label ? label : 'Product Image'}</Text>
       <Pressable onPress={mainHandler} style={styles.upload_btn}>
-        <Text style={styles.upload_text}>Upload Product Image</Text>
+        <Text style={styles.upload_text}>Upload {label ?  label : 'Product Image'}</Text>
       </Pressable>
       {imgState && options?.includeBase64 && (
         <View style={styles.render_images}>

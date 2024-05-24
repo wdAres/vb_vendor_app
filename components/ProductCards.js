@@ -30,7 +30,7 @@ const ProductCards = memo(
 
     return (
       <Pressable
-        onPress={() => navigation.navigate("EditProduct_1",{id:_id})}
+        onPress={() => navigation.navigate("ViewProduct",{id:_id})}
         style={[
           styles.productCards,
           styles.skuParentFlexBox,

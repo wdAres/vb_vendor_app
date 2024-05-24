@@ -37,6 +37,7 @@ const Coupons1 = () => {
     reset,
     formState: { errors, defaultValues },
   } = useForm();
+  const [expiry,setExpiry] = useState('')
 
   const handleForm = (data) => {
     console.log(data);
@@ -44,7 +45,7 @@ const Coupons1 = () => {
       {
         url: `coupon`,
         method: "POST",
-        body: data,
+        body: {...data,expiryDate:expiry},
       },
       (result) => {
         navigation.replace("Coupons");
@@ -64,7 +65,7 @@ const Coupons1 = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.shopSettingScrollViewContent}
         >
-          <Coupon_Info control={control} errors={errors} />
+          <Coupon_Info control={control} errors={errors} expiry={expiry} setExpiry={setExpiry} />
         </ScrollView>
         <PrimaryBtn
           title={"Create Coupon"}

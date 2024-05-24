@@ -30,7 +30,7 @@ const ProductCard = ({
     }
   }
 
-  const handlePress = () => navigation.navigate("ProductsDetails", { id: _id });
+  const handlePress = () => navigation.navigate("ViewProduct", { id: _id });
   return (
     <Pressable onPress={handlePress}>
       <View style={[classes.card, style]}>

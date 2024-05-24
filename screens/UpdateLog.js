@@ -23,7 +23,7 @@ import UL_Info from "./Support/components/UL_Info";
 const UpdateLog = () => {
   const { sendRequest, isLoading } = useHttp2();
   const route = useRoute();
-  const { id } = route.params;
+  const { id  , orderStatus} = route.params;
   const navigation = useNavigation();
   const {
     control,
@@ -72,6 +72,7 @@ const UpdateLog = () => {
                   control={control}
                   errors={errors}
                   uni_style={uni_style}
+                  orderStatus={orderStatus}
                 />
               </View>
             </View>

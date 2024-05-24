@@ -109,6 +109,7 @@ import EditProduct_3 from "./screens/Product/EditProduct/EditProduct_3";
 import EditProduct_4 from "./screens/Product/EditProduct/EditProduct_4";
 import EditProduct_5 from "./screens/Product/EditProduct/EditProduct_5";
 import EditProduct_6 from "./screens/Product/EditProduct/EditProduct_6";
+import ViewProduct from "./screens/Product/ViewProduct/ViewProduct";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -485,6 +486,11 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="EditProduct_6"
                   component={EditProduct_6}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="ViewProduct"
+                  component={ViewProduct}
                   options={{ headerShown: false }}
                 />
               </>

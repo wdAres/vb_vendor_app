@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ControlledInput from "../../../components/form/Controlled/ControlledInput";
 import FormItem from "../../../components/form/FormItem";
-import { StyleSheet, Text, View } from "react-native";
+import {View } from "react-native";
 import ControlledSelect from "../../../components/form/Controlled/ControlledSelect";
 
-const UL_Info = ({ control, errors, uni_style }) => {
+const UL_Info = ({ control, errors, uni_style, orderStatus }) => {
   const [openProvinceSelect, setOpenProvinceSelect] = useState(false);
+
   const [province, setProvince] = useState([
     { value: "pending", label: "Pending" },
     { value: "processing", label: "Processing" },
@@ -13,6 +14,17 @@ const UL_Info = ({ control, errors, uni_style }) => {
     { value: "delivered", label: "Delivered" },
     { value: "cancelled", label: "Cancelled" },
   ]);
+
+  useEffect(() => {
+    const filteredProvinceOptions = province.filter(
+      (option) =>
+        option.value !== orderStatus &&
+        province.findIndex((el) => el.value === orderStatus) <=
+          province.findIndex((el) => el.value === option.value)
+    );
+
+    setProvince(filteredProvinceOptions);
+  }, [orderStatus]);
 
   const inputFields = [
     {
@@ -54,5 +66,3 @@ const UL_Info = ({ control, errors, uni_style }) => {
 };
 
 export default UL_Info;
-
-const styles = StyleSheet.create({});

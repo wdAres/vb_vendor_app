@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import {
   FontFamily,
   Color,
@@ -23,6 +27,7 @@ import {
 import Header from "../../components/Header";
 import useHttp2 from "../../hooks/useHttp2";
 import moment from "moment";
+import Steps from "../../components/Steps";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
@@ -32,7 +37,7 @@ const OrderDetails = () => {
   const [data, setData] = useState([]);
   const [tableData, setTableData] = useState([]);
 
-  const getData = () => {
+  const getData = useCallback(() => {
     sendRequest(
       {
         url: `order/${id}/show`,
@@ -50,11 +55,13 @@ const OrderDetails = () => {
         setData(result.data);
       }
     );
-  };
+  }, [id, sendRequest]);
 
-  useEffect(() => {
-    getData();
-  }, [getData]);
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [getData])
+  );
 
   return (
     <>
@@ -107,66 +114,37 @@ const OrderDetails = () => {
                 <View style={styles.frameContainer}>
                   <View style={styles.frameContainer}>
                     <View style={styles.frameParent3}>
-                      <View style={styles.thJuneParent}>
-                        <Text style={[styles.thJune, styles.juneClr]}>
-                          29th June
-                        </Text>
-                        <Text style={[styles.orderConfirmed, styles.textTypo]}>
-                          Order confirmed
-                        </Text>
-                      </View>
-                      <View style={[styles.thJuneGroup, styles.juneSpaceBlock]}>
-                        <Text style={[styles.thJune1, styles.thJune1Typo]}>
-                          29th June
-                        </Text>
-                        <Text style={[styles.shipped, styles.thJune1Typo]}>
-                          Shipped
-                        </Text>
-                      </View>
-                      <View
-                        style={[styles.thJuneContainer, styles.juneSpaceBlock]}
-                      >
-                        <Text style={[styles.thJune1, styles.thJune1Typo]}>
-                          29th June
-                        </Text>
-                        <Text style={[styles.orderConfirmed, styles.textTypo]}>
-                          Out for delivery
-                        </Text>
-                      </View>
-                      <View
-                        style={[styles.thJuneParent1, styles.juneSpaceBlock]}
-                      >
-                        <Text style={[styles.thJune3, styles.thJune3Typo]}>
-                          29th June
-                        </Text>
-                        <Text style={[styles.delivered, styles.thJune3Typo]}>
-                          Delivered
-                        </Text>
-                      </View>
-                      <Image
-                        style={styles.imageIcon}
-                        resizeMode="cover"
-                        source={require("../../assets/image4.png")}
-                      />
+                      <Steps currentStep={data?.orderStatus} />
                     </View>
+                    {/* Logs */}
                     <View style={styles.logsParent}>
                       <Text style={[styles.logs, styles.logsTypo]}>Logs</Text>
-                      <View style={[styles.frameParentSpaceBlock,styles.gap]}>
-                        {data && data?.logs?.length > 0 && data.logs.map((element,index)=>(
-                        <Text
-                        key={index}
-                          style={[styles.packageIsShipped, styles.packageTypo]}
-                        >
-                          {element.log}
-                        </Text>
-                        ))}
+                      <View style={[styles.frameParentSpaceBlock, styles.gap]}>
+                        {data &&
+                          data?.logs?.length > 0 &&
+                          data.logs.map((element, index) => (
+                            <Text
+                              key={index}
+                              style={[
+                                styles.packageIsShipped,
+                                styles.packageTypo,
+                              ]}
+                            >
+                              {element.log}
+                            </Text>
+                          ))}
                       </View>
                     </View>
                   </View>
                   <TouchableOpacity
                     style={styles.updateLog}
                     activeOpacity={0.2}
-                    onPress={() => navigation.navigate("UpdateLog",{id:data?._id})}
+                    onPress={() =>
+                      navigation.navigate("UpdateLog", {
+                        id: data?._id,
+                        orderStatus: data?.orderStatus,
+                      })
+                    }
                   >
                     <Text style={styles.updateLog1Typo}>Update Log</Text>
                   </TouchableOpacity>
@@ -177,7 +155,7 @@ const OrderDetails = () => {
               <Text style={[styles.orderStatus, styles.logsTypo]}>
                 Product details
               </Text>
-              <View
+              {/* <View
                 style={[
                   styles.imagePlaceHolderParent,
                   styles.frameParentSpaceBlock,
@@ -216,7 +194,7 @@ const OrderDetails = () => {
                     </Text>
                   </View>
                 </View>
-              </View>
+              </View> */}
             </View>
             <View style={styles.orderStatusParent}>
               <Text style={[styles.orderStatus, styles.logsTypo]}>
@@ -242,26 +220,30 @@ const OrderDetails = () => {
                 </View>
               </View>
             </View>
-            {data?.pickupAddress && 
-            <View style={styles.orderStatusParent}>
-              <Text style={[styles.orderStatus, styles.logsTypo]}>
-                Pickup Address
-              </Text>
-              <View style={[styles.frameWrapper1, styles.frameBorder]}>
-                <View style={styles.frameContainer}>
-                  <Text style={[styles.paymentMethods, styles.orderTypo]}>
-                    Nishant Choudhary
-                  </Text>
-                  <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
-                    Apt. 453 52466 Kimberlie Trail, Emardmouth, IL 70724
-                  </Text>
-                  <Text style={[styles.apt45352466, styles.apt45352466FlexBox]}>
-                    7503063585
-                  </Text>
+            {data?.pickupAddress && (
+              <View style={styles.orderStatusParent}>
+                <Text style={[styles.orderStatus, styles.logsTypo]}>
+                  Pickup Address
+                </Text>
+                <View style={[styles.frameWrapper1, styles.frameBorder]}>
+                  <View style={styles.frameContainer}>
+                    <Text style={[styles.paymentMethods, styles.orderTypo]}>
+                      Nishant Choudhary
+                    </Text>
+                    <Text
+                      style={[styles.apt45352466, styles.apt45352466FlexBox]}
+                    >
+                      Apt. 453 52466 Kimberlie Trail, Emardmouth, IL 70724
+                    </Text>
+                    <Text
+                      style={[styles.apt45352466, styles.apt45352466FlexBox]}
+                    >
+                      7503063585
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-}
+            )}
           </View>
         </View>
       </ScrollView>
@@ -309,7 +291,7 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(1.61),
     alignSelf: "stretch",
   },
-  gap:{
+  gap: {
     gap: responsiveHeight(1.61),
   },
   juneClr: {

@@ -5,8 +5,9 @@ import FormItem from "../../../components/form/FormItem";
 import ControlledInput from "../../../components/form/Controlled/ControlledInput";
 import useHttp2 from "../../../hooks/useHttp2";
 import ControlledDate from "../../../components/form/Controlled/ControlledDate";
+import DateInput from "../../../components/form/Controlled/DateInput";
 
-export default function Coupon_Info({ control, errors }) {
+export default function Coupon_Info({ control, errors, expiry, setExpiry }) {
   const [openProductSelect, setOpenProductSelect] = useState(false);
   const [products, setProducts] = useState([]);
 
@@ -65,11 +66,10 @@ export default function Coupon_Info({ control, errors }) {
         rules: {
           required: "Coupon Code is required",
           validate: (value) => {
-            console.log(value)
+            console.log(value);
             return (
-              [/^[^\s]+$/].every((pattern) =>
-                pattern.test(value)
-              ) ||"Your input cannot contain any spaces"
+              [/^[^\s]+$/].every((pattern) => pattern.test(value)) ||
+              "Your input cannot contain any spaces"
             );
           },
         },
@@ -88,19 +88,19 @@ export default function Coupon_Info({ control, errors }) {
       },
       child: (data) => <ControlledInput {...data} />,
     },
-    {
-      label: "Expiry Date",
-      dataObj: {
-        name: "expiryDate",
-        control: control,
-        errors: errors,
-        rules: {
-          required: "Expiry Date is required",
-        },
-        placeholder:'Select Expiry Date'
-      },
-      child: (data) => <ControlledDate {...data} />,
-    },
+    // {
+    //   label: "Expiry Date",
+    //   dataObj: {
+    //     name: "expiryDate",
+    //     control: control,
+    //     errors: errors,
+    //     rules: {
+    //       required: "Expiry Date is required",
+    //     },
+    //     placeholder: "Select Expiry Date",
+    //   },
+    //   child: (data) => <ControlledDate {...data} />,
+    // },
     {
       label: "Discount Type",
       dataObj: {
@@ -127,8 +127,8 @@ export default function Coupon_Info({ control, errors }) {
           required: "Discount Value is required",
         },
         forInput: {
-            keyboardType: "numeric",
-          }
+          keyboardType: "numeric",
+        },
       },
       child: (data) => <ControlledInput {...data} />,
     },
@@ -143,7 +143,7 @@ export default function Coupon_Info({ control, errors }) {
         },
         forInput: {
           keyboardType: "numeric",
-        }
+        },
       },
       child: (data) => <ControlledInput {...data} />,
     },
@@ -174,7 +174,7 @@ export default function Coupon_Info({ control, errors }) {
         setItems: setProducts,
         rules: {
           required: "Products is required",
-        }
+        },
         // multiple:true,
         // max:3,
         // mode:'BADGE'
@@ -183,8 +183,16 @@ export default function Coupon_Info({ control, errors }) {
     },
   ];
 
-
-  return formData.map((element) => (
-    <FormItem key={element.dataObj.name} {...element} />
-  ));
+  return (
+    <>
+      {formData.map((element) => (
+        <FormItem key={element.dataObj.name} {...element} />
+      ))}
+      <DateInput
+        dateState={expiry}
+        dateStateFunc={setExpiry}
+        label={"Expiry Date"}
+      />
+    </>
+  );
 }
