@@ -13,15 +13,18 @@ import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import P_Price from "../components/P_Price";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductData } from "../../../redux/Slices/productSlice";
-import DateInput from "../../../components/form/Controlled/DateInput";
+import Toast from "react-native-toast-message";
+import moment from "moment";
 
 const AddProduct_1 = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { productData } = useSelector((state) => state.product);
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [discountDateRange, setDiscountDateRange] = useState({
+    start: "",
+    end: "",
+  });
 
   const {
     control,
@@ -32,10 +35,10 @@ const AddProduct_1 = () => {
   } = useForm({
     defaultValues: {
       returnApplicable: "none",
-      discountDateRange: {
-        start: "",
-        end: "",
-      },
+      // discountDateRange: {
+      //   start: "",
+      //   end: "",
+      // },
     },
   });
 
@@ -46,13 +49,52 @@ const AddProduct_1 = () => {
   };
 
   const handleForm = (data) => {
-    dispatch(updateProductData(data));
+    if (!discountDateRange.start || !discountDateRange.end) {
+      Toast.show({
+        type: "error",
+        text1: "Both Discount Date Start and End is required",
+      });
+      return;
+    }
+
+    dispatch(
+      updateProductData({
+        ...data,
+        discountDateRange: {
+          start: new Date(discountDateRange.start).toISOString(),
+          end: new Date(discountDateRange.end).toISOString(),
+        },
+      })
+    );
     navigation.navigate("AddProduct_6");
   };
 
   useEffect(() => {
-      reset(productData);
-  }, []);
+    if (productData?.discountDateRange) {
+      setDiscountDateRange(prev=>({
+        start:moment(productData?.discountDateRange?.start).toDate(),
+        end:moment(productData?.discountDateRange?.end).toDate(),
+      }));
+    }
+    reset({
+      price: productData?.price,
+      discountType: productData?.discountType,
+      discount: productData?.discount,
+      // discountDateRange: {
+      //   start: productData?.discountDateRange?.start,
+      //   end: productData?.discountDateRange?.end,
+      // },
+      sku: productData?.sku,
+      quantityAvailable: productData?.quantityAvailable,
+      name: productData?.name,
+      unitType: productData?.unitType,
+      weight: productData?.weight,
+      brand: productData?.brand,
+      categories: productData?.categories,
+      returnApplicable: productData?.returnApplicable ?? "none",
+      restockingFee: productData?.restockingFee,
+    });
+  }, [productData]);
 
   return (
     <>
@@ -76,6 +118,8 @@ const AddProduct_1 = () => {
             errors={errors}
             uni_style={uni_style}
             watch={watch}
+            discountDateRange={discountDateRange}
+            setDiscountDateRange={setDiscountDateRange}
           />
           {/* <View style={{gap: responsiveHeight(4.1)}}>
             <DateInput

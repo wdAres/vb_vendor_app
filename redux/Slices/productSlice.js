@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { setNewProduct } from "../Thunk/productThunk";
 
 const initialState = {
   productData: {},
-  productLoadingState:false
+  productLoadingState: false,
 };
 
 const productSlice = createSlice({
@@ -47,15 +48,20 @@ const productSlice = createSlice({
         }
       });
 
-      state.productData = {...state.productData , ...action.payload}
-
+      state.productData = { ...state.productData, ...action.payload };
     },
-    updateLoading:(state,action)=>{
-      state.productLoadingState = !state.productLoadingState
-    }
+    updateLoading: (state, action) => {
+      state.productLoadingState = !state.productLoadingState;
+    },
   },
 });
 
-export const { emptyProductData, updateProductData ,deletingGroupBuyFields,updateDataExceptGroupBuy , updateLoading } = productSlice.actions;
+export const {
+  emptyProductData,
+  updateProductData,
+  deletingGroupBuyFields,
+  updateDataExceptGroupBuy,
+  updateLoading,
+} = productSlice.actions;
 
 export default productSlice.reducer;

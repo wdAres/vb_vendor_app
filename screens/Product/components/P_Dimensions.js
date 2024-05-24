@@ -54,7 +54,7 @@ const P_Dimensions = ({ control, errors, uni_style }) => {
             .map((element, index) => (
               <>
                 <FormItem key={index} {...valueField(index)[0]} />
-                <FormItem key={index+100} {...valueField(index)[1]} />
+                <FormItem key={index+1000} {...valueField(index)[1]} />
               </>
             ))}
         </View>

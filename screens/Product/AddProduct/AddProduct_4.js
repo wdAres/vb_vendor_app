@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import PrimaryBtn from "../../../components/Buttons/PrimaryBtn";
 import {
@@ -12,11 +12,17 @@ import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import P_GroupBuy from "../components/P_GroupBuy";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductData } from "../../../redux/Slices/productSlice";
+import moment from "moment";
 
 const AddProduct_4 = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { productData } = useSelector((state) => state.product);
+
+  const [discountDateRange, setDiscountDateRange] = useState({
+    groupByStartDate: "",
+    groupByEndDate: "",
+  });
 
   const {
     control,
@@ -33,12 +39,44 @@ const AddProduct_4 = () => {
   };
 
   const handleForm = (data) => {
-    dispatch(updateProductData(data));
+    if (
+      !discountDateRange.groupByStartDate ||
+      !discountDateRange.groupByEndDate
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Both Group Buy Start and End  Date is required",
+      });
+      return;
+    }
+
+    dispatch(
+      updateProductData({
+        ...data,
+        groupByStartDate: new Date(
+          discountDateRange.groupByStartDate
+        ).toISOString(),
+        groupByEndDate: new Date(
+          discountDateRange.groupByEndDate
+        ).toISOString(),
+      })
+    );
     navigation.navigate("AddProduct_5");
   };
 
   useEffect(() => {
-    reset(productData);
+    if (productData?.groupByStartDate && productData?.groupByEndDate) {
+      setDiscountDateRange((prev) => ({
+        groupByStartDate: moment(productData?.groupByStartDate).toDate(),
+        groupByEndDate: moment(productData?.groupByEndDate).toDate(),
+      }));
+    }
+    reset({
+      groupByMinOrder: productData?.groupByMinOrder,
+      groupByOrderReach: productData?.groupByOrderReach,
+      groupByDiscountType: productData?.groupByDiscountType,
+      groupByDiscount: productData?.groupByDiscount,
+    });
   }, []);
 
   return (
@@ -57,6 +95,8 @@ const AddProduct_4 = () => {
             errors={errors}
             uni_style={uni_style}
             watch={watch}
+            discountDateRange={discountDateRange}
+            setDiscountDateRange={setDiscountDateRange}
           />
         </ScrollView>
         <PrimaryBtn title={"Next Page"} onPress={handleSubmit(handleForm)} />

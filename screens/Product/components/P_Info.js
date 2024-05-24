@@ -27,7 +27,7 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
     { value: 'pc', label: 'pc' },
     { value: 'gm', label: 'grams' },
     { value: 'lb', label: 'lb' },
-    { value: 'liter', label: 'liter' },
+    { value: 'l', label: 'liter' },
     { value: 'm', label: 'meter' },
     { value: 'ft', label: 'feet' },
     { value: 'ml', label: 'ml' },
@@ -101,6 +101,8 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
         setOpen: setSelect,
         items: categories,
         setItems: setCategories,
+        // mode:'multiple',
+        // max:3,
         rules: {
           required: "category is required",
         },

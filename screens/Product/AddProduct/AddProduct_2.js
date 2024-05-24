@@ -19,7 +19,7 @@ import { updateProductData } from "../../../redux/Slices/productSlice";
 const AddProduct_2 = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {productData} = useSelector(state=>state.product)
+  const { productData } = useSelector((state) => state.product);
 
   const {
     control,
@@ -29,7 +29,15 @@ const AddProduct_2 = () => {
     setValue,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      seo: {
+        metaDescription: "",
+        metaTitle: "",
+        metaKeywords : '',
+      },
+    },
+  });
 
   const uni_style = {
     title: styles.overall_heading,
@@ -42,9 +50,13 @@ const AddProduct_2 = () => {
     navigation.navigate("AddProduct_3");
   };
 
-  useEffect(()=>{
-    reset(productData)
-  },[])
+  useEffect(() => {
+    reset({
+      description: productData?.description,
+      specifications: productData?.specifications,
+      seo: productData?.seo,
+    });
+  }, [productData]);
 
   const updateOption = (index) => {
     let options = getValues("specifications");
@@ -69,11 +81,7 @@ const AddProduct_2 = () => {
             uni_style={uni_style}
             updateOption={updateOption}
           />
-          <P_Meta
-            control={control}
-            errors={errors}
-            uni_style={uni_style}
-          />
+          <P_Meta control={control} errors={errors} uni_style={uni_style} />
         </ScrollView>
         <PrimaryBtn title={"Next Page"} onPress={handleSubmit(handleForm)} />
       </View>

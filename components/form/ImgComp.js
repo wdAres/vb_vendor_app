@@ -33,6 +33,7 @@ const ImgComp = ({ imgState, imgStateFunc, options, label }) => {
     }
   };
 
+
   return (
     <View style={[styles.container2]}>
       <Text style={styles.label}>Product Image</Text>
@@ -48,7 +49,7 @@ const ImgComp = ({ imgState, imgStateFunc, options, label }) => {
                 key={index}
                 height={100}
                 source={{
-                  uri: `data:${element.mime};base64,${element.data}`,
+                  uri: element.url ? element.url : `data:${element.mime};base64,${element.data}`,
                 }}
               />
             ))
@@ -57,7 +58,7 @@ const ImgComp = ({ imgState, imgStateFunc, options, label }) => {
               width={100}
               height={100}
               source={{
-                uri: `data:${imgState.mime};base64,${imgState.data}`,
+                uri: imgState.url ? imgState.url :  `data:${imgState.mime};base64,${imgState.data}`,
               }}
             />
           )}

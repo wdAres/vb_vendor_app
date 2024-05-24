@@ -103,6 +103,12 @@ import AddProduct_3 from "./screens/Product/AddProduct/AddProduct_3";
 import AddProduct_4 from "./screens/Product/AddProduct/AddProduct_4";
 import AddProduct_5 from "./screens/Product/AddProduct/AddProduct_5";
 import AddProduct_6 from "./screens/Product/AddProduct/AddProduct_6";
+import EditProduct_1 from "./screens/Product/EditProduct/EditProduct_1";
+import EditProduct_2 from "./screens/Product/EditProduct/EditProduct_2";
+import EditProduct_3 from "./screens/Product/EditProduct/EditProduct_3";
+import EditProduct_4 from "./screens/Product/EditProduct/EditProduct_4";
+import EditProduct_5 from "./screens/Product/EditProduct/EditProduct_5";
+import EditProduct_6 from "./screens/Product/EditProduct/EditProduct_6";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -449,6 +455,36 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="AddProduct_6"
                   component={AddProduct_6}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditProduct_1"
+                  component={EditProduct_1}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditProduct_2"
+                  component={EditProduct_2}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditProduct_3"
+                  component={EditProduct_3}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditProduct_4"
+                  component={EditProduct_4}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditProduct_5"
+                  component={EditProduct_5}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="EditProduct_6"
+                  component={EditProduct_6}
                   options={{ headerShown: false }}
                 />
               </>

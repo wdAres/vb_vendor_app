@@ -4,9 +4,7 @@ import { Image, Pressable, StyleSheet } from "react-native";
 import { Text } from "react-native";
 import { View } from "react-native";
 import DatePicker from "react-native-date-picker";
-import ImageCropPicker from "react-native-image-crop-picker";
 import { responsiveHeight } from "react-native-responsive-dimensions";
-import Toast from "react-native-toast-message";
 
 const DateInput = ({ dateState, dateStateFunc, label  }) => {
   const [open, setOpen] = useState(false);

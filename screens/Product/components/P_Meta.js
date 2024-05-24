@@ -11,9 +11,6 @@ const P_Meta = ({ control, errors, uni_style }) => {
       label: "Meta Title",
       dataObj: {
         name: "seo.metaTitle",
-        rules: {
-          required: "meta title is required",
-        },
         control: control,
         errors: errors,
       },
@@ -23,9 +20,6 @@ const P_Meta = ({ control, errors, uni_style }) => {
       label: "Meta Description",
       dataObj: {
         name: "seo.metaDescription",
-        rules: {
-          required: "description is required",
-        },
         control: control,
         errors: errors,
       },
@@ -35,9 +29,6 @@ const P_Meta = ({ control, errors, uni_style }) => {
       label: "Meta Keywords",
       dataObj: {
         name: "seo.metaKeywords",
-        rules: {
-          required: "meta keywords is required",
-        },
         control: control,
         errors: errors,
       },

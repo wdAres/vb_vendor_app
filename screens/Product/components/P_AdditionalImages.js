@@ -4,38 +4,33 @@ import ImgComp from "../../../components/form/ImgComp";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductData } from "../../../redux/Slices/productSlice";
 
-const P_Image = ({ uni_style, setProductImage, productImage }) => {
+const P_AdditionalImages = ({ uni_style, setProductAdditionalImages, productAdditionalImages }) => {
   const { productData } = useSelector((state) => state.product);
 
   const productImageOptions = {
     width: 400,
     height: 400,
     mediaType: "photo",
+    multiple:true,
     includeBase64: true,
   };
 
   const props_for_productImage = {
-    imgState: productImage,
-    imgStateFunc: setProductImage,
+    imgState: productAdditionalImages,
+    imgStateFunc: setProductAdditionalImages,
     options: productImageOptions,
     label: "Product Image",
   };
 
   useEffect(() => {
-    if (typeof productData.image === 'object') {
-      setProductImage(productData.image);
-    }
-    else if (productData.url) {
-      setProductImage({url:productData?.url})
-      console.log('here')
+    if (productData.additionalImages) {
+      setProductAdditionalImages(productData.additionalImages);
     }
   }, [productData]);
 
-
-
   return (
     <View>
-      <Text style={[uni_style.title]}>Product Images</Text>
+      <Text style={[uni_style.title]}>Product Additional Images</Text>
       <View style={[uni_style.container, uni_style.frameview]}>
         <ImgComp {...props_for_productImage} />
       </View>
@@ -43,6 +38,6 @@ const P_Image = ({ uni_style, setProductImage, productImage }) => {
   );
 };
 
-export default P_Image;
+export default P_AdditionalImages;
 
 const styles = StyleSheet.create({});

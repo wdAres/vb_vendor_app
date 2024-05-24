@@ -4,11 +4,12 @@ import FormItem from "../../../components/form/FormItem";
 import { StyleSheet, Text, View } from "react-native";
 import ControlledSelect from "../../../components/form/Controlled/ControlledSelect";
 import ControlledDate from "../../../components/form/Controlled/ControlledDate";
+import DateInput from "../../../components/form/Controlled/DateInput";
 
-const P_GroupBuy = ({ control, errors, uni_style, watch }) => {
+const P_GroupBuy = ({ control, errors, uni_style, watch ,setDiscountDateRange,discountDateRange}) => {
   const [selectDt, setSelectDt] = useState(false);
   const [dt, setDtData] = useState([
-    { value: "fixed", label: "Fixed" },
+    { value: "flat", label: "Flat" },
     { value: "percentage", label: "Percentage" },
   ]);
 
@@ -76,31 +77,44 @@ const P_GroupBuy = ({ control, errors, uni_style, watch }) => {
       },
       child: (data) => <ControlledInput {...data} />,
     },
-    {
-      label: "Discount Start Date",
-      dataObj: {
-        name: "groupByStartDate",
-        rules: {
-          required: "discount start date is required",
-        },
-        control: control,
-        errors: errors,
-      },
-      child: (data) => <ControlledDate {...data} />,
-    },
-    {
-      label: "Discount End Date",
-      dataObj: {
-        name: "groupByEndDate",
-        rules: {
-          required: "discount end date is required",
-        },
-        control: control,
-        errors: errors,
-      },
-      child: (data) => <ControlledDate {...data} />,
-    }
+    // {
+    //   label: "Discount Start Date",
+    //   dataObj: {
+    //     name: "groupByStartDate",
+    //     rules: {
+    //       required: "discount start date is required",
+    //     },
+    //     control: control,
+    //     errors: errors,
+    //   },
+    //   child: (data) => <ControlledDate {...data} />,
+    // },
+    // {
+    //   label: "Discount End Date",
+    //   dataObj: {
+    //     name: "groupByEndDate",
+    //     rules: {
+    //       required: "discount end date is required",
+    //     },
+    //     control: control,
+    //     errors: errors,
+    //   },
+    //   child: (data) => <ControlledDate {...data} />,
+    // }
   ];
+
+  const startFunc = (date) => {
+    setDiscountDateRange((prev) => ({
+      ...prev,
+      groupByStartDate: date,
+    }));
+  };
+  const endFunc = (date) => {
+    setDiscountDateRange((prev) => ({
+      ...prev,
+      groupByEndDate: date,
+    }));
+  };
 
   return (
     <View>
@@ -109,6 +123,16 @@ const P_GroupBuy = ({ control, errors, uni_style, watch }) => {
         {inputFields.map((element) => (
           <FormItem key={element.dataObj.name} {...element} />
         ))}
+        <DateInput 
+        dateState={discountDateRange?.groupByStartDate}
+        label={'Group Buy Start'}
+      dateStateFunc={startFunc}
+        />
+        <DateInput 
+        dateState={discountDateRange?.groupByEndDate}
+        label={'Group Buy End'}
+      dateStateFunc={endFunc}
+        />
       </View>
     </View>
   );

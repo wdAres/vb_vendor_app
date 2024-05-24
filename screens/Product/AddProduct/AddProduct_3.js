@@ -30,7 +30,8 @@ const AddProduct_3 = () => {
   } = useForm({
     defaultValues: {
       shipping: {
-        fee: 0,
+        fee: '0',
+        type:'free'
       },
       cod:false,
       stockVisibility:false,
@@ -39,8 +40,6 @@ const AddProduct_3 = () => {
     },
   });
 
-
-
   const uni_style = {
     title: styles.overall_heading,
     container: styles.overall_container,
@@ -48,18 +47,28 @@ const AddProduct_3 = () => {
   };
 
   const handleForm = (data) => {
-    dispatch(updateProductData(data));
+    dispatch(updateProductData(data)); 
     if (data.groupBy) {
       navigation.navigate("AddProduct_4");
     }else{
       navigation.navigate("AddProduct_5");
-    }
-    
+    }   
   };
 
   useEffect(()=>{
-    reset(productData)
-  },[])
+    reset({
+      shipping: {
+        fee: productData?.shipping?.fee ?? '0',
+        type:productData?.type
+      },
+      estDeliveryDate:productData?.estDeliveryDate,
+      cod:productData?.cod,
+      stockVisibility:productData?.stockVisibility,
+      groupBy:productData?.groupBy,
+      instabuild:productData?.instabuild,
+      tags:productData?.tags
+    })
+  },[productData])
 
   
   useEffect(()=>{

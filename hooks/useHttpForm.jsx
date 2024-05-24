@@ -20,16 +20,16 @@ const useHttpForm = () => {
         try {
             const req = await fetch(baseUrl, {
                 method: reqConfig.method || 'GET',
-                headers: reqConfig.headers || {'Authorization': `Bearer ${token}` },
+                headers: reqConfig.headers || {'Authorization': `Bearer ${token}` , 'Content-Type': 'multipart/form-data' },
                 body: reqConfig.body ? (reqConfig.body) : null,
             })
 
             const resp = await req.json()
 
-            if (!resp.success) {
-                setError(resp)
-                throw new Error(resp.message)
-            }
+            // if (!resp.success) {
+            //     setError(resp)
+            //     throw new Error(resp.message)
+            // }
 
             if (needToast) {
                 Toast.show({

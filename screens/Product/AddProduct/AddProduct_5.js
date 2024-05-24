@@ -6,7 +6,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from "react-native-responsive-dimensions";
-import { useForm } from "react-hook-form";
+import { Form, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/core";
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import P_Dimensions from "../components/P_Dimensions";
@@ -52,37 +52,54 @@ const AddProduct_5 = () => {
     frameview: styles.overall_frameView,
   };
 
-  const handleForm = (data) => {
-    
+  const handleForm = async (data) => {
     if (!productData.groupBy) {
       dispatch(updateDataExceptGroupBuy(data));
     } else {
       dispatch(updateProductData(data));
     }
 
-    let latestObj = { ...productData};
+    let newObj = { ...productData };
 
-    
+    console.log({
+      ...newObj.additionalImages[0] , data: ''
+  })
+
     const formData = new FormData();
 
-    let res = latestObj.specifications?.map(
+    // Image Operation
+    formData.append("image", {
+      uri: newObj.image.path,
+      type: newObj.image.mime,
+      name: `${Date.now()}.${newObj.image.mime.split("/")[1]}`,
+    });
+
+    // newObj.additionalImages.forEach((element,index)=>(
+    //   formData.append(`additionalImages.${index}` ,{
+    //     uri: element.image.path,
+    //     type: element.image.mime,
+    //     name: `${Date.now()}.${element.image.mime.split("/")[1]}`,
+    //   })
+    // ))
+
+    // Specifications Operation
+    let res = newObj.specifications?.map(
       (element) => `${element.first}:${element.last}`
     );
-    
     formData.append("specifications", res.join(","));
-    
-    latestObj.dimensions.forEach((element, index) => {
+
+    // Dimensions
+    newObj.dimensions.forEach((element, index) => {
       formData.append(`dimensions[${index}].name`, element.name);
       formData.append(`dimensions[${index}].value`, element.value);
     });
-    
-    formData.append('image',latestObj.image)
 
-    delete latestObj.specifications;
-    delete latestObj.dimensions;
-    delete latestObj.image;
+    delete newObj.specifications;
+    delete newObj.dimensions;
+    delete newObj.image;
+    delete newObj.additionalImages;
 
-    Object.entries(latestObj).forEach(([key, value]) => {
+    Object.entries(newObj).forEach(([key, value]) => {
       if (typeof value === "object" && value !== null) {
         Object.entries(value).forEach(([subKey, subValue]) => {
           formData.append(`${key}.${subKey}`, subValue);
@@ -92,26 +109,27 @@ const AddProduct_5 = () => {
       }
     });
 
-
-    console.log(formData)
+    // console.log(formData);
 
     sendRequest(
       {
         url: `product`,
         method: "POST",
-        body: formData._parts,
+        body: formData,
       },
-      () => {
-        // dispatch(emptyProductData());
+      (result) => {
+        dispatch(emptyProductData());
         navigation.navigate("Products1");
-      },
-      true
+        console.log(result);
+      }
     );
   };
 
   useEffect(() => {
-    reset(productData);
-  }, []);
+    reset({
+      dimensions: productData?.dimensions,
+    });
+  }, [productData]);
 
   return (
     <>

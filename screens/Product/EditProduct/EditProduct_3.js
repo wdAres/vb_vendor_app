@@ -15,7 +15,7 @@ import P_Category from "../components/P_Category";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductData } from "../../../redux/Slices/productSlice";
 
-const AddProduct_3 = () => {
+const EditProduct_3 = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {productData} = useSelector(state=>state.product)
@@ -30,7 +30,8 @@ const AddProduct_3 = () => {
   } = useForm({
     defaultValues: {
       shipping: {
-        fee: 0,
+        fee: '0',
+        type:'free'
       },
       cod:false,
       stockVisibility:false,
@@ -39,8 +40,6 @@ const AddProduct_3 = () => {
     },
   });
 
-
-
   const uni_style = {
     title: styles.overall_heading,
     container: styles.overall_container,
@@ -48,18 +47,28 @@ const AddProduct_3 = () => {
   };
 
   const handleForm = (data) => {
-    dispatch(updateProductData(data));
+    dispatch(updateProductData(data)); 
     if (data.groupBy) {
-      navigation.navigate("AddProduct_4");
+      navigation.navigate("EditProduct_4");
     }else{
-      navigation.navigate("AddProduct_5");
-    }
-    
+      navigation.navigate("EditProduct_5");
+    }   
   };
 
   useEffect(()=>{
-    reset(productData)
-  },[])
+    reset({
+      shipping: {
+        fee: productData?.shipping?.fee ?? '0',
+        type:productData?.type
+      },
+      estDeliveryDate:String(productData?.estDeliveryDate),
+      cod:productData?.cod,
+      stockVisibility:productData?.stockVisibility,
+      groupBy:productData?.groupBy,
+      instabuild:productData?.instabuild,
+      tags:typeof productData?.tags === 'object' ? productData?.tags.join('') : productData?.tags,
+    })
+  },[productData])
 
   
   useEffect(()=>{
@@ -70,7 +79,7 @@ const AddProduct_3 = () => {
 
   return (
     <>
-      <Header label={"Add Product"} />
+      <Header label={"Edit Product"} />
       <View style={styles.container}>
         <ScrollView
           horizontal={false}
@@ -105,7 +114,7 @@ const AddProduct_3 = () => {
   );
 };
 
-export default AddProduct_3;
+export default EditProduct_3;
 
 const styles = StyleSheet.create({
   container: {

@@ -23,13 +23,14 @@ const ProductCards = memo(
     price,
     inStock,
     url,
+    _id
   }) => {
 
     const navigation = useNavigation();
 
     return (
       <Pressable
-        onPress={() => navigation.navigate("ProductsDetails")}
+        onPress={() => navigation.navigate("EditProduct_1",{id:_id})}
         style={[
           styles.productCards,
           styles.skuParentFlexBox,

@@ -7,21 +7,24 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { useForm } from "react-hook-form";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useRoute } from "@react-navigation/core";
 import P_Info from "../components/P_Info";
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import P_Price from "../components/P_Price";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductData } from "../../../redux/Slices/productSlice";
-import DateInput from "../../../components/form/Controlled/DateInput";
+import Toast from "react-native-toast-message";
+import moment from "moment";
+import useHttp2 from "../../../hooks/useHttp2";
 
-const AddProduct_1 = () => {
+const EditProduct_1 = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { productData } = useSelector((state) => state.product);
-
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [discountDateRange, setDiscountDateRange] = useState({
+    start: "",
+    end: "",
+  });
 
   const {
     control,
@@ -32,10 +35,6 @@ const AddProduct_1 = () => {
   } = useForm({
     defaultValues: {
       returnApplicable: "none",
-      discountDateRange: {
-        start: "",
-        end: "",
-      },
     },
   });
 
@@ -46,17 +45,81 @@ const AddProduct_1 = () => {
   };
 
   const handleForm = (data) => {
-    dispatch(updateProductData(data));
-    navigation.navigate("AddProduct_6");
+    if (!discountDateRange.start || !discountDateRange.end) {
+      Toast.show({
+        type: "error",
+        text1: "Both Discount Date Start and End is required",
+      });
+      return;
+    }
+
+    dispatch(
+      updateProductData({
+        ...data,
+        discountDateRange: {
+          start: new Date(discountDateRange.start).toISOString(),
+          end: new Date(discountDateRange.end).toISOString(),
+        },
+      })
+    );
+    navigation.navigate("EditProduct_6");
+  };
+
+  const { sendRequest, isLoading } = useHttp2();
+  const { id } = useRoute().params;
+
+  const myData = () => {
+    sendRequest(
+      {
+        url: `product/${id}/show`,
+      },
+      (result) => {
+        dispatch(
+          updateProductData({
+            ...result.data,
+            brand: result?.data?.brand?._id,
+            categories: result.data.categories[0]._id,
+          })
+        );
+      },
+      true
+    );
   };
 
   useEffect(() => {
-      reset(productData);
-  }, []);
+    myData();
+  }, [id]); // Fetch data once when the component mounts
+
+  useEffect(() => {
+    if (productData) {
+      setDiscountDateRange({
+        start: productData.discountDateRange?.start
+          ? moment(productData.discountDateRange.start).toDate()
+          : "",
+        end: productData.discountDateRange?.end
+          ? moment(productData.discountDateRange.end).toDate()
+          : "",
+      });
+      reset({
+        price: String(productData.price),
+        discountType: productData.discountType,
+        discount: String(productData.discount),
+        sku: productData.sku,
+        quantityAvailable: String(productData.quantityAvailable),
+        name: productData.name,
+        unitType: productData.unitType,
+        weight: String(productData.weight),
+        brand: productData.brand,
+        categories: productData.categories,
+        returnApplicable: productData.returnApplicable ?? "none",
+        restockingFee: String(productData.restockingFee),
+      });
+    }
+  }, [productData]); // Update form only when productData changes
 
   return (
     <>
-      <Header label={"Add Product"} />
+      <Header label={"Edit Product"} />
       <View style={styles.container}>
         <ScrollView
           horizontal={false}
@@ -76,19 +139,9 @@ const AddProduct_1 = () => {
             errors={errors}
             uni_style={uni_style}
             watch={watch}
+            discountDateRange={discountDateRange}
+            setDiscountDateRange={setDiscountDateRange}
           />
-          {/* <View style={{gap: responsiveHeight(4.1)}}>
-            <DateInput
-              label={"Discount Range Start"}
-              dateState={startDate}
-              dateStateFunc={setStartDate}
-            />
-            <DateInput
-              label={"Discount Range End"}
-              dateState={endDate}
-              dateStateFunc={setEndDate}
-            />
-          </View> */}
         </ScrollView>
         <PrimaryBtn title={"Next Page"} onPress={handleSubmit(handleForm)} />
       </View>
@@ -96,7 +149,7 @@ const AddProduct_1 = () => {
   );
 };
 
-export default AddProduct_1;
+export default EditProduct_1;
 
 const styles = StyleSheet.create({
   container: {

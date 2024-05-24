@@ -16,10 +16,10 @@ import P_Meta from "../components/P_Meta";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductData } from "../../../redux/Slices/productSlice";
 
-const AddProduct_2 = () => {
+const EditProduct_2 = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {productData} = useSelector(state=>state.product)
+  const { productData } = useSelector((state) => state.product);
 
   const {
     control,
@@ -29,7 +29,15 @@ const AddProduct_2 = () => {
     setValue,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues:{
+      seo:{
+        metaDescription:'',
+        metaTitle:'',
+        metaKeywords : ''
+      }
+    }
+  });
 
   const uni_style = {
     title: styles.overall_heading,
@@ -39,12 +47,19 @@ const AddProduct_2 = () => {
 
   const handleForm = (data) => {
     dispatch(updateProductData(data));
-    navigation.navigate("AddProduct_3");
+    navigation.navigate("EditProduct_3");
   };
 
-  useEffect(()=>{
-    reset(productData)
-  },[])
+
+
+  useEffect(() => {
+    let specs  = productData?.specs?.map(element => ({ first: element.label, last: element.value }))
+    reset({
+      description: productData?.description,
+      specifications: specs ? specs : productData?.specifications,
+      seo: productData?.seo,
+    });
+  }, [productData]);
 
   const updateOption = (index) => {
     let options = getValues("specifications");
@@ -54,7 +69,7 @@ const AddProduct_2 = () => {
 
   return (
     <>
-      <Header label={"Add Product"} />
+      <Header label={"Edit Product"} />
       <View style={styles.container}>
         <ScrollView
           horizontal={false}
@@ -69,11 +84,7 @@ const AddProduct_2 = () => {
             uni_style={uni_style}
             updateOption={updateOption}
           />
-          <P_Meta
-            control={control}
-            errors={errors}
-            uni_style={uni_style}
-          />
+          <P_Meta control={control} errors={errors} uni_style={uni_style} />
         </ScrollView>
         <PrimaryBtn title={"Next Page"} onPress={handleSubmit(handleForm)} />
       </View>
@@ -81,7 +92,7 @@ const AddProduct_2 = () => {
   );
 };
 
-export default AddProduct_2;
+export default EditProduct_2;
 
 const styles = StyleSheet.create({
   container: {
