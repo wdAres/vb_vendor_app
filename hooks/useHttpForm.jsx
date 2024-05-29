@@ -26,10 +26,10 @@ const useHttpForm = () => {
 
             const resp = await req.json()
 
-            // if (!resp.success) {
-            //     setError(resp)
-            //     throw new Error(resp.message)
-            // }
+            if (!resp.success) {
+                setError(resp)
+                throw new Error(resp.message)
+            }
 
             if (needToast) {
                 Toast.show({

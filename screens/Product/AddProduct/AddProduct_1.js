@@ -35,10 +35,7 @@ const AddProduct_1 = () => {
   } = useForm({
     defaultValues: {
       returnApplicable: "none",
-      // discountDateRange: {
-      //   start: "",
-      //   end: "",
-      // },
+      restockingFee:0
     },
   });
 
@@ -80,10 +77,6 @@ const AddProduct_1 = () => {
       price: productData?.price,
       discountType: productData?.discountType,
       discount: productData?.discount,
-      // discountDateRange: {
-      //   start: productData?.discountDateRange?.start,
-      //   end: productData?.discountDateRange?.end,
-      // },
       sku: productData?.sku,
       quantityAvailable: productData?.quantityAvailable,
       name: productData?.name,
@@ -92,7 +85,7 @@ const AddProduct_1 = () => {
       brand: productData?.brand,
       categories: productData?.categories,
       returnApplicable: productData?.returnApplicable ?? "none",
-      restockingFee: productData?.restockingFee,
+      restockingFee: String(productData?.restockingFee),
     });
   }, [productData]);
 

@@ -62,8 +62,9 @@ const AddProduct_5 = () => {
     let newObj = { ...productData };
 
     console.log({
-      ...newObj.additionalImages[0] , data: ''
-  })
+      ...newObj.additionalImages[0],
+      data: "",
+    });
 
     const formData = new FormData();
 
@@ -74,13 +75,15 @@ const AddProduct_5 = () => {
       name: `${Date.now()}.${newObj.image.mime.split("/")[1]}`,
     });
 
-    // newObj.additionalImages.forEach((element,index)=>(
-    //   formData.append(`additionalImages.${index}` ,{
-    //     uri: element.image.path,
-    //     type: element.image.mime,
-    //     name: `${Date.now()}.${element.image.mime.split("/")[1]}`,
-    //   })
-    // ))
+    //  Additional Images
+    newObj?.additionalImages?.length > 0 &&
+      newObj?.additionalImages?.forEach((element, index) =>
+        formData.append(`additionalImages`, {
+          uri: element.path,
+          type: element.mime,
+          name: `${Date.now()}.${element.mime.split("/")[1]}`,
+        })
+      );
 
     // Specifications Operation
     let res = newObj.specifications?.map(

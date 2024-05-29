@@ -53,15 +53,25 @@ const EditProduct_5 = () => {
   };
 
   const handleForm = async (data) => {
-    console.log(productData?._id);
-
-    if (!productData.groupBy) {
-      dispatch(updateDataExceptGroupBuy(data));
-    } else {
-      dispatch(updateProductData(data));
-    }
-
+    dispatch(updateProductData(data));
     let newObj = { ...productData };
+
+    if (!newObj.groupBy) {
+      const groupBuyArr = [
+        "groupByEndDate",
+        "groupByStartDate",
+        "groupByDiscount",
+        "groupByDiscountType",
+        "groupByOrderReach",
+        "groupByMinOrder",
+        "groupByMinOrder",
+      ];
+      groupBuyArr.forEach((key) => {
+        if (key in newObj) {
+          delete newObj[key];
+        }
+      });
+    }
 
     const formData = new FormData();
 
@@ -75,13 +85,18 @@ const EditProduct_5 = () => {
       });
     }
 
-    // newObj.additionalImages.forEach((element,index)=>(
-    //   formData.append(`additionalImages.${index}` ,{
-    //     uri: element.image.path,
-    //     type: element.image.mime,
-    //     name: `${Date.now()}.${element.image.mime.split("/")[1]}`,
-    //   })
-    // ))
+
+    //  Additional Images
+    newObj?.additionalImages?.length > 0 &&
+      newObj?.additionalImages?.forEach((element, index) => {
+        element.mime
+          ? formData.append(`additionalImages.${index}`, {
+              uri: element.path,
+              type: element.mime,
+              name: `${Date.now()}${index+'011'}.${element.mime.split("/")[1]}`,
+            })
+          : '';
+      });
 
     // Specifications Operation
     let res = newObj.specifications?.map(
@@ -100,35 +115,31 @@ const EditProduct_5 = () => {
     delete newObj.image;
     delete newObj.additionalImages;
     // Additional Keys which is not required
-    delete newObj.url
-    delete newObj.specs; 
-    delete newObj._id
-    delete newObj.avgRating
-    delete newObj.createAt
-    delete newObj.__v
+    delete newObj.url;
+    delete newObj.specs;
+    delete newObj._id;
+    delete newObj.avgRating;
+    delete newObj.createAt;
+    delete newObj.__v;
 
-    // console.log(newObj.categories)
 
     Object.entries(newObj).forEach(([key, value]) => {
       if (typeof value === "object" && value !== null) {
         Object.entries(value).forEach(([subKey, subValue]) => {
           formData.append(`${key}.${subKey}`, subValue);
         });
-        console.log(key)
       } else {
         formData.append(key, value);
       }
     });
 
-
     sendRequest(
       {
         url: `product/${productData?._id}/edit`,
-        method: "PUt",
+        method: "PUT",
         body: formData,
       },
       (result) => {
-        console.log(result)
         dispatch(emptyProductData());
         navigation.navigate("Products1");
       }

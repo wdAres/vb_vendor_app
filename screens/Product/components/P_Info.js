@@ -20,12 +20,13 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
     { value: "60", label: "60 Days" },
     { value: "90", label: "90 Days" },
   ]);
+  const [returnApplicable,setReturnApplicable] = useState('none')
 
   const [selectUT, setSelectUT] = useState(false);
   const [ut, setUTData] = useState( [
     { value: 'kg', label: 'kg' },
     { value: 'pc', label: 'pc' },
-    { value: 'gm', label: 'grams' },
+    { value: 'gm', label: 'gram' },
     { value: 'lb', label: 'lb' },
     { value: 'l', label: 'liter' },
     { value: 'm', label: 'meter' },
@@ -169,7 +170,14 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
     getBrands(), getCategories();
   }, []);
 
-  const returnApplicable = watch('returnApplicable')
+  useEffect(()=>{
+    if (typeof watch('returnApplicable') !== 'function') {
+      setReturnApplicable(watch('returnApplicable') ?? 'none')
+    }
+  },[watch('returnApplicable')])
+
+  // const vl = watch('returnApplicable')
+  // console.log(typeof vl)
 
   return (
     <View>
