@@ -27,7 +27,6 @@ const P_Image = ({ uni_style, setProductImage, productImage }) => {
     }
     else if (productData.url) {
       setProductImage({url:productData?.url})
-      console.log('here')
     }
   }, [productData]);
 

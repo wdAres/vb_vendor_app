@@ -35,9 +35,10 @@ const EditProduct_6 = () => {
       });
       return;
     }
-    else if (!productImage.mime) {
-      navigation.navigate("EditProduct_2");
-    }
+    // else if (!productImage.mime) {
+    //   navigation.navigate("EditProduct_2");
+    // }
+
     dispatch(updateProductData({ image: productImage , additionalImages:productAdditionalImages }));
     navigation.navigate("EditProduct_2");
   };

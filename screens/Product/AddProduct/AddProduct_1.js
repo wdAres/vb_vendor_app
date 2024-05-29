@@ -35,7 +35,7 @@ const AddProduct_1 = () => {
   } = useForm({
     defaultValues: {
       returnApplicable: "none",
-      restockingFee:0
+      restockingFee: 0,
     },
   });
 
@@ -68,9 +68,9 @@ const AddProduct_1 = () => {
 
   useEffect(() => {
     if (productData?.discountDateRange) {
-      setDiscountDateRange(prev=>({
-        start:moment(productData?.discountDateRange?.start).toDate(),
-        end:moment(productData?.discountDateRange?.end).toDate(),
+      setDiscountDateRange((prev) => ({
+        start: moment(productData?.discountDateRange?.start).toDate(),
+        end: moment(productData?.discountDateRange?.end).toDate(),
       }));
     }
     reset({
@@ -85,7 +85,7 @@ const AddProduct_1 = () => {
       brand: productData?.brand,
       categories: productData?.categories,
       returnApplicable: productData?.returnApplicable ?? "none",
-      restockingFee: String(productData?.restockingFee),
+      restockingFee: productData?.restockingFee ?? "0",
     });
   }, [productData]);
 

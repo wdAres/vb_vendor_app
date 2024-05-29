@@ -53,26 +53,33 @@ const ViewProduct = () => {
         url: `product/${id}/show`,
       },
       (result) => {
-        console.log(result.data);
         setData(result.data);
       }
     );
   }, [id]);
 
-  
   const handleDelete = () => {
-    sendRequest({
-      url:`product/${id}/delete`,
-      method:'DELETE',
-    },result=>{
-      navigation.goBack('Products1')
-    })
-  }
+    sendRequest(
+      {
+        url: `product/${id}/delete`,
+        method: "DELETE",
+      },
+      (result) => {
+        navigation.goBack("Products1");
+      }
+    );
+  };
   const renderElement = {
-    "": <VP_BasicInfo data={data} handleDelete={handleDelete} isLoading={isLoading} />,
+    "": (
+      <VP_BasicInfo
+        data={data}
+        handleDelete={handleDelete}
+        isLoading={isLoading}
+      />
+    ),
     other_details: <VP_OtherDetails data={data} />,
-    product_description : <VP_Description data={data} />,
-    meta_description:<VP_SEO data={data} />
+    product_description: <VP_Description data={data} />,
+    meta_description: <VP_SEO data={data} />,
   };
 
   return (
@@ -121,9 +128,9 @@ const styles = StyleSheet.create({
     gap: 20,
     flexDirection: "column",
   },
-  link:{
-    fontSize:12,
-    fontWeight:'500',
-    color:'#AE0000'
-  }
+  link: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: "#AE0000",
+  },
 });

@@ -135,7 +135,7 @@ const EditProduct_5 = () => {
 
     sendRequest(
       {
-        url: `product/${productData?._id}/edit`,
+        url: `product/`,
         method: "PUT",
         body: formData,
       },

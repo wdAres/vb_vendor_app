@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import PrimaryBtn from "../../../components/Buttons/PrimaryBtn";
 import {
@@ -7,12 +7,15 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { useForm } from "react-hook-form";
-import { useNavigation, useRoute } from "@react-navigation/core";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/core";
 import P_Info from "../components/P_Info";
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import P_Price from "../components/P_Price";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProductData } from "../../../redux/Slices/productSlice";
+import {
+  updateProductData,
+  emptyProductData,
+} from "../../../redux/Slices/productSlice";
 import Toast from "react-native-toast-message";
 import moment from "moment";
 import useHttp2 from "../../../hooks/useHttp2";
@@ -88,7 +91,7 @@ const EditProduct_1 = () => {
 
   useEffect(() => {
     myData();
-  }, [id]); // Fetch data once when the component mounts
+  }, [id]);
 
   useEffect(() => {
     if (productData) {
@@ -116,6 +119,14 @@ const EditProduct_1 = () => {
       });
     }
   }, [productData]); // Update form only when productData changes
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     return () => {
+  //       dispatch(emptyProductData());
+  //     };
+  //   }, [dispatch])
+  // );
 
   return (
     <>

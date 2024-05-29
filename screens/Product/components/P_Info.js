@@ -172,7 +172,8 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
 
   useEffect(()=>{
     if (typeof watch('returnApplicable') !== 'function') {
-      setReturnApplicable(watch('returnApplicable') ?? 'none')
+      let value = watch('returnApplicable')
+      setReturnApplicable(value)
     }
   },[watch('returnApplicable')])
 

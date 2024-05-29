@@ -78,10 +78,10 @@ const AddProduct_5 = () => {
     //  Additional Images
     newObj?.additionalImages?.length > 0 &&
       newObj?.additionalImages?.forEach((element, index) =>
-        formData.append(`additionalImages`, {
+        formData.append(`additionalImages.${index}`, {
           uri: element.path,
           type: element.mime,
-          name: `${Date.now()}.${element.mime.split("/")[1]}`,
+          name: `additionalImage${Date.now()}${index}.${element.mime.split("/")[1]}`,
         })
       );
 
@@ -92,7 +92,7 @@ const AddProduct_5 = () => {
     formData.append("specifications", res.join(","));
 
     // Dimensions
-    newObj.dimensions.forEach((element, index) => {
+    newObj?.dimensions?.forEach((element, index) => {
       formData.append(`dimensions[${index}].name`, element.name);
       formData.append(`dimensions[${index}].value`, element.value);
     });
@@ -112,19 +112,18 @@ const AddProduct_5 = () => {
       }
     });
 
-    // console.log(formData);
 
     sendRequest(
       {
-        url: `product`,
+        url: `product/`,
         method: "POST",
         body: formData,
       },
       (result) => {
         dispatch(emptyProductData());
         navigation.navigate("Products1");
-        console.log(result);
-      }
+        // console.log(result);/
+      },true
     );
   };
 

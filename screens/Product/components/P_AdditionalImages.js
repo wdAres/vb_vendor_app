@@ -4,14 +4,18 @@ import ImgComp from "../../../components/form/ImgComp";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductData } from "../../../redux/Slices/productSlice";
 
-const P_AdditionalImages = ({ uni_style, setProductAdditionalImages, productAdditionalImages }) => {
+const P_AdditionalImages = ({
+  uni_style,
+  setProductAdditionalImages,
+  productAdditionalImages,
+}) => {
   const { productData } = useSelector((state) => state.product);
 
   const productImageOptions = {
     width: 400,
     height: 400,
     mediaType: "photo",
-    multiple:true,
+    multiple: true,
     includeBase64: true,
   };
 
@@ -24,7 +28,16 @@ const P_AdditionalImages = ({ uni_style, setProductAdditionalImages, productAddi
 
   useEffect(() => {
     if (productData.additionalImages) {
-      setProductAdditionalImages(productData.additionalImages);
+      const lastImage =
+        productData.additionalImages[productData.additionalImages.length - 1];
+      if (lastImage.url) {
+        let urlMap = productData.additionalImages.map((element) => ({
+          url: element.url,
+        }));
+        setProductAdditionalImages(urlMap);
+      } else {
+        setProductAdditionalImages(productData.additionalImages);
+      }
     }
   }, [productData]);
 

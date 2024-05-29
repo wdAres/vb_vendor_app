@@ -38,8 +38,6 @@ const VP_BasicInfo = ({ data , handleDelete , isLoading }) => {
     { label: "Quantity Available", value: data?.quantityAvailable },
   ];
 
-  console.log(data?.tags && data?.tags[0].split(","));
-
   return (
     <>
       <Container style={[styles.container_1]}>

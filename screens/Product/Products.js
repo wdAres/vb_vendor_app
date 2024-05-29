@@ -105,6 +105,15 @@ export default function Products({ navigation }) {
     },
   ];
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setData([]);
+        setPage(1);
+      };
+    }, [])
+  );
+
   return (
     <>
       <Header
@@ -120,7 +129,7 @@ export default function Products({ navigation }) {
           />
           <ToggleBtns onPress={handleDeliveryStatus} data={pressableData} />
         </View>
-        
+
         {data.length > 0 ? (
           <FlatList
             data={data}
@@ -136,7 +145,8 @@ export default function Products({ navigation }) {
             )}
           />
         ) : (
-          <Text>No Data Found!</Text>
+          isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : 
+          <Text>{"No Data Found!"}</Text>
         )}
       </View>
     </>
