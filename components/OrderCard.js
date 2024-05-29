@@ -10,7 +10,7 @@ import { Color, FontFamily, Border, FontSize } from "../GlobalStyles";
 const OrderCard = React.memo(({ data }) => {
   const navigation = useNavigation();
 
-  const { _id, orderStatus, date, paymentRefNumber, customerId } = data;
+  const { _id, orderStatus, date, paymentRefNumber, customerId , orderId , product } = data;
 
   const colored_bg = {
     cancelled: orderCardStyles.rejected_bg,
@@ -36,9 +36,9 @@ const OrderCard = React.memo(({ data }) => {
     >
       <View style={orderCardStyles.parent}>
         <Text style={[orderCardStyles.text, orderCardStyles.deliveredTypo]}>
-          {paymentRefNumber}
+          Order ID : {orderId}
         </Text>
-        <Text style={orderCardStyles.kayraDecor3d}>{customerId?.name}</Text>
+        <Text style={orderCardStyles.kayraDecor3d}>{product?.name ?? '--'}</Text>
         <View
           style={[
             orderCardStyles.deliveredWrapper,

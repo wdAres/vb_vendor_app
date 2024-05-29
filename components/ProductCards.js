@@ -23,18 +23,16 @@ const ProductCards = memo(
     price,
     inStock,
     url,
-    _id
+    _id,
+    qty,
+    totalPrice,
   }) => {
-
     const navigation = useNavigation();
 
     return (
       <Pressable
-        onPress={() => navigation.navigate("ViewProduct",{id:_id})}
-        style={[
-          styles.productCards,
-          styles.skuParentFlexBox,
-        ]}
+        onPress={() => navigation.navigate("ViewProduct", { id: _id })}
+        style={[styles.productCards, styles.skuParentFlexBox]}
       >
         <View style={styles.frameParent}>
           <View style={styles.skuParentFlexBox}>
@@ -45,17 +43,13 @@ const ProductCards = memo(
             {productname}
           </Text>
           <Text style={[styles.text1, styles.text1Typo]}>${price}</Text>
+          {qty && (
+            <Text style={[styles.text1, styles.text1Typo]}>QTY : ${qty}</Text>
+          )}
           <View style={{ flexDirection: "row", gap: 10 }}>
             {groupBy && (
-              <View
-                style={[
-                  styles.groupBuyWrapper,
-                  styles.wrapperFlexBox,
-                ]}
-              >
-                <Text
-                  style={[styles.groupBuy, styles.inStockTypo]}
-                >
+              <View style={[styles.groupBuyWrapper, styles.wrapperFlexBox]}>
+                <Text style={[styles.groupBuy, styles.inStockTypo]}>
                   {"Group Buy"}
                 </Text>
               </View>
@@ -81,7 +75,7 @@ const ProductCards = memo(
           <Image
             style={styles.imagePlaceholderIcon}
             resizeMode="cover"
-            source={url ? {uri: url} : require('../assets/error.png')}
+            source={url ? { uri: url } : require("../assets/error.png")}
           />
           <View style={[styles.inStockWrapper, styles.wrapperFlexBox]}>
             <Text style={[styles.inStock, styles.inStockTypo]}>
@@ -177,8 +171,8 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveHeight(1.61),
     paddingHorizontal: responsiveWidth(3.33),
   },
-  ib_bg:{backgroundColor:'#E9D8FF'},
-  ib_cl:{color:'#9747FF'},
+  ib_bg: { backgroundColor: "#E9D8FF" },
+  ib_cl: { color: "#9747FF" },
 });
 
 export default ProductCards;

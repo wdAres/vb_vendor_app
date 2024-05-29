@@ -19,6 +19,7 @@ const ProductCard = ({
   tags,
   _id,
   discountType,
+  imageUrl
 }) => {
   const navigation = useNavigation();
 
@@ -36,7 +37,7 @@ const ProductCard = ({
       <View style={[classes.card, style]}>
         <Image
           style={[classes.image]}
-          source={require("../assets/image-placeholder1.png")}
+          source={{uri:url}}
         />
         <View style={[classes.cardBody]}>
           <Text style={[classes.title]}>

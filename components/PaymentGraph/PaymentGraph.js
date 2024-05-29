@@ -79,7 +79,7 @@ const PaymentGraph = () => {
           yAxisThickness={0}
           xAxisThickness={0}
           // hideRules={true}
-          showScrollIndicator={true}
+          showScrollIndicator={false}
           isAnimated={true}
           lineBehindBars={true}
           spacing={50}

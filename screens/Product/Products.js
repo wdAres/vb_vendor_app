@@ -43,14 +43,14 @@ export default function Products({ navigation }) {
         }
       );
     },
-    []
+    [sendRequest]
   );
 
   // Fetch data when the screen gains focus
   useFocusEffect(
     useCallback(() => {
       getData(page, query, delivery_status);
-    }, [page, query, delivery_status])
+    }, [page, query, delivery_status, sendRequest])
   );
 
   const handleEndReached = () => {
@@ -107,7 +107,11 @@ export default function Products({ navigation }) {
 
   return (
     <>
-      <Header label={"My Products"} hideArrow={true} handlePress={()=>navigation.navigate('AddProduct_1')}  />
+      <Header
+        label={"My Products"}
+        hideArrow={true}
+        handlePress={() => navigation.navigate("AddProduct_1")}
+      />
       <View style={styles.screen}>
         <View style={styles.block1}>
           <SearchBar
@@ -116,17 +120,24 @@ export default function Products({ navigation }) {
           />
           <ToggleBtns onPress={handleDeliveryStatus} data={pressableData} />
         </View>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id.toString()}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={renderFooter}
-          ItemSeparatorComponent={() => (
-            <View style={{ height: responsiveHeight(2.36) }} />
-          )}
-        />
+        
+        {data.length > 0 ? (
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id.toString()}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={renderFooter}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: responsiveHeight(2.36) }} />
+            )}
+          />
+        ) : (
+          <Text>No Data Found!</Text>
+        )}
       </View>
     </>
   );

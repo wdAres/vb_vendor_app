@@ -6,7 +6,14 @@ import ControlledSelect from "../../../components/form/Controlled/ControlledSele
 import ControlledDate from "../../../components/form/Controlled/ControlledDate";
 import DateInput from "../../../components/form/Controlled/DateInput";
 
-const P_GroupBuy = ({ control, errors, uni_style, watch ,setDiscountDateRange,discountDateRange}) => {
+const P_GroupBuy = ({
+  control,
+  errors,
+  uni_style,
+  watch,
+  setDiscountDateRange,
+  discountDateRange,
+}) => {
   const [selectDt, setSelectDt] = useState(false);
   const [dt, setDtData] = useState([
     { value: "flat", label: "Flat" },
@@ -72,8 +79,8 @@ const P_GroupBuy = ({ control, errors, uni_style, watch ,setDiscountDateRange,di
         control: control,
         errors: errors,
         forInput: {
-            keyboardType: "numeric",
-          },
+          keyboardType: "numeric",
+        },
       },
       child: (data) => <ControlledInput {...data} />,
     },
@@ -123,15 +130,15 @@ const P_GroupBuy = ({ control, errors, uni_style, watch ,setDiscountDateRange,di
         {inputFields.map((element) => (
           <FormItem key={element.dataObj.name} {...element} />
         ))}
-        <DateInput 
-        dateState={discountDateRange?.groupByStartDate}
-        label={'Group Buy Start'}
-      dateStateFunc={startFunc}
+        <DateInput
+          dateState={discountDateRange?.groupByStartDate}
+          label={"Group Buy Start"}
+          dateStateFunc={startFunc}
         />
-        <DateInput 
-        dateState={discountDateRange?.groupByEndDate}
-        label={'Group Buy End'}
-      dateStateFunc={endFunc}
+        <DateInput
+          dateState={discountDateRange?.groupByEndDate}
+          label={"Group Buy End"}
+          dateStateFunc={endFunc}
         />
       </View>
     </View>

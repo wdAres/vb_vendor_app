@@ -52,8 +52,8 @@ const ToggleBtns = ({ data , onPress }) => {
       style={styles.scrollview_style}
       contentContainerStyle={styles.container_style}
       horizontal={true}
-      showsVerticalScrollIndicator={true}
-      showsHorizontalScrollIndicator={true}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
     >
       {data.map((element, index) => (
         <PressableBtn {...element} key={index} />

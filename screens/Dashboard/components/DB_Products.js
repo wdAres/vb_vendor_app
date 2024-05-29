@@ -31,6 +31,7 @@ const DB_Products = () => {
           horizontal={true}
           contentContainerStyle={styles.inner_container}
           style={styles.container}
+          showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
           {data.map(element=>(

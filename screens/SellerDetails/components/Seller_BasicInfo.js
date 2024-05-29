@@ -23,6 +23,12 @@ const Seller_BasicInfo = ({ control, errors , uni_style }) => {
         name: "shopPhone",
         rules: {
           required: "shop phone is required",
+          validate: (value) => {
+            return (
+              value.length == 10  ||
+              "10 digits number is required"
+            );
+          },
         },
         control: control,
         errors: errors,

@@ -188,7 +188,7 @@ const ShopDetails = () => {
           </View>
         </ScrollView>
         <PrimaryBtn
-          title={"Save Changes"}
+          title={"Update Details"}
           isLoading={isLoading}
           disabled={isLoading || !isFormValid}
           onPress={handleSubmit(handleForm)}

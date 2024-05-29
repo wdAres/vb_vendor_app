@@ -33,6 +33,11 @@ const AT_Info = ({ control, errors, uni_style }) => {
         name: "message",
         control: control,
         errors: errors,
+        forInput:{
+          multiline:true,
+          numberOfLines:6,
+          textAlignVertical: 'top'
+        },
         rules: {
           required: "Message is required",
         },

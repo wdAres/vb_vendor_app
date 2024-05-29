@@ -1,4 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import Container from "../../../../components/Container/Container";
 import {
@@ -7,7 +14,7 @@ import {
 } from "react-native-responsive-dimensions";
 import moment from "moment";
 
-const VP_BasicInfo = ({ data }) => {
+const VP_BasicInfo = ({ data , handleDelete , isLoading }) => {
   const arr1 = [
     { label: "Product Name", value: data?.name },
     { label: "Brand", value: data?.brand?.name },
@@ -31,6 +38,8 @@ const VP_BasicInfo = ({ data }) => {
     { label: "Quantity Available", value: data?.quantityAvailable },
   ];
 
+  console.log(data?.tags && data?.tags[0].split(","));
+
   return (
     <>
       <Container style={[styles.container_1]}>
@@ -49,15 +58,23 @@ const VP_BasicInfo = ({ data }) => {
           <View style={[styles.inner_container_row, styles.column]}>
             <Text style={[styles.icr_left, styles.font_1]}>Tags : </Text>
             <View style={[styles.tags_container]}>
-              {data?.tags?.length > 0 ? data?.tags?.map((element) => (
-                <Text key={element._id} style={[styles.tag]}>
-                  {element.tag}
+              {data?.tags?.length > 0 ? (
+                data?.tags[0]?.split(",")?.map((element) => (
+                  <Text key={element._id} style={[styles.tag]}>
+                    {element}
+                  </Text>
+                ))
+              ) : (
+                <Text style={[styles.fallback_text, styles.font_1]}>
+                  No Tags Found!
                 </Text>
-              )) : <Text style={[styles.fallback_text , styles.font_1]}>No Tags Found!</Text>}
+              )}
             </View>
           </View>
           <View style={[styles.inner_container_row, styles.column]}>
-            <Text style={[styles.icr_left, styles.font_1]}>Product Category : </Text>
+            <Text style={[styles.icr_left, styles.font_1]}>
+              Product Category :{" "}
+            </Text>
             <View style={[styles.tags_container]}>
               {data?.categories?.map((element) => (
                 <Text key={element._id} style={[styles.tag]}>
@@ -109,9 +126,29 @@ const VP_BasicInfo = ({ data }) => {
               />
             ))
           ) : (
-            <Text style={[styles.fallback_text , styles.font_1]}>No Images Found!</Text>
+            <Text style={[styles.fallback_text, styles.font_1]}>
+              No Images Found!
+            </Text>
           )}
         </ScrollView>
+      </Container>
+      <Container style={[styles.container_1]}>
+        <Text style={styles.heading}>Action</Text>
+        <View style={[styles.inner_container]}>
+            <View style={[styles.inner_container_row]}>
+              <Text style={[styles.icr_left, styles.font_1]}>
+                Delete Product
+              </Text>
+              <Pressable
+              onPress={handleDelete}
+              disabled={isLoading}
+              >
+              <Text style={[styles.icr_right, styles.font_1]}>
+                {isLoading ? 'Loading' : 'Delete' }
+              </Text>
+              </Pressable>
+            </View>
+        </View>
       </Container>
     </>
   );
@@ -160,7 +197,7 @@ const styles = StyleSheet.create({
   },
   tag: {
     minWidth: responsiveWidth(13.33),
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
     backgroundColor: "#ececec",
     fontSize: responsiveHeight(0.99),
     textAlign: "center",

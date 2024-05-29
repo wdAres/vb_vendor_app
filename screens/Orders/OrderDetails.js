@@ -28,6 +28,8 @@ import Header from "../../components/Header";
 import useHttp2 from "../../hooks/useHttp2";
 import moment from "moment";
 import Steps from "../../components/Steps";
+import ProductCards from "../../components/ProductCards";
+import Container from "../../components/Container/Container";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
@@ -45,11 +47,12 @@ const OrderDetails = () => {
       (result) => {
         let items = result?.data?.items?.map((element, index) => ({
           index: index + 1,
+          _id: element.productId._id,
           price: element?.price,
           qty: element?.qty,
           name: element?.productId?.name,
           url: element?.productId?.url,
-          inStock: element?.productId?.inStock,
+          price: element?.price,
         }));
         setTableData(items);
         setData(result.data);
@@ -136,18 +139,22 @@ const OrderDetails = () => {
                       </View>
                     </View>
                   </View>
-                  <TouchableOpacity
-                    style={styles.updateLog}
-                    activeOpacity={0.2}
-                    onPress={() =>
-                      navigation.navigate("UpdateLog", {
-                        id: data?._id,
-                        orderStatus: data?.orderStatus,
-                      })
-                    }
-                  >
-                    <Text style={styles.updateLog1Typo}>Update Log</Text>
-                  </TouchableOpacity>
+                  {data?.orderStatus !== "delivered" &&
+                    data?.orderStatus !== "cancelled" &&
+                    data?.orderStatus !== "return" && (
+                      <TouchableOpacity
+                        style={styles.updateLog}
+                        activeOpacity={0.2}
+                        onPress={() =>
+                          navigation.navigate("UpdateLog", {
+                            id: data?._id,
+                            orderStatus: data?.orderStatus,
+                          })
+                        }
+                      >
+                        <Text style={styles.updateLog1Typo}>Update Log</Text>
+                      </TouchableOpacity>
+                    )}
                 </View>
               </View>
             </View>
@@ -155,46 +162,51 @@ const OrderDetails = () => {
               <Text style={[styles.orderStatus, styles.logsTypo]}>
                 Product details
               </Text>
-              {/* <View
-                style={[
-                  styles.imagePlaceHolderParent,
-                  styles.frameParentSpaceBlock,
-                ]}
-              >
-                <Image
-                  style={styles.imagePlaceHolder}
-                  resizeMode="cover"
-                  source={require("../../assets/imageplaceholder1.png")}
-                />
-                <View style={styles.pearlBeadingTexturParent}>
-                  <Text style={[styles.pearlBeadingTextur, styles.orderTypo]}>
-                    Pearl Beading Textured Faux Fur Furnitures
-                  </Text>
-                  <View style={[styles.starsParent, styles.parentSpaceBlock]}>
-                    <Image
+
+              {isLoading ? (
+                <Text>Loading</Text>
+              ) : (
+                <Pressable
+                  onPress={() =>
+                    navigation.navigate("ViewProduct", {
+                      id: tableData[0]?._id,
+                    })
+                  }
+                  style={[
+                    styles.imagePlaceHolderParent,
+                    styles.frameParentSpaceBlock,
+                  ]}
+                >
+                  <Image
+                    style={styles.imagePlaceHolder}
+                    resizeMode="contain"
+                    source={{ uri: tableData[0]?.url }}
+                  />
+                  <View style={styles.pearlBeadingTexturParent}>
+                    <Text style={[styles.pearlBeadingTextur, styles.orderTypo]}>
+                      {tableData[0]?.name}
+                    </Text>
+                    <View style={[styles.starsParent, styles.parentSpaceBlock]}>
+                      {/* <Image
                       style={styles.starsIcon}
                       resizeMode="cover"
-                      source={require("../../assets/stars2.png")}
-                    />
-                    <Text style={[styles.reviews, styles.logsTypo]}>
-                      480+ Reviews
-                    </Text>
-                  </View>
-                  <View style={styles.parentSpaceBlock}>
-                    <View style={[styles.offWrapper, styles.text3Layout]}>
-                      <Text style={[styles.off, styles.orderTypo]}>
-                        2 % off
+                      source={{uri:}}
+                    /> */}
+                      <Text style={[styles.reviews, styles.logsTypo]}>
+                        Qty : {tableData[0]?.qty}
+                      </Text>
+                      <Text style={[styles.reviews, styles.logsTypo]}>
+                        Total Price : ${tableData[0]?.price}
                       </Text>
                     </View>
-                    <Text style={[styles.text3, styles.textSpaceBlock]}>
-                      $1399
-                    </Text>
-                    <Text style={[styles.text4, styles.textSpaceBlock]}>
-                      $1299
-                    </Text>
+                    {/* <View style={styles.parentSpaceBlock}>
+                      <Text style={[styles.text4, styles.textSpaceBlock]}>
+                        ${tableData[0]?.price}
+                      </Text>
+                    </View> */}
                   </View>
-                </View>
-              </View> */}
+                </Pressable>
+              )}
             </View>
             <View style={styles.orderStatusParent}>
               <Text style={[styles.orderStatus, styles.logsTypo]}>
@@ -203,7 +215,7 @@ const OrderDetails = () => {
               <View style={[styles.frameParent5, styles.frameBorder]}>
                 <View style={styles.frameContainer}>
                   <Text style={[styles.paymentMethods, styles.orderTypo]}>
-                    Payment Methods
+                    Payment Method
                   </Text>
                   <Text style={styles.pickup}>{data?.paymentMethod}</Text>
                 </View>
@@ -244,6 +256,37 @@ const OrderDetails = () => {
                 </View>
               </View>
             )}
+           <Text style={[styles.orderStatus, styles.logsTypo,styles.mt]}>
+                Payment Description
+              </Text>
+            <Container style={[styles.container_1]}>
+              <View style={[styles.inner_container]}>
+                <View style={[styles.inner_container_row]}>
+                  <Text style={[styles.icr_left, styles.font_1]}>Subtotal</Text>
+                  <Text style={[styles.icr_right, styles.font_1]}>
+                    ${data?.subtotal}
+                  </Text>
+                </View>
+                <View style={[styles.inner_container_row]}>
+                  <Text style={[styles.icr_left, styles.font_1]}>Discount</Text>
+                  <Text style={[styles.icr_right, styles.font_1]}>
+                    ${data?.discount}
+                  </Text>
+                </View>
+                <View style={[styles.inner_container_row]}>
+                  <Text style={[styles.icr_left, styles.font_1]}>Shipping Charge</Text>
+                  <Text style={[styles.icr_right, styles.font_1]}>
+                    ${data?.shippingCharge}
+                  </Text>
+                </View>
+                <View style={[styles.inner_container_row]}>
+                  <Text style={[styles.icr_left, styles.font_1]}>Total</Text>
+                  <Text style={[styles.icr_right, styles.font_1]}>
+                    ${data?.total}
+                  </Text>
+                </View>
+              </View>
+            </Container>
           </View>
         </View>
       </ScrollView>
@@ -269,6 +312,7 @@ const styles = StyleSheet.create({
   },
   orderTypo: {
     fontFamily: FontFamily.interSemiBold,
+    textTransform: "capitalize",
     fontWeight: "600",
   },
   textTypo: {
@@ -418,7 +462,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorWhite,
   },
   orderStatus: {
-    height: responsiveHeight(1.74),
+    // height: responsiveHeight(1.74),
     display: "flex",
     color: Color.colorBlack,
     fontFamily: FontFamily.interSemiBold,
@@ -523,6 +567,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorWhite,
     alignItems: "center",
   },
+  mt:{
+    marginTop: responsiveHeight(3.73),
+  },
   orderStatusParent: {
     marginTop: responsiveHeight(3.73),
     alignSelf: "stretch",
@@ -531,6 +578,7 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_5xs,
     width: responsiveWidth(20.51),
     height: responsiveHeight(10.57),
+    backgroundColor: "#d4d9d6",
   },
   pearlBeadingTextur: {
     color: Color.colorDarkslategray_100,
@@ -544,7 +592,7 @@ const styles = StyleSheet.create({
   },
   reviews: {
     color: Color.black,
-    marginLeft: responsiveHeight(1.11),
+    // marginLeft: responsiveHeight(1.11),
     fontFamily: FontFamily.interMedium,
     fontWeight: "500",
     flex: 1,
@@ -643,6 +691,35 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveHeight(2.36),
     alignItems: "flex-start",
     justifyContent: "flex-start",
+  },
+  container_1: {
+    padding: responsiveHeight(1.86),
+    gap: responsiveHeight(1.86),
+    flexDirection: "column",
+    marginTop: 10,
+  },
+  heading: {
+    fontSize: responsiveHeight(1.49),
+    color: "#000",
+    fontWeight: "600",
+  },
+  inner_container: {
+    flexDirection: "column",
+    gap: responsiveHeight(1.24),
+  },
+  inner_container_row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  font_1: {
+    fontWeight: "500",
+    fontSize: responsiveHeight(1.24),
+  },
+  icr_left: {
+    color: "#898989",
+  },
+  icr_right: {
+    color: "#000",
   },
 });
 

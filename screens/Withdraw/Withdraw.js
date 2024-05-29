@@ -114,6 +114,8 @@ export default function Withdraw({ navigation }) {
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.1}
           ListFooterComponent={renderFooter}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => (
             <View style={{ height: responsiveHeight(2.36) }} />
           )}

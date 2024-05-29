@@ -66,7 +66,6 @@ export default function Coupon_Info({ control, errors, expiry, setExpiry }) {
         rules: {
           required: "Coupon Code is required",
           validate: (value) => {
-            console.log(value);
             return (
               [/^[^\s]+$/].every((pattern) => pattern.test(value)) ||
               "Your input cannot contain any spaces"

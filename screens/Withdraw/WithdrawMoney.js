@@ -47,7 +47,7 @@ const WithdrawMoney = () => {
       <ScrollView
         style={styles.withdrawMoney}
         horizontal={false}
-        showsVerticalScrollIndicator={true}
+        showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.withdrawMoneyScrollViewContent}
       >

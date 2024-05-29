@@ -11,6 +11,11 @@ const P_Desc = ({ control, errors, uni_style, initial_value = 1,updateOption }) 
       label: "Description",
       dataObj: {
         name: "description",
+        forInput:{
+          multiline:true,
+          numberOfLines:6,
+          textAlignVertical: 'top'
+        },
         rules: {
           required: "description is required",
         },

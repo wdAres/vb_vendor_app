@@ -79,6 +79,10 @@ export default function Support({ navigation }) {
 
   const pressableData = [
     {
+      label: "All",
+      value: "",
+    },
+    {
       label: "Ongoing",
       value: "open",
     },
@@ -109,6 +113,8 @@ export default function Support({ navigation }) {
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.1}
           ListFooterComponent={renderFooter}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => (
             <View style={{ height: responsiveHeight(2.36) }} />
           )}

@@ -26,9 +26,6 @@ const CP_Info = ({ control, errors , uni_style }) => {
             rules: {
               required: "New password is required",
             },
-            forInput:{
-              keyboardType:'numeric'
-          }
           },
           child: (data) => <ControlledInput {...data} />,
         }
