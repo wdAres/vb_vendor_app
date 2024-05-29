@@ -9,6 +9,7 @@ import { Color } from "../../GlobalStyles";
 import DB_Tiles from "./components/DB_Tiles";
 import PaymentGraph from "../../components/PaymentGraph/PaymentGraph";
 import DB_Products from "./components/DB_Products";
+import NewsBox from "../../components/Notifications/NewsBox";
 
 const Dashboard = () => {
   return (
@@ -23,6 +24,7 @@ const Dashboard = () => {
       >
         <DB_Tiles />
         <PaymentGraph />
+        <NewsBox />
         <DB_Products />
       </ScrollView>
     </>

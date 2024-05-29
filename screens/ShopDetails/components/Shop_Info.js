@@ -59,6 +59,11 @@ const Shop_Info = ({ control, errors , uni_style }) => {
         name: "seoMetaDescription",
         control: control,
         errors: errors,
+        forInput:{
+          multiline:true,
+          numberOfLines:6,
+          textAlignVertical: 'top'
+        },
       },
       child: (data) => <ControlledInput {...data} />,
     }

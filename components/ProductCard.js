@@ -19,26 +19,23 @@ const ProductCard = ({
   tags,
   _id,
   discountType,
-  imageUrl
+  imageUrl,
 }) => {
   const navigation = useNavigation();
 
   const new_price = (discountType) => {
-    if (discountType==='flat') {
-      return price - discount
-    }else{
-      return price - (price*(discount/100))
+    if (discountType === "flat") {
+      return price - discount;
+    } else {
+      return price - price * (discount / 100);
     }
-  }
+  };
 
   const handlePress = () => navigation.navigate("ViewProduct", { id: _id });
   return (
     <Pressable onPress={handlePress}>
       <View style={[classes.card, style]}>
-        <Image
-          style={[classes.image]}
-          source={{uri:url}}
-        />
+        <Image style={[classes.image]} source={{ uri: url }} />
         <View style={[classes.cardBody]}>
           <Text style={[classes.title]}>
             {name.length > 46 ? name.slice(0, 46) + "..." : name}
@@ -48,7 +45,7 @@ const ProductCard = ({
             <Text style={[classes.price]}>${price}</Text>
             <View style={[classes.tag]}>
               <Text style={[classes.tagText]}>
-              {discountType === "flat" && "$"}
+                {discountType === "flat" && "$"}
                 {discount}
                 {discountType === "percentage" && "%"} off
               </Text>
@@ -71,6 +68,7 @@ const classes = StyleSheet.create({
   image: {
     width: "100%",
     height: responsiveHeight(14.8),
+    backgroundColor: "#d7d9d7",
   },
   cardBody: {
     paddingHorizontal: responsiveWidth(2.56),
@@ -81,7 +79,7 @@ const classes = StyleSheet.create({
     width: "100%",
     color: "black",
     fontSize: responsiveHeight(1.24),
-    textTransform:'capitalize'
+    textTransform: "capitalize",
   },
   my_flex: {
     display: "flex",

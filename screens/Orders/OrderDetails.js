@@ -462,7 +462,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorWhite,
   },
   orderStatus: {
-    // height: responsiveHeight(1.74),
     display: "flex",
     color: Color.colorBlack,
     fontFamily: FontFamily.interSemiBold,

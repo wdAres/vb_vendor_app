@@ -74,6 +74,11 @@ const Seller_Address = ({ control, errors, uni_style }) => {
         rules: {
           required: "shop address is required",
         },
+        forInput:{
+          multiline:true,
+          numberOfLines:6,
+          textAlignVertical: 'top'
+        },
         control: control,
         errors: errors,
       },

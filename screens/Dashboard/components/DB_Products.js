@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   inner_container: {
-    gap: responsiveWidth(3.33),
+    gap: responsiveWidth(1.61),
   },
 });

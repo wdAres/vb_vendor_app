@@ -13,7 +13,6 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from "react-native-responsive-dimensions";
-import SearchBar from "../../components/SearchBar";
 import useHttp2 from "../../hooks/useHttp2";
 import PaymentCard from "../../components/PaymentCard";
 import PaymentGraph from "../../components/PaymentGraph/PaymentGraph";
@@ -54,11 +53,6 @@ export default function Payments({ navigation }) {
     }
   };
 
-  const handleSearch = (text) => {
-    setQuery(text);
-    setPage(1);
-  };
-
   const renderItem = ({ item }) => {
     return <PaymentCard data={item} />;
   };
@@ -66,6 +60,11 @@ export default function Payments({ navigation }) {
   const renderFooter = () => {
     if (!isLoading) return null;
     return <ActivityIndicator size="large" color="#0000ff" />;
+  };
+
+  const handleSearch = (text) => {
+    setQuery(text);
+    setPage(1);
   };
 
   return (
