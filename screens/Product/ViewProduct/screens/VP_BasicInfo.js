@@ -14,7 +14,13 @@ import {
 } from "react-native-responsive-dimensions";
 import moment from "moment";
 
-const VP_BasicInfo = ({ data , handleDelete , isLoading }) => {
+const VP_BasicInfo = ({
+  data,
+  handleDelete,
+  isLoading,
+  deleteAdditionalImages,
+  deleteSingleImg
+}) => {
   const arr1 = [
     { label: "Product Name", value: data?.name },
     { label: "Brand", value: data?.brand?.name },
@@ -115,13 +121,18 @@ const VP_BasicInfo = ({ data , handleDelete , isLoading }) => {
         >
           {data?.additionalImages?.length > 0 ? (
             data?.additionalImages?.map((element) => (
-              <Image
-                key={element._id}
-                style={styles.photo}
-                width={150}
-                height={150}
-                source={{ uri: element.url }}
-              />
+              <View style={{position:'relative'}}>
+                <Image
+                  key={element._id}
+                  style={styles.photo}
+                  width={150}
+                  height={150}
+                  source={{ uri: element.url }}
+                />
+                <Pressable style={styles.del_con} onPress={()=>deleteSingleImg(element._id)}>
+                  <Text style={styles.del_text}>X</Text>
+                </Pressable>
+              </View>
             ))
           ) : (
             <Text style={[styles.fallback_text, styles.font_1]}>
@@ -131,21 +142,31 @@ const VP_BasicInfo = ({ data , handleDelete , isLoading }) => {
         </ScrollView>
       </Container>
       <Container style={[styles.container_1]}>
+        <Text style={styles.heading}>Additional Image Action</Text>
+        <View style={[styles.inner_container]}>
+          <View style={[styles.inner_container_row]}>
+            <Text style={[styles.icr_left, styles.font_1]}>
+              Delete Additional Images
+            </Text>
+            <Pressable onPress={deleteAdditionalImages} disabled={isLoading}>
+              <Text style={[styles.icr_right, styles.font_1]}>
+                {isLoading ? "Loading" : "Delete"}
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </Container>
+      <Container style={[styles.container_1]}>
         <Text style={styles.heading}>Action</Text>
         <View style={[styles.inner_container]}>
-            <View style={[styles.inner_container_row]}>
-              <Text style={[styles.icr_left, styles.font_1]}>
-                Delete Product
-              </Text>
-              <Pressable
-              onPress={handleDelete}
-              disabled={isLoading}
-              >
+          <View style={[styles.inner_container_row]}>
+            <Text style={[styles.icr_left, styles.font_1]}>Delete Product</Text>
+            <Pressable onPress={handleDelete} disabled={isLoading}>
               <Text style={[styles.icr_right, styles.font_1]}>
-                {isLoading ? 'Loading' : 'Delete' }
+                {isLoading ? "Loading" : "Delete"}
               </Text>
-              </Pressable>
-            </View>
+            </Pressable>
+          </View>
         </View>
       </Container>
     </>
@@ -212,4 +233,21 @@ const styles = StyleSheet.create({
     gap: 10,
     flexDirection: "row",
   },
+  del_con:{
+    position:'absolute',
+    top:5,
+    right:10,
+    zIndex:10,
+    backgroundColor:'#AE0000',
+    width:20,
+    height:20,
+    borderRadius:10,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  del_text:{
+    color:'white',
+    fontWeight:'500',
+    // fontSize:10
+  }
 });

@@ -104,7 +104,7 @@ const RefundRequest2 = ({ onClose, data, parentFunc }) => {
         </View>
       </View>
 
-      <Modal animationType="fade" transparent visible={frameButtonVisible}>
+      {/* <Modal animationType="fade" transparent visible={frameButtonVisible}>
         <View style={styles.frameButtonOverlay}>
           <Pressable style={styles.frameButtonBg} onPress={closeFrameButton} />
           <RejectReason
@@ -113,7 +113,7 @@ const RefundRequest2 = ({ onClose, data, parentFunc }) => {
             onClose={closeFrameButton}
           />
         </View>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

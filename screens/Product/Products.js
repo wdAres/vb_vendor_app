@@ -18,6 +18,8 @@ import ToggleBtns from "../../components/ToggleBtns";
 import OrderCard from "../../components/OrderCard";
 import useHttp2 from "../../hooks/useHttp2";
 import ProductCards from "../../components/ProductCards";
+import { useDispatch } from "react-redux";
+import { emptyProductData } from "../../redux/Slices/productSlice";
 
 export default function Products({ navigation }) {
   const [page, setPage] = useState(1);
@@ -26,6 +28,8 @@ export default function Products({ navigation }) {
   const [query, setQuery] = useState("");
   const [nextPageExist, setNextPageExist] = useState(false);
   const [delivery_status, setDeliveryStatus] = useState("");
+  const dispatch = useDispatch()
+  
 
   const getData = useCallback(
     (pageNumber, searchQuery = "", deliveryStatus = "") => {
@@ -107,6 +111,7 @@ export default function Products({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
+      dispatch(emptyProductData())
       return () => {
         setData([]);
         setPage(1);

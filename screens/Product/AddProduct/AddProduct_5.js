@@ -122,7 +122,6 @@ const AddProduct_5 = () => {
       (result) => {
         dispatch(emptyProductData());
         navigation.navigate("Products1");
-        // console.log(result);/
       },true
     );
   };

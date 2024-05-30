@@ -26,12 +26,13 @@ const P_Info = ({ control, errors, uni_style, watch }) => {
   const [ut, setUTData] = useState( [
     { value: 'kg', label: 'kg' },
     { value: 'pc', label: 'pc' },
-    { value: 'gm', label: 'gram' },
+    { value: 'gram', label: 'gram' },
     { value: 'lb', label: 'lb' },
-    { value: 'l', label: 'liter' },
-    { value: 'm', label: 'meter' },
-    { value: 'ft', label: 'feet' },
+    { value: 'liter', label: 'liter' },
+    { value: 'meter', label: 'meter' },
+    { value: 'feet', label: 'feet' },
     { value: 'ml', label: 'ml' },
+    { value: 'mm', label: 'mm' },
 ]);
 
   const inputFields = [

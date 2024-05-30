@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   text: {
-    fontSize: "1.24",
+    fontSize: responsiveHeight(1.24),
     color: "#A1A1A1",
     fontWeight: "500",
   },
   para: {
-    fontSize: "1.24",
+    fontSize: responsiveHeight(1.24),
     color: "#000",
     fontWeight: "500",
   },

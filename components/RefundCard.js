@@ -16,12 +16,12 @@ const RefundCard = ({ callerFunc, data }) => {
   const colored_bg = {
     'rejected': styles.rejected_bg,
     'approved': styles.paid_bg,
-    pending: styles.pending_bg,
+    'pending': styles.pending_bg,
   };
   const colored_cl = {
     'rejected': styles.rejected_cl,
     'approved': styles.paid_cl,
-    pending: styles.pending_cl,
+    'pending': styles.pending_cl,
   };
 
   return (

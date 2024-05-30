@@ -85,7 +85,6 @@ const EditProduct_5 = () => {
       });
     }
 
-
     //  Additional Images
     newObj?.additionalImages?.length > 0 &&
       newObj?.additionalImages?.forEach((element, index) => {
@@ -93,9 +92,11 @@ const EditProduct_5 = () => {
           ? formData.append(`additionalImages.${index}`, {
               uri: element.path,
               type: element.mime,
-              name: `${Date.now()}${index+'011'}.${element.mime.split("/")[1]}`,
+              name: `${Date.now()}${index + "011"}.${
+                element.mime.split("/")[1]
+              }`,
             })
-          : '';
+          : "";
       });
 
     // Specifications Operation
@@ -122,7 +123,6 @@ const EditProduct_5 = () => {
     delete newObj.createAt;
     delete newObj.__v;
 
-
     Object.entries(newObj).forEach(([key, value]) => {
       if (typeof value === "object" && value !== null) {
         Object.entries(value).forEach(([subKey, subValue]) => {
@@ -135,14 +135,15 @@ const EditProduct_5 = () => {
 
     sendRequest(
       {
-        url: `product/`,
+        url: `product/${productData._id}/edit`,
         method: "PUT",
         body: formData,
       },
       (result) => {
         dispatch(emptyProductData());
         navigation.navigate("Products1");
-      }
+      },
+      true
     );
   };
 

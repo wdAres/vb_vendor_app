@@ -1,383 +1,185 @@
-import React, { useState, useCallback } from "react";
 import {
-  ScrollView,
-  Image,
-  StyleSheet,
+  ActivityIndicator,
+  FlatList,
+  Modal,
   Pressable,
+  StyleSheet,
   Text,
   View,
-  TextInput,
-  TouchableOpacity,
-  Modal,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import RefundRequest2 from "../../components/RefundRequest2";
-import {
-  FontFamily,
-  Padding,
-  Color,
-  Border,
-  FontSize,
-} from "../../GlobalStyles";
+import React, { useCallback, useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
+import Header from "../../components/Header";
+import { Color } from "../../GlobalStyles";
 import {
   responsiveHeight,
   responsiveWidth,
 } from "react-native-responsive-dimensions";
-import RefundCard from "../../components/RefundCard";
-import Header from "../../components/Header";
+import SearchBar from "../../components/SearchBar";
+import ToggleBtns from "../../components/ToggleBtns";
+import OrderCard from "../../components/OrderCard";
 import useHttp2 from "../../hooks/useHttp2";
+import RefundCard from "../../components/RefundCard";
+import RefundRequest2 from "../../components/RefundRequest2";
 
-const RefundRequest1 = () => {
-  const navigation = useNavigation();
+export default function RefundRequest1({ navigation }) {
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState([]);
   const { sendRequest, isLoading } = useHttp2();
-  const [data, setData] = React.useState([]);
-  const [pageDetails, setPageDetails] = React.useState({});
-  const [page, setPage] = React.useState(1);
-  const [limit, setLimit] = React.useState(10);
-  const [allDataLoaded, setAllDataLoaded] = React.useState(false);
-  const [query, setQuery] = React.useState("");
-  const [currentData, setCurrentData] = useState("");
+  const [query, setQuery] = useState("");
+  const [nextPageExist, setNextPageExist] = useState(false);
+  const [delivery_status, setDeliveryStatus] = useState("");
 
-  const getData = () => {
-    sendRequest(
-      {
-        url: `refund-request?limit=${limit}&page=${page}${
-          query ? `&query=${query}` : ""
-        }`,
-      },
-      (result) => {
-        if (result.data.docs.length === 0) {
-          setAllDataLoaded(true);
+  const [currentOrder, setCurrentOrder] = useState({});
+  const [modal, setModal] = useState(false);
+
+  const getData = useCallback(
+    (pageNumber, searchQuery = "", deliveryStatus = "") => {
+      sendRequest(
+        {
+          url: `refund-request?limit=10&page=${pageNumber}&search=${searchQuery}&status=${deliveryStatus}`,
+        },
+        (result) => {
+          setData((prevData) =>
+            pageNumber === 1
+              ? result.data.docs
+              : [...prevData, ...result.data.docs]
+          );
+          setNextPageExist(result.data.hasNextPage);
         }
-        if (query) {
-          // Clear existing data when a new query is applied
-          setData(result.data.docs);
-        } else {
-          setData((prevData) => {
-            // Filter out duplicates and append new data to existing data
-            const newData = result.data.docs.filter(
-              (item) => !prevData.some((prevItem) => prevItem.id === item.id)
-            );
-            return [...prevData, ...newData];
-          });
-        }
-      }
-    );
-  };
+      );
+    },
+    [sendRequest]
+  );
 
-  React.useEffect(() => {
-    getData();
-  }, [page, limit, query]);
+  // Fetch data when the screen gains focus
+  useFocusEffect(
+    useCallback(() => {
+      getData(page, query, delivery_status);
+    }, [page, query, delivery_status, sendRequest])
+  );
 
-  const handleScroll = (event) => {
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-    const isCloseToBottom =
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
-    if (isCloseToBottom && !allDataLoaded) {
+  const handleEndReached = () => {
+    if (nextPageExist) {
       setPage((prevPage) => prevPage + 1);
     }
   };
 
-  const renderPaymentCards = () => {
-    if (isLoading && page === 1) {
-      return <Text>Loading...</Text>;
-    } else if (data.length === 0 && !isLoading) {
-      return <Text>No data found</Text>;
-    } else {
-      return (
-        <>
-          {data.map((payment, index) => (
-            <RefundCard
-              callerFunc={openRefundRequestCard}
-              a
-              key={index}
-              data={payment}
-              style={styles.paymentCard}
-            />
-          ))}
-          {isLoading && <Text>Loading more...</Text>}
-        </>
-      );
-    }
+  const handleSearch = (text) => {
+    setQuery(text);
+    setPage(1);
   };
 
-  const [refundRequestCardVisible, setRefundRequestCardVisible] =
-    useState(false);
-
-  const openRefundRequestCard = useCallback((data) => {
-    setRefundRequestCardVisible(true);
-    setCurrentData(data);
-  }, []);
-
-  const closeRefundView = () => {
-    setRefundRequestCardVisible(false);
-    setCurrentData({});
+  const handleClick = (data) => {
+    setCurrentOrder(data);
+    setModal(true);
   };
+
+  const renderItem = ({ item }) => {
+    return <RefundCard callerFunc={handleClick} data={item} />;
+  };
+
+  const renderFooter = () => {
+    if (!isLoading) return null;
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  };
+
+  const handleDeliveryStatus = (status) => {
+    setDeliveryStatus(status);
+    setPage(1);
+  };
+
+  const pressableData = [
+    {
+      label: "All",
+      value: "",
+    },
+    {
+      label: "Pending",
+      value: "pending",
+    },
+    {
+      label: "Approved",
+      value: "approved",
+    },
+    {
+      label: "Rejected",
+      value: "rejected",
+    },
+  ];
 
   return (
     <>
-      <View style={{ flex: 1 }}>
-        <Header label={"Refund Request"} />
-
-        <ScrollView
-          style={styles.refundRequest}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.refundRequestScrollViewContent}
-          onScroll={handleScroll}
-          scrollEventThrottle={16} //
-        >
-          <View style={styles.frameParent}>
-            <View style={styles.frameGroup}>
-              {/* <TextInput
-                style={styles.frameChild}
-                placeholder="Search By Order ID"
-                placeholderTextColor="#b9b9b9"
-                value={query}
-                onChangeText={(text) => setQuery(text)}
-              /> */}
-              <View style={styles.refundRequestCardParent}>
-                {renderPaymentCards()}
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+      <Header label={"Refund Request"} />
+      <View style={styles.screen}>
+        <View style={styles.block1}>
+          {/* <SearchBar
+            placeholder={"search by order id"}
+            onSearch={handleSearch}
+          /> */}
+          <ToggleBtns onPress={handleDeliveryStatus} data={pressableData} />
+        </View>
+        {data.length > 0 ? (
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id.toString()}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={renderFooter}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: responsiveHeight(2.36) }} />
+            )}
+          />
+        ) : (
+          <Text>No Data Found!</Text>
+        )}
       </View>
 
       <Modal
-        animationType="fade"
+        style={styles.modal}
+        animationType="slide"
         transparent
-        visible={refundRequestCardVisible}
+        visible={modal}
       >
         <View style={styles.refundRequestCardOverlay}>
           <Pressable
             style={styles.refundRequestCardBg}
-            onPress={closeRefundView}
+            onPress={() => setModal(false)}
           />
           <RefundRequest2
             parentFunc={getData}
-            data={currentData}
-            onClose={closeRefundView}
+            data={currentOrder}
+            onClose={() => setModal(false)}
           />
         </View>
       </Modal>
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  refundRequestScrollViewContent: {
-    flexDirection: "column",
+  screen: {
+    flex: 1,
+    backgroundColor: Color.colorWhite,
     paddingHorizontal: responsiveWidth(5.12),
     paddingVertical: responsiveHeight(2.36),
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
   },
-  iconLayout: {
-    width: responsiveHeight(2.98),
-    height: responsiveHeight(2.98),
+  block1: {
+    gap: responsiveHeight(2.36),
+    marginBottom: responsiveHeight(2.36),
+    flexDirection: "column",
   },
-  approvedTypo: {
-    fontFamily: FontFamily.interMedium,
-    fontWeight: "500",
-    textAlign: "left",
-  },
-  home04ParentFlexBox: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  refundCardBorder: {
-    paddingVertical: responsiveHeight(1.61),
-    paddingHorizontal: responsiveWidth(4.1),
-    borderWidth: 1,
-    borderColor: Color.colorGainsboro_200,
-    borderStyle: "solid",
-    borderRadius: Border.br_8xs,
-    alignItems: "center",
-    flexDirection: "row",
-    alignSelf: "stretch",
-    backgroundColor: Color.colorWhite,
-  },
-  frameLayout: {
-    height: responsiveHeight(0.62),
-    width: responsiveWidth(13.58),
-    borderBottomLeftRadius: Border.br_8xs,
-    borderBottomRightRadius: Border.br_8xs,
-  },
-  homeTypo: {
-    marginTop: responsiveHeight(0.74),
-    fontSize: FontSize.size_5xs,
-    fontFamily: FontFamily.interMedium,
-    fontWeight: "500",
-    textAlign: "left",
-  },
-  icon: {
-    height: "100%",
-    width: "100%",
-  },
-  arrowLeftSm: {
-    height: responsiveHeight(2.98),
-  },
-  refundRequest1: {
-    fontSize: FontSize.size_lg,
-    fontWeight: "600",
-    fontFamily: FontFamily.interSemiBold,
-    marginLeft: 10,
-    textAlign: "left",
-    color: Color.colorBlack,
-  },
-  arrowLeftSmParent: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  frameChild: {
-    height: responsiveHeight(4.85),
-    paddingHorizontal: responsiveWidth(2.82),
-    paddingVertical: responsiveHeight(1.24),
-    fontFamily: FontFamily.interRegular,
-    fontSize: FontSize.size_3xs,
-    borderWidth: 1,
-    borderColor: Color.colorGainsboro_200,
-    borderStyle: "solid",
-    borderRadius: Border.br_8xs,
-    alignItems: "center",
-    flexDirection: "row",
-    alignSelf: "stretch",
-    overflow: "hidden",
-    backgroundColor: Color.colorWhite,
-  },
-  refundRequestCardOverlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(113, 113, 113, 0.3)",
-  },
-  refundRequestCardBg: {
+  modal: {
     position: "absolute",
-    width: "100%",
-    height: "100%",
-    left: 0,
-    top: 0,
+    bottom: 0,
+    height:'auto'
   },
-  orderId2021202236: {
-    color: Color.colorDarkgray_100,
-    fontSize: FontSize.size_xs,
-    fontWeight: "500",
-  },
-  kayraDecor3d: {
-    width: responsiveWidth(59.23),
-    marginTop: responsiveHeight(1.11),
-    fontSize: FontSize.size_xs,
-    fontWeight: "500",
-    color: Color.colorBlack,
-  },
-  approved: {
-    color: Color.colorLimegreen,
-    fontSize: FontSize.size_3xs,
-  },
-  approvedWrapper: {
-    borderRadius: Border.br_lgi,
-    backgroundColor: Color.colorHoneydew,
-    width: responsiveWidth(20.76),
-    paddingHorizontal: responsiveWidth(2.56),
-    paddingVertical: responsiveHeight(0.49),
-    marginTop: responsiveHeight(1.11),
-    height: responsiveHeight(2.98),
-    flexDirection: "row",
-  },
-  orderId2021202236Parent: {
-    flex: 1,
-  },
-  arrowRightSmIcon: {
-    marginLeft: responsiveWidth(15.64),
-    height: responsiveHeight(2.98),
-  },
-  refundRequestCard1Overlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(113, 113, 113, 0.3)",
-  },
-  refundRequestCard1Bg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    left: 0,
-    top: 0,
-  },
-  refundRequestCard1: {
-    marginTop: responsiveHeight(1.99),
-  },
-  refundRequestCard2Overlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(113, 113, 113, 0.3)",
-  },
-  refundRequestCard2Bg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    left: 0,
-    top: 0,
-  },
-  refundRequestCard3Overlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(113, 113, 113, 0.3)",
-  },
-  refundRequestCard3Bg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    left: 0,
-    top: 0,
-  },
-  refundRequestCard4Overlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(113, 113, 113, 0.3)",
-  },
-  refundRequestCard4Bg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    left: 0,
-    top: 0,
-  },
-  refundRequestCard5Overlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(113, 113, 113, 0.3)",
-  },
-  refundRequestCard5Bg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    left: 0,
-    top: 0,
-  },
-  refundRequestCardParent: {
-    // marginTop: responsiveHeight(1.86),
-    gap: responsiveHeight(1.99),
-    alignSelf: "stretch",
-  },
-  frameGroup: {
-    alignSelf: "stretch",
-  },
-  frameParent: {
-    alignSelf: "stretch",
-  },
-  refundRequest: {
-    maxWidth: "100%",
-    overflow: "hidden",
-    width: "100%",
-    flex: 1,
-    backgroundColor: Color.colorWhite,
-  },
+  refundRequestCardBg:{
+    backgroundColor:'red'
+  }
 });
 
-export default RefundRequest1;
+// 355 - 143 lines

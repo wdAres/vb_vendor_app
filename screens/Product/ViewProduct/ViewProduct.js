@@ -20,6 +20,7 @@ import { useNavigation, useRoute } from "@react-navigation/core";
 import VP_OtherDetails from "./screens/VP_OtherDetails";
 import VP_Description from "./screens/VP_Description";
 import VP_SEO from "./screens/VB_SEO";
+import useHttpForm from "../../../hooks/useHttpForm";
 
 const pressableData = [
   {
@@ -46,8 +47,9 @@ const ViewProduct = () => {
   const { id } = useRoute().params;
   const [data, setData] = useState({});
   const navigation = useNavigation();
+  const { sendRequest: sendReq, isLoading: loading2 } = useHttpForm();
 
-  useEffect(() => {
+  const getData = () => {
     sendRequest(
       {
         url: `product/${id}/show`,
@@ -56,6 +58,10 @@ const ViewProduct = () => {
         setData(result.data);
       }
     );
+  };
+
+  useEffect(() => {
+    getData();
   }, [id]);
 
   const handleDelete = () => {
@@ -69,12 +75,47 @@ const ViewProduct = () => {
       }
     );
   };
+
+  const deleteAdditionalImages = () => {
+    let formData = new FormData();
+
+    formData.append("additionalImages", []);
+
+    sendReq(
+      {
+        url: `product/${id}/edit`,
+        method: "PUT",
+        body: formData,
+      },
+      (result) => {
+        getData();
+      },
+      true
+    );
+  };
+  const deleteSingleImg = img_id => {
+    
+    sendRequest(
+      {
+        url: `product/${id}/remove/${img_id}`,
+        method: "PATCh",
+      },
+      (result) => {
+        getData();
+      },
+      true
+    );
+  };
+
+
   const renderElement = {
     "": (
       <VP_BasicInfo
         data={data}
         handleDelete={handleDelete}
         isLoading={isLoading}
+        deleteAdditionalImages={deleteAdditionalImages}
+        deleteSingleImg={deleteSingleImg}
       />
     ),
     other_details: <VP_OtherDetails data={data} />,
