@@ -17,6 +17,7 @@ const OrderCard = React.memo(({ data }) => {
     return: orderCardStyles.rejected_bg,
     delivered: orderCardStyles.paid_bg,
     pending: orderCardStyles.pending_bg,
+    hold: orderCardStyles.pending_bg,
     processing: orderCardStyles.processing_bg,
     shipped: orderCardStyles.shipped_bg,
   };
@@ -25,6 +26,7 @@ const OrderCard = React.memo(({ data }) => {
     return: orderCardStyles.rejected_cl,
     delivered: orderCardStyles.paid_cl,
     pending: orderCardStyles.pending_cl,
+    hold: orderCardStyles.pending_cl,
     processing: orderCardStyles.processing_cl,
     shipped: orderCardStyles.shipped_cl,
   };

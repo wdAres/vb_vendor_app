@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -18,6 +18,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import Header from "../components/Header";
 import PaymentGraph from "../components/PaymentGraph/PaymentGraph";
+import useHttp2 from "../hooks/useHttp2";
 
 const renderMenuItems = (menuItems) => {
   return menuItems.map((item, index) => (
@@ -145,6 +146,45 @@ const VendorProfile = () => {
   const logoutData = [
     touchablesData[13], // Logout
   ];
+  const { sendRequest: tileRequest, isLoading: tileLoading } = useHttp2()
+  const [tileStateData, setTileStateData] = useState(  {
+      totalOrders: 0,
+      todayOrders: 0,
+      confirmedOrders: 0,
+      shippedOrders: 0,
+      recentRefundProducts: 0
+    })
+
+  const tileData = [
+    {
+      label: 'Total Orders',
+      value: tileStateData.totalOrders,
+    },
+    {
+      label: 'Today Orders',
+      value: tileStateData.todayOrders,
+    },
+    {
+      label: 'Confirmed Orders',
+      value: tileStateData.confirmedOrders
+    },
+    {
+      label: 'Shipped Orders',
+      value: tileStateData.shippedOrders
+    },
+    {
+      label: 'Recent Refunded Orders',
+      value: tileStateData.recentRefundProducts
+    },
+  ]
+
+
+  useEffect(() => {
+    tileRequest({ url: 'order/tiles' }, result => {
+      setTileStateData(result.data)
+    })
+  }, [])
+
 
   return (
     <>
@@ -190,59 +230,24 @@ const VendorProfile = () => {
               style={styles.frameContainer}
               horizontal={true}
               showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={true}
+              showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.frameScrollViewContent}
             >
-              <Pressable style={styles.frameBorder}>
-                <View>
-                  <Text style={[styles.totalOrders, styles.inTransitTypo]}>
-                    Total Orders
-                  </Text>
-                  <Text style={[styles.text, styles.textTypo]}>878</Text>
-                </View>
-                <Image
-                  style={[styles.arrowRightSmIcon1, styles.iconLayout1]}
-                  resizeMode="cover"
-                  source={require("../assets/arrowrightsm3.png")}
-                />
-              </Pressable>
-              <Pressable style={[styles.frameParent1, styles.frameBorder]}>
-                <View>
-                  <Text style={[styles.totalOrders, styles.inTransitTypo]}>
-                    Total Products
-                  </Text>
-                  <Text style={[styles.text, styles.textTypo]}>032</Text>
-                </View>
-                <Image
-                  style={[styles.arrowRightSmIcon2, styles.iconLayout1]}
-                  resizeMode="cover"
-                  source={require("../assets/arrowrightsm3.png")}
-                />
-              </Pressable>
-              <View style={[styles.rectangleParent, styles.groupChildLayout]}>
-                <View style={[styles.groupChild, styles.groupChildLayout]} />
-                <Image
-                  style={[styles.arrowRightSmIcon3, styles.iconLayout1]}
-                  resizeMode="cover"
-                  source={require("../assets/arrowrightsm3.png")}
-                />
-                <Text style={[styles.inTransit, styles.text2Position]}>
-                  In Transit
-                </Text>
-                <Text style={[styles.text2, styles.text2Position]}>70</Text>
-              </View>
-              <View style={[styles.rectangleParent, styles.groupChildLayout]}>
-                <View style={[styles.groupChild, styles.groupChildLayout]} />
-                <Image
-                  style={[styles.arrowRightSmIcon3, styles.iconLayout1]}
-                  resizeMode="cover"
-                  source={require("../assets/arrowrightsm3.png")}
-                />
-                <Text style={[styles.inTransit, styles.text2Position]}>
-                  RTO
-                </Text>
-                <Text style={[styles.text2, styles.text2Position]}>02</Text>
-              </View>
+              {tileData.map(element=>(
+                 <Pressable onPress={()=>navigation.navigate('Orders')} style={styles.frameBorder}>
+                 <View>
+                   <Text style={[styles.totalOrders, styles.inTransitTypo]}>
+                     {element.label}
+                   </Text>
+                   <Text style={[styles.text, styles.textTypo]}>{element.value}</Text>
+                 </View>
+                 <Image
+                   style={[styles.arrowRightSmIcon1, styles.iconLayout1]}
+                   resizeMode="cover"
+                   source={require("../assets/arrowrightsm3.png")}
+                 />
+               </Pressable>
+              ))}
             </ScrollView>
             <View style={styles.frameParent}>
               <Text style={[styles.myShopAnd, styles.inTransitTypo]}>
@@ -297,7 +302,8 @@ const styles = StyleSheet.create({
   frameScrollViewContent: {
     flexDirection: "row",
     alignItems: "flex-start",
-    justifyContent: "flex-start",
+    gap:10,
+    justifyContent: "space-between",
   },
   vendorProfileScrollViewContent: {
     flexDirection: "column",
@@ -347,12 +353,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(3.58),
     alignItems: "center",
     flexDirection: "row",
+    justifyContent:'space-between',
     borderWidth: 1,
     borderColor: Color.colorGainsboro_200,
     borderStyle: "solid",
     borderRadius: Border.br_3xs,
     overflow: "hidden",
     backgroundColor: Color.colorWhite,
+    minWidth:200,
   },
   groupChildLayout: {
     height: responsiveHeight(12.93),

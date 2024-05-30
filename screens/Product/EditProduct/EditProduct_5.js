@@ -75,7 +75,7 @@ const EditProduct_5 = () => {
 
     const formData = new FormData();
 
-    // Image Operation
+    // // Image Operation
 
     if (newObj?.image.mime) {
       formData.append("image", {
@@ -85,7 +85,7 @@ const EditProduct_5 = () => {
       });
     }
 
-    //  Additional Images
+    // //  Additional Images
     newObj?.additionalImages?.length > 0 &&
       newObj?.additionalImages?.forEach((element, index) => {
         element.mime
@@ -99,13 +99,13 @@ const EditProduct_5 = () => {
           : "";
       });
 
-    // Specifications Operation
+    // // Specifications Operation
     let res = newObj.specifications?.map(
       (element) => `${element.first}:${element.last}`
     );
     formData.append("specifications", res.join(","));
 
-    // // Dimensions
+    // // // Dimensions
     newObj.dimensions.forEach((element, index) => {
       formData.append(`dimensions[${index}].name`, element.name);
       formData.append(`dimensions[${index}].value`, element.value);
@@ -115,6 +115,7 @@ const EditProduct_5 = () => {
     delete newObj.dimensions;
     delete newObj.image;
     delete newObj.additionalImages;
+    delete newObj.variations;
     // Additional Keys which is not required
     delete newObj.url;
     delete newObj.specs;
@@ -127,11 +128,14 @@ const EditProduct_5 = () => {
       if (typeof value === "object" && value !== null) {
         Object.entries(value).forEach(([subKey, subValue]) => {
           formData.append(`${key}.${subKey}`, subValue);
+          console.log(key);
         });
       } else {
         formData.append(key, value);
       }
     });
+
+    // formData.append('akaks','sfsafsafsa')
 
     sendRequest(
       {

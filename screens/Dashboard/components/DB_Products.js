@@ -1,25 +1,37 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import ProductCard from "../../../components/ProductCard";
 import {
   responsiveHeight,
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import useHttp2 from "../../../hooks/useHttp2";
+import { useFocusEffect } from "@react-navigation/core";
 
 const DB_Products = () => {
   const [data, setData] = useState({});
   const { sendRequest, isLoading } = useHttp2();
 
-  const getData = () => {
+  const getData = useCallback(() => {
     sendRequest({ url: "product?limit=10&page=1&search" }, (result) => {
       setData(result.data.docs);
     });
-  };
+  }, [sendRequest]);
 
-  useEffect(() => {
-    getData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+      return () => {
+        setData([]);
+      };
+    }, [])
+  );
 
   return (
     <>
@@ -34,12 +46,18 @@ const DB_Products = () => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
-          {data.map(element=>(
-              <ProductCard key={element._id} style={styles.productCard} {...element} />
+          {data.map((element) => (
+            <ProductCard
+              key={element._id}
+              style={styles.productCard}
+              {...element}
+            />
           ))}
         </ScrollView>
+      ) : isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <Text>No Products Found!</Text>
+        <Text>{"No Data Found!"}</Text>
       )}
     </>
   );

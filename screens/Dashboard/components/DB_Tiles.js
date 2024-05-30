@@ -33,7 +33,7 @@ const DB_Tiles = () => {
       <View style={styles.frameParent}>
         <Pressable style={[styles.pressable, styles.groupBorder, styles.flex1]}>
           <Text style={[styles.largeText, styles.firebrickText]}>
-            {data?.totalOrders ?? "0"}
+            {abbreviateNumber(data?.totalOrders ?? 0)}
           </Text>
           <Text style={[styles.my_text, styles.firebrickText]}>
             Total Orders
@@ -48,7 +48,7 @@ const DB_Tiles = () => {
           ]}
         >
           <Text style={[styles.largeText, styles.firebrickText]}>
-            {data?.todayOrders ?? "0"}
+            {abbreviateNumber(data?.todayOrders ?? 0)}
           </Text>
           <Text style={[styles.my_text, styles.firebrickText]}>
             Today Orders
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   largeText: {
     fontFamily: FontFamily.interMedium,
     fontWeight: "500",
-    fontSize: FontSize.size_34xl,
+    fontSize: FontSize.size_11xl,
   },
   firebrickText: {
     color: Color.colorFirebrick_200,
