@@ -29,8 +29,8 @@ const P_AdditionalImages = ({
   useEffect(() => {
     if (productData.additionalImages) {
       const lastImage =
-        productData.additionalImages[productData.additionalImages.length - 1];
-      if (lastImage.url) {
+        productData?.additionalImages[productData.additionalImages.length - 1];
+      if (lastImage?.url) {
         let urlMap = productData.additionalImages.map((element) => ({
           url: element.url,
         }));

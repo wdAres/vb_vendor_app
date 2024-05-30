@@ -99,12 +99,13 @@ const EditAttributes = () => {
   return (
     <>
       <Header label={"Edit Attribute"}>
-        <PrimaryBtn
-          isLoading={isLoading}
+        <Pressable
+          disabled={isLoading}
           onPress={handleDelete}
-          title={"Delete"}
           style={styles.btn}
-        />
+        >
+          <Text style={styles.btn_text}>{isLoading ?'Loading' : 'Delete'}</Text>
+        </Pressable>
       </Header>
       <View style={styles.my_parent}>
         <ScrollView
@@ -308,8 +309,11 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: "auto",
-    paddingVertical: 5,
-    paddingHorizontal: 20,
+  },
+  btn_text: {
+    fontSize: 12,
+color:'#AE0000',
+fontWeight:'500'
   },
 });
 

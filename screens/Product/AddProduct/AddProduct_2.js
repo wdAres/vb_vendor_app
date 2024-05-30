@@ -47,7 +47,7 @@ const AddProduct_2 = () => {
 
   const handleForm = (data) => {
     dispatch(updateProductData(data));
-    navigation.navigate("AddProduct_3");
+    navigation.navigate("AddProduct_7");
   };
 
   useEffect(() => {

@@ -141,7 +141,7 @@ const VP_BasicInfo = ({
           )}
         </ScrollView>
       </Container>
-      <Container style={[styles.container_1]}>
+      {/* <Container style={[styles.container_1]}>
         <Text style={styles.heading}>Additional Image Action</Text>
         <View style={[styles.inner_container]}>
           <View style={[styles.inner_container_row]}>
@@ -155,7 +155,7 @@ const VP_BasicInfo = ({
             </Pressable>
           </View>
         </View>
-      </Container>
+      </Container> */}
       <Container style={[styles.container_1]}>
         <Text style={styles.heading}>Action</Text>
         <View style={[styles.inner_container]}>

@@ -15,8 +15,8 @@ const ImgComp = ({ imgState, imgStateFunc, options, label , ph }) => {
       throw new Error("Image size exceeds 5 MB.");
     }
 
-    if (options.multiple && img.length > 3) {
-      throw new Error("Maximum 3 images can be uploaded");
+    if (options.multiple && img.length > 5) {
+      throw new Error("Maximum 5 images can be uploaded");
     }
 
     imgStateFunc(img);

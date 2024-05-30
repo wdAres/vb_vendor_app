@@ -108,6 +108,15 @@ export default function RefundRequest1({ navigation }) {
     },
   ];
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setData([]);
+        setPage(1);
+      };
+    }, [])
+  );
+
   return (
     <>
       <Header label={"Refund Request"} />
@@ -134,7 +143,8 @@ export default function RefundRequest1({ navigation }) {
             )}
           />
         ) : (
-          <Text>No Data Found!</Text>
+          isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : 
+          <Text>{"No Data Found!"}</Text>
         )}
       </View>
 
@@ -150,7 +160,7 @@ export default function RefundRequest1({ navigation }) {
             onPress={() => setModal(false)}
           />
           <RefundRequest2
-            parentFunc={getData}
+            parentFunc={()=>getData(page,query,delivery_status)}
             data={currentOrder}
             onClose={() => setModal(false)}
           />
@@ -175,11 +185,21 @@ const styles = StyleSheet.create({
   modal: {
     position: "absolute",
     bottom: 0,
-    height:'auto'
+    height: "auto",
   },
-  refundRequestCardBg:{
-    backgroundColor:'red'
-  }
+  refundRequestCardOverlay: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(113, 113, 113, 0.3)",
+  },
+  refundRequestCardBg: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    left: 0,
+    top: 0,
+  },
 });
 
 // 355 - 143 lines

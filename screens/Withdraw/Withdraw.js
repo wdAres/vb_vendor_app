@@ -19,6 +19,7 @@ import useHttp2 from "../../hooks/useHttp2";
 import CouponCard from "../../components/CouponCard";
 import WithdrawCard from "../../components/WithdrawCard";
 import PrimaryBtn from "../../components/Buttons/PrimaryBtn";
+import { abbreviateNumber } from "js-abbreviation-number";
 
 export default function Withdraw({ navigation }) {
   const [page, setPage] = useState(1);
@@ -90,6 +91,15 @@ export default function Withdraw({ navigation }) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setData([]);
+        setPage(1);
+      };
+    }, [])
+  );
+
   return (
     <>
       <Header label={"Withdraw"} />
@@ -99,7 +109,7 @@ export default function Withdraw({ navigation }) {
             <Text style={[styles.text1]}>
               Wallet Amount
             </Text>
-            <Text style={[styles.text2]}>${wallet}</Text>
+            <Text style={[styles.text2]}>${abbreviateNumber(wallet)}</Text>
           </View>
           <PrimaryBtn
           style={styles.btn}
@@ -107,19 +117,24 @@ export default function Withdraw({ navigation }) {
             onPress={() => navigation.navigate("WithdrawMoney")}
           />
         </View>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id.toString()}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={renderFooter}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => (
-            <View style={{ height: responsiveHeight(2.36) }} />
-          )}
-        />
+        {data.length > 0 ? (
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id.toString()}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={renderFooter}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: responsiveHeight(2.36) }} />
+            )}
+          />
+        ) : (
+          isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : 
+          <Text>{"No Data Found!"}</Text>
+        )}
       </View>
     </>
   );

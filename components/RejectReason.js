@@ -4,25 +4,26 @@ import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
 import PrimaryBtn from "./Buttons/PrimaryBtn";
 import useHttp2 from "../hooks/useHttp2";
 import Toast from "react-native-toast-message";
+import { useForm } from "react-hook-form";
+import RR_Reason from "../screens/Support/components/RR_Reason";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
 const RejectReason = ({ onClose, id, parentFunc }) => {
-  const {sendRequest,isLoading} = useHttp2();
-  const [message, setMessage] = React.useState("");
-  const reject = () => {
-    if (!message) {
-      return Toast.show({
-        type: "error",
-        text1: "Your reject reason is empty!",
-      });
-    }
+  const { sendRequest, isLoading } = useHttp2();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, defaultValues },
+  } = useForm();
 
+  const reject = (data) => {
+    console.log(data);
     sendRequest(
       {
-        url: `refund-request/${id}/accept`,
+        url: `refund-request/${id}/reject`,
         method: "PUT",
-        body: {
-          reason: message,
-        },
+        body: data,
       },
       (result) => {
         parentFunc();
@@ -32,19 +33,23 @@ const RejectReason = ({ onClose, id, parentFunc }) => {
     );
   };
 
+  const uni_style = {
+    title: styles.overall_heading,
+    container: styles.overall_container,
+    frameview: styles.overall_frameView,
+  };
+
   return (
     <View style={styles.rejectReason}>
       <View style={styles.rejectReasonParent}>
         <Text style={styles.rejectReason1}>Reject Reason</Text>
-        <TextInput
-          style={[styles.frameChild, styles.frameChildFlexBox]}
-          placeholder="Type Something.."
-          multiline={true}
-          placeholderTextColor="#8f9095"
-          value={message}
-          onChangeText={v=>setMessage(v)}
+        <RR_Reason control={control} errors={errors} uni_style={uni_style} />
+        <PrimaryBtn
+          isLoading={isLoading}
+          disabled={isLoading}
+          onPress={handleSubmit(reject)}
+          title={"Reject Refund"}
         />
-        <PrimaryBtn isLoading={isLoading} onPress={reject} title={"Reject Refund"} />
       </View>
     </View>
   );
@@ -110,10 +115,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_6xl,
     paddingVertical: 30,
     maxWidth: "100%",
-    maxHeight: "100%",
     flexDirection: "row",
     overflow: "hidden",
     backgroundColor: Color.colorWhite,
+  },
+  overall_heading: {
+    fontSize: FontSize.size_mini,
+    color: Color.colorFirebrick_200,
+    fontFamily: FontFamily.interSemiBold,
+    fontWeight: "600",
+    textAlign: "left",
+    alignSelf: "stretch",
+  },
+  overall_container: {
+    gap: responsiveHeight(2.98),
+    marginVertical: responsiveHeight(2.98),
+  },
+  overall_frameView: {
+    alignSelf: "stretch",
   },
 });
 

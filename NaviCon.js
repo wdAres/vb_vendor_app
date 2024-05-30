@@ -110,6 +110,8 @@ import EditProduct_4 from "./screens/Product/EditProduct/EditProduct_4";
 import EditProduct_5 from "./screens/Product/EditProduct/EditProduct_5";
 import EditProduct_6 from "./screens/Product/EditProduct/EditProduct_6";
 import ViewProduct from "./screens/Product/ViewProduct/ViewProduct";
+import AddProduct_7 from "./screens/Product/AddProduct/AddProduct_7";
+import Notifications from "./screens/Notifications/Notifications";
 
 const Tab = createBottomTabNavigator();
 function BottomTabsRoot({ navigation }) {
@@ -302,6 +304,7 @@ const NaviCon = () => {
                   component={AddProduct5}
                   options={{ headerShown: false }}
                 />
+             
                 
                 <Stack.Screen
                   name="SellerDetails"
@@ -458,6 +461,11 @@ const NaviCon = () => {
                   component={AddProduct_6}
                   options={{ headerShown: false }}
                 />
+                   {/* <Stack.Screen
+                  name="AddProduct_7"
+                  component={AddProduct_7}
+                  options={{ headerShown: false }}
+                /> */}
                 <Stack.Screen
                   name="EditProduct_1"
                   component={EditProduct_1}
@@ -491,6 +499,11 @@ const NaviCon = () => {
                 <Stack.Screen
                   name="ViewProduct"
                   component={ViewProduct}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Notifications"
+                  component={Notifications}
                   options={{ headerShown: false }}
                 />
               </>

@@ -11,12 +11,14 @@ import NewsBoxCard from "./components/NewsBoxCard";
 import useHttp2 from "../../hooks/useHttp2";
 import Container from "../Container/Container";
 import { responsiveHeight } from "react-native-responsive-dimensions";
+import { useNavigation } from "@react-navigation/core";
 
 const NewsBox = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const { sendRequest, isLoading: loading } = useHttp2();
+  const navigation = useNavigation()
 
   useEffect(() => {
     fetchData();
@@ -64,12 +66,12 @@ const NewsBox = () => {
     <Container  style={styles.container}>
       <View style={styles.flex}>
         <Text style={styles.heading}>News</Text>
-        <Pressable disabled={loading} onPress={handleReadAll}>
-          <Text style={styles.link}>{loading ? "Loading" : "Read All"}</Text>
+        <Pressable disabled={loading} onPress={()=>navigation.navigate('Notifications')}>
+          <Text style={styles.link}>{loading ? "Loading" : "View All"}</Text>
         </Pressable>
       </View>
       {data?.length > 0 ? (
-        <ScrollView style={styles.container_2} onScroll={handleScroll} scrollEventThrottle={16}>
+        <ScrollView style={styles.container_2} contentContainerStyle={styles.inner_container_2} onScroll={handleScroll} scrollEventThrottle={16}>
           {data?.length > 0 &&
             data?.map((item, index) => (
               <NewsBoxCard fetchData={fetchData} key={index} data={item} />
@@ -105,6 +107,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   container_2:{
-    height:400
+    height:400,
+  },
+  inner_container_2:{
+    gap:responsiveHeight(2.61)
   }
 });

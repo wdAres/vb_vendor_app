@@ -6,10 +6,12 @@ import {
 } from "react-native-responsive-dimensions";
 import { FontFamily, FontSize, Border, Color } from "../../../GlobalStyles";
 import useHttp2 from "../../../hooks/useHttp2";
+import { abbreviateNumber } from "js-abbreviation-number";
 
 const DB_Tiles = () => {
   const [data, setData] = useState({});
   const { sendRequest, isLoading } = useHttp2();
+
 
   const getData = () => {
     sendRequest({ url: "dashboard/tiles" }, (result) => {
@@ -63,7 +65,7 @@ const DB_Tiles = () => {
           ]}
         >
           <Text style={[styles.largeText, styles.bluevioletText]}>
-            {data?.totalSales ?? 0}
+            {abbreviateNumber(data?.totalSales ?? 0)}
           </Text>
           <Text style={[styles.my_text, styles.bluevioletText]}>
             Total Sales ($)
@@ -79,7 +81,7 @@ const DB_Tiles = () => {
           ]}
         >
           <Text style={[styles.largeText, styles.cornflowerblueText]}>
-            {data?.todaySales ?? 0}
+            {abbreviateNumber(data?.todaySales ?? 0)}
           </Text>
           <Text style={[styles.my_text, styles.cornflowerblueText]}>
             Today Sales ($)

@@ -68,6 +68,15 @@ export default function Coupons({ navigation }) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setData([]);
+        setPage(1);
+      };
+    }, [])
+  );
+
   return (
     <>
       <Header
@@ -81,19 +90,25 @@ export default function Coupons({ navigation }) {
             onSearch={handleSearch}
           />
         </View>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id.toString()}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={renderFooter}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => (
-            <View style={{ height: responsiveHeight(2.36) }} />
-          )}
-        />
+
+        {data.length > 0 ? (
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id.toString()}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={renderFooter}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: responsiveHeight(2.36) }} />
+            )}
+          />
+        ) : (
+          isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : 
+          <Text>{"No Data Found!"}</Text>
+        )}
       </View>
     </>
   );

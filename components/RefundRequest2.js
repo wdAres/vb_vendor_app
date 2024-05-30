@@ -16,11 +16,13 @@ import {
 import useHttp2 from "../hooks/useHttp2";
 import moment from "moment";
 import RejectReason from "./RejectReason";
+import { useNavigation } from "@react-navigation/core";
 
 const RefundRequest2 = ({ onClose, data, parentFunc }) => {
   const { sendRequest, isLoading } = useHttp2();
   const { _id, createdAt, amount, status, message, orderId, productId } = data;
   const [frameButtonVisible, setFrameButtonVisible] = useState(false);
+  const navigation = useNavigation();
 
   const openFrameButton = useCallback(() => {
     setFrameButtonVisible(true);
@@ -28,6 +30,7 @@ const RefundRequest2 = ({ onClose, data, parentFunc }) => {
 
   const closeFrameButton = useCallback(() => {
     setFrameButtonVisible(false);
+    onClose();
   }, []);
 
   const acceptHandler = () => {
@@ -68,7 +71,13 @@ const RefundRequest2 = ({ onClose, data, parentFunc }) => {
           </View>
           <View style={[styles.dateParent, styles.parentSpaceBlock]}>
             <Text style={styles.date}>Product</Text>
-            <Text style={[styles.view, styles.textTypo]}>View</Text>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("ViewProduct", { id: productId._id })
+              }
+            >
+              <Text style={[styles.view, styles.textTypo]}>View</Text>
+            </Pressable>
           </View>
           <View style={styles.parentSpaceBlock}>
             <Text style={styles.reasonTypo}>Reason</Text>
@@ -104,7 +113,7 @@ const RefundRequest2 = ({ onClose, data, parentFunc }) => {
         </View>
       </View>
 
-      {/* <Modal animationType="fade" transparent visible={frameButtonVisible}>
+      <Modal animationType="slide" transparent visible={frameButtonVisible}>
         <View style={styles.frameButtonOverlay}>
           <Pressable style={styles.frameButtonBg} onPress={closeFrameButton} />
           <RejectReason
@@ -113,7 +122,7 @@ const RefundRequest2 = ({ onClose, data, parentFunc }) => {
             onClose={closeFrameButton}
           />
         </View>
-      </Modal> */}
+      </Modal>
     </>
   );
 };

@@ -106,8 +106,8 @@ const VendorProfile = () => {
       onPress: () => navigation.navigate("Attributes"),
     },
     {
-      title: "DemoScreen",
-      onPress: () => navigation.navigate("DemoScreen"),
+      title: "Notifications",
+      onPress: () => navigation.navigate("Notifications"),
     },
   ];
 

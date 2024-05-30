@@ -1,24 +1,21 @@
 import {
   ActivityIndicator,
   FlatList,
+  Pressable,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
 import Header from "../../components/Header";
 import { Color } from "../../GlobalStyles";
-import {
-  responsiveHeight,
-  responsiveWidth,
-} from "react-native-responsive-dimensions";
-import SearchBar from "../../components/SearchBar";
-import ToggleBtns from "../../components/ToggleBtns";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 import OrderCard from "../../components/OrderCard";
 import useHttp2 from "../../hooks/useHttp2";
+import NotificationCard from "../../components/Notifications/components/NotificationCard";
 
-export default function Orders({ navigation }) {
+export default function Notifications({ navigation }) {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const { sendRequest, isLoading } = useHttp2();
@@ -30,7 +27,7 @@ export default function Orders({ navigation }) {
     (pageNumber, searchQuery = "", deliveryStatus = "") => {
       sendRequest(
         {
-          url: `order?limit=10&page=${pageNumber}&search=${searchQuery}&orderStatus=${deliveryStatus}`,
+          url: `notifications?limit=10&page=${pageNumber}`,
         },
         (result) => {
           setData((prevData) =>
@@ -48,8 +45,8 @@ export default function Orders({ navigation }) {
   // Fetch data when the screen gains focus
   useFocusEffect(
     useCallback(() => {
-      getData(page, query, delivery_status);
-    }, [page, query, delivery_status,sendRequest])
+      getData(page);
+    }, [page])
   );
 
   const handleEndReached = () => {
@@ -58,52 +55,11 @@ export default function Orders({ navigation }) {
     }
   };
 
-  const handleSearch = (text) => {
-    setQuery(text);
-    setPage(1);
-  };
-
-  const renderItem = ({ item }) => {
-    return <OrderCard data={item} />;
-  };
 
   const renderFooter = () => {
     if (!isLoading) return null;
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
-
-  const handleDeliveryStatus = (status) => {
-    setDeliveryStatus(status);
-    setPage(1);
-  };
-
-  const pressableData = [
-    {
-      label: "All",
-      value: "",
-    },
-    {
-      label: "Pending",
-      value: "pending",
-    },
-    {
-      label: "Processing",
-      value: "processing",
-    },
-    {
-      label: "Shipped",
-      value: "shipped",
-    },
-    {
-      label: "Delivered",
-      value: "delivered",
-    },
-    {
-      label: "Cancelled",
-      value: "cancelled",
-    },
-  ];
-
 
   useFocusEffect(
     useCallback(() => {
@@ -114,17 +70,46 @@ export default function Orders({ navigation }) {
     }, [])
   );
 
+  const handleMarkDone = (id) => {
+    sendRequest(
+      {
+        url: `notifications/${id}/seen`,
+        method:'PUT'
+      },
+      (result) => {
+        getData(page);
+      },
+      true
+    );
+  };
+  const handleMarkDoneAll  = () => {
+    sendRequest(
+      {
+        url: `notifications/seen`,
+        method:'PUT'
+      },
+      (result) => {
+        getData(page);
+      },
+      true
+    );
+  };
+
+
+  const renderItem = ({ item }) => {
+    return <NotificationCard handleMarkDone={handleMarkDone} {...item} />;
+  };
+
+
+
   return (
     <>
-      <Header label={"My Orders"} hideArrow={true} />
+      <Header label={"Notifications"} >
+        <Pressable onPress={()=>handleMarkDoneAll()}>
+            <Text style={styles.link}>Read All</Text>
+        </Pressable>
+      </Header>
       <View style={styles.screen}>
-        <View style={styles.block1}>
-          <SearchBar
-            placeholder={"search by order id"}
-            onSearch={handleSearch}
-          />
-          <ToggleBtns onPress={handleDeliveryStatus} data={pressableData} />
-        </View>
         {data.length > 0 ? (
           <FlatList
             data={data}
@@ -135,12 +120,10 @@ export default function Orders({ navigation }) {
             ListFooterComponent={renderFooter}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={() => (
-              <View style={{ height: responsiveHeight(2.36) }} />
-            )}
           />
+        ) : isLoading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : 
           <Text>{"No Data Found!"}</Text>
         )}
       </View>
@@ -152,14 +135,17 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Color.colorWhite,
-    paddingHorizontal: responsiveWidth(5.12),
-    paddingVertical: responsiveHeight(2.36),
   },
   block1: {
     gap: responsiveHeight(2.36),
     marginBottom: responsiveHeight(2.36),
     flexDirection: "column",
   },
+  link:{
+    fontSize: responsiveHeight(1.49),
+    color: "#ae0000",
+    fontWeight: "500",
+  }
 });
 
 // 355 - 143 lines
