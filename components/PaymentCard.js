@@ -7,6 +7,7 @@ import {
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 import moment from "moment";
+import { abbreviateNumber } from "js-abbreviation-number";
 
 export default function PaymentCard({ style, data}) {
 
@@ -21,7 +22,7 @@ export default function PaymentCard({ style, data}) {
     >
       <View style={styles.walletAmountParent}>
         <Text style={styles.date2082023Typo}>Order Id {orderId.orderId}</Text>
-        <Text style={[styles.text1, styles.textTypo]}>${orderId.total}</Text>
+        <Text style={[styles.text1, styles.textTypo]}>${abbreviateNumber(data?.orderId?.subtotal ?? 0,2)}</Text>
         <Text style={[styles.date2082023, styles.date2082023Typo]}>{moment(date).format('ll')}</Text>
       </View>
       <Image

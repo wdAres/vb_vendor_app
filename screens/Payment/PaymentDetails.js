@@ -23,6 +23,7 @@ import {
 import useHttp2 from "../../hooks/useHttp2";
 import moment from "moment";
 import Header from "../../components/Header";
+import { abbreviateNumber } from "js-abbreviation-number";
 
 const PaymentDetails = () => {
   const navigation = useNavigation();
@@ -54,7 +55,7 @@ const PaymentDetails = () => {
     { title: "Date of Payment", value: moment(data?.date).format("ll") },
     { title: "Admin’s Commission", value: "--" },
     { title: "Payment Method", value: data?.orderId?.paymentMethod ?? "--" },
-    { title: "Amount", value: "$" + data?.orderId?.subtotal ?? "--" },
+    // { title: "Amount", value: "$" + data?.subtotal ?? "--" },
   ];
   return (
     <View style={styles.container}>
@@ -71,7 +72,7 @@ const PaymentDetails = () => {
             <Text style={[styles.amount, styles.amountTypo]}>Amount</Text>
             <View style={styles.parent}>
               <Text style={[styles.text, styles.offTypo]}>
-                ${data?.orderId?.subtotal ?? 0}
+                ${abbreviateNumber(data?.orderId?.subtotal ?? 0,2)}
               </Text>
               <Image
                 style={styles.okIcon}

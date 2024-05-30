@@ -128,7 +128,6 @@ const EditProduct_5 = () => {
       if (typeof value === "object" && value !== null) {
         Object.entries(value).forEach(([subKey, subValue]) => {
           formData.append(`${key}.${subKey}`, subValue);
-          console.log(key);
         });
       } else {
         formData.append(key, value);

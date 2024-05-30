@@ -65,7 +65,7 @@ const DB_Tiles = () => {
           ]}
         >
           <Text style={[styles.largeText, styles.bluevioletText]}>
-            {abbreviateNumber(data?.totalSales ?? 0)}
+            {abbreviateNumber(data?.totalSales ?? 0,2)}
           </Text>
           <Text style={[styles.my_text, styles.bluevioletText]}>
             Total Sales ($)
@@ -81,7 +81,7 @@ const DB_Tiles = () => {
           ]}
         >
           <Text style={[styles.largeText, styles.cornflowerblueText]}>
-            {abbreviateNumber(data?.todaySales ?? 0)}
+            {abbreviateNumber(data?.todaySales ?? 0,2)}
           </Text>
           <Text style={[styles.my_text, styles.cornflowerblueText]}>
             Today Sales ($)
